@@ -1,0 +1,45 @@
+# Put this file at .github/workflows/orla-il-banks.yml in a PRIVATE repository
+# of your own. It reads your Israeli bank and card accounts once a day and
+# files the rows into Orla. The runner refuses to start in a public
+# repository, because public repositories have public run logs.
+#
+# Two secrets, under Settings, Secrets and variables, Actions:
+#   ORLA_TOKEN        the key from Orla: Integrations, Israeli banks
+#   ORLA_IL_ACCOUNTS  your logins, as JSON. See the README for the shape.
+
+name: orla-il-banks
+
+on:
+  schedule:
+    # Every day at 04:17 UTC: 07:17 in Israel in summer, 06:17 in winter.
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Two runs logging into the same bank at once look like an attack to the bank.
+concurrency:
+  group: orla-il-banks
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      # Pinned to a commit, not a tag: this job holds your bank passwords, and
+      # a tag can be moved to other code after you read it.
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      # Chrome's sandbox needs user namespaces, which Ubuntu 24.04 restricts.
+      # Lifted on this throwaway runner so the sandbox can stay on.
+      - run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+      # Pinned to one version, which installs one exact set of dependencies.
+      # Raise it on purpose, after reading the release notes.
+      - name: Read the banks and file the rows into Orla
+        env:
+          ORLA_TOKEN: ${{ secrets.ORLA_TOKEN }}
+          ORLA_IL_ACCOUNTS: ${{ secrets.ORLA_IL_ACCOUNTS }}
+        run: npx --yes orla-il-banks@0.1.0 run

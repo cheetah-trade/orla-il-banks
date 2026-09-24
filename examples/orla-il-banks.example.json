@@ -1,0 +1,12 @@
+{
+  "orla": {
+    "url": "https://app.orla.finance",
+    "token": "the key from Orla: Integrations, Israeli banks"
+  },
+  "days": 90,
+  "accounts": [
+    { "company": "hapoalim", "userCode": "AB12345", "password": "your password" },
+    { "company": "isracard", "id": "012345678", "card6Digits": "123456", "password": "your password" },
+    { "company": "max", "username": "your username", "password": "your password" }
+  ]
+}

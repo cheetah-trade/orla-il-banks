@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.tgz
+.DS_Store
+# a config holds bank passwords and a saved scrape is a statement
+*.local.json
+orla-il-banks.json
+scrape*.json

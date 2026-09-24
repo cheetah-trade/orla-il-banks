@@ -1,0 +1,7 @@
+node_modules
+dist
+.git
+*.json
+!package.json
+!npm-shrinkwrap.json
+!tsconfig.json

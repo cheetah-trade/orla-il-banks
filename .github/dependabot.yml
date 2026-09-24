@@ -1,0 +1,13 @@
+# Proposals, not merges: every bump is read before it lands, since everything
+# in this tree runs next to a bank password (RELEASING.md).
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 3
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

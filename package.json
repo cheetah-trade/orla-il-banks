@@ -1,0 +1,54 @@
+{
+  "name": "orla-il-banks",
+  "version": "0.1.0",
+  "description": "Israeli bank and card transactions into your Orla books. Runs on your machine; your bank password never reaches Orla.",
+  "license": "MIT",
+  "author": "Digital Flow Pte. Ltd.",
+  "homepage": "https://github.com/cheetah-trade/orla-il-banks#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cheetah-trade/orla-il-banks.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cheetah-trade/orla-il-banks/issues"
+  },
+  "keywords": [
+    "orla",
+    "israel",
+    "bank",
+    "hapoalim",
+    "leumi",
+    "isracard",
+    "max",
+    "cal",
+    "bookkeeping"
+  ],
+  "type": "module",
+  "bin": {
+    "orla-il-banks": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "npm-shrinkwrap.json"
+  ],
+  "engines": {
+    "node": ">=22.22.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc --noEmit -p tsconfig.json",
+    "prepublishOnly": "npm run build",
+    "test": "npm run build && node --test test/*.test.js"
+  },
+  "dependencies": {
+    "israeli-bank-scrapers": "6.12.1",
+    "puppeteer": "24.43.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}

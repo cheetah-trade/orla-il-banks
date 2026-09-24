@@ -1,0 +1,57 @@
+name: release
+
+# A tag is the release. Nothing publishes from a laptop and no long-lived npm
+# token exists to leak: npm mints a short-lived credential from this workflow's
+# OIDC identity, which also puts a provenance attestation on the version.
+# Configure the trusted publisher once on npmjs.com for the package
+# `orla-il-banks`: this repository, workflow `release.yml`.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  npm:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - run: npm install -g npm@latest
+      - run: npm ci --no-fund --no-audit
+      - run: npm run check
+      - run: npm test
+      # The tag and the manifest agree, or `npm view` and `git tag` stop
+      # telling the same story.
+      - name: Tag matches package.json
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg="$(node -p "require('./package.json').version")"
+          if [ "$tag" != "$pkg" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match package.json version $pkg"
+            exit 1
+          fi
+      - run: npm publish --access public
+
+  image:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: docker build -t "ghcr.io/${GITHUB_REPOSITORY}:${GITHUB_REF_NAME#v}" .
+      - run: docker run --rm "ghcr.io/${GITHUB_REPOSITORY}:${GITHUB_REF_NAME#v}" check-browser
+      - name: Push to GitHub Packages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "$GH_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          docker push "ghcr.io/${GITHUB_REPOSITORY}:${GITHUB_REF_NAME#v}"
