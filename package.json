@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "israeli-bank-scrapers": "6.12.1",
-    "puppeteer": "24.43.1"
+    "puppeteer": "25.11.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
