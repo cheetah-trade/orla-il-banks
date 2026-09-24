@@ -21,14 +21,15 @@ jobs:
       # the next step starts.
       - run: npm ci --no-fund --no-audit
       - run: npm run check
-      - run: npm test
       # Ubuntu 24.04 stops unprivileged user namespaces, which Chrome's sandbox
       # needs. Lifted on this throwaway runner instead of turning the sandbox
-      # off; the template in templates/github-actions does the same.
+      # off; the template in templates/github-actions does the same. Before the
+      # tests, because one of them starts a browser on a kept profile and would
+      # otherwise skip itself here, where it matters most.
+      - run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+      - run: npm test
       - name: The browser starts on a stock runner
-        run: |
-          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
-          node dist/cli.js check-browser
+        run: node dist/cli.js check-browser
       # What `npm publish` would upload. The shrinkwrap is the point: without
       # it `npx` resolves the dependency ranges afresh on every install, and
       # the tree next to the password is whatever was newest that morning.

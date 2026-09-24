@@ -12,11 +12,13 @@
 import { chmodSync, readFileSync, writeFileSync } from "node:fs";
 import { createInterface } from "node:readline/promises";
 
-import { optional, parse, RUN_FLAGS } from "./args.js";
+import { optional, parse, RUN_FLAGS, TRUST_FLAGS } from "./args.js";
 import { COMPANIES, type CompanyId, isCompany, LEFT_OUT } from "./companies.js";
 import { ConfigError, guardActions, loadConfig, redact, secretsOf, type Config } from "./config.js";
 import { israelDay, mapAccount, type PushRow, type ScrapedAccount } from "./map.js";
+import { defaultProfileBase, profileDir } from "./profile.js";
 import { push, PushError } from "./push.js";
+import { needsTrustHint, trustDevice } from "./trust.js";
 
 // The library reads the banks' dates in the process's zone. Pinned before any
 // bank is read, so a run on a UTC server books the same days as one in Haifa.
@@ -40,6 +42,7 @@ Usage:
   orla-il-banks run [--config <file>] [--days <n>] [--dry-run] [--only <ids>]
   orla-il-banks companies
   orla-il-banks check-browser
+  orla-il-banks trust <company> [--config <file>]
 
 run:
   --config <file>     JSON with orla.url, orla.token, days and accounts.
@@ -51,9 +54,15 @@ run:
   --save-json <file>  also save what the banks returned (readable by you only)
   --from-json <file>  send a saved file instead of reading the banks
   --show-browser      show the browser while it logs in, for debugging
+  --profile-dir <dir> where kept browser profiles live (default ~/.orla-il-banks/profiles)
 
 check-browser starts the browser on an empty page and closes it. Run it
 first on a new machine, container or CI runner: it touches no bank.
+
+trust opens a bank's own login page on the browser profile later runs use.
+Log in there yourself, with the code the bank sends; the window closes when
+the bank shows your accounts. Needed once per computer for Bank Hapoalim,
+which asks for a code whenever a login comes from a device it does not know.
 
 Exit status: 0 everything went through, 1 a bank or the delivery failed,
 2 the command line or the config is wrong.
@@ -71,7 +80,12 @@ function fail(message: string, code: number): never {
 
 function companiesText(): string {
   const lines = Object.entries(COMPANIES).map(([id, spec]) => {
-    const note = "otp" in spec ? "  (asks for a code at every login: run it from a terminal)" : "";
+    const note =
+      "otp" in spec
+        ? "  (asks for a code at every login: run it from a terminal)"
+        : "trustedDevice" in spec
+          ? `  (once per computer: orla-il-banks trust ${id})`
+          : "";
     return `  ${id.padEnd(18)} ${spec.name.padEnd(20)} ${spec.fields.join(", ")}${note}`;
   });
   const out = Object.entries(LEFT_OUT).map(([id, why]) => `  ${id.padEnd(18)} not supported: ${why}`);
@@ -107,23 +121,56 @@ async function ask(question: string): Promise<string> {
   }
 }
 
-async function readBanks(config: Config, only: Set<string> | null, showBrowser: boolean, secrets: string[]) {
+async function readBanks(
+  config: Config,
+  only: Set<string> | null,
+  showBrowser: boolean,
+  secrets: string[],
+  profileBase: string,
+) {
   const { scrape } = await import("./scrape.js");
   const startDate = new Date(Date.now() - config.days * 24 * 3600 * 1000);
   const read: Saved[] = [];
   let failed = 0;
   for (const account of config.accounts) {
     if (only && !only.has(account.company)) continue;
-    const name = COMPANIES[account.company].name;
-    if ("otp" in COMPANIES[account.company] && !process.stdin.isTTY) {
+    const spec = COMPANIES[account.company];
+    const name = spec.name;
+    if ("otp" in spec && !process.stdin.isTTY) {
       process.stderr.write(`${name}: skipped. It asks for a code at every login, so it only runs from a terminal.\n`);
       failed += 1;
       continue;
     }
+    let kept: string | undefined;
+    if ("trustedDevice" in spec) {
+      if (process.env["GITHUB_ACTIONS"] === "true" || process.env["ORLA_IL_EPHEMERAL"] === "1") {
+        // A runner or a container is a new device every time, and keeping the
+        // profile there would mean a bank session in a cache or an image.
+        const where = process.env["GITHUB_ACTIONS"] === "true" ? "a GitHub runner" : "this container";
+        process.stderr.write(
+          `${name}: skipped. It asks for a code whenever a login comes from a device it does not know, and ${where} is new every time. Run it from your own computer.\n`,
+        );
+        failed += 1;
+        continue;
+      }
+      try {
+        kept = profileDir(profileBase, account.company, account.credentials);
+      } catch (error) {
+        if (!(error instanceof ConfigError)) throw error;
+        process.stderr.write(`${name}: skipped. ${error.message}\n`);
+        failed += 1;
+        continue;
+      }
+    }
     process.stdout.write(`${name}: logging in\n`);
-    const outcome = await scrape(account, { startDate, showBrowser, ask, env: process.env });
+    const outcome = await scrape(account, { startDate, showBrowser, ask, env: process.env, profileDir: kept });
     if (!outcome.ok) {
       process.stderr.write(`${name}: failed. ${redact(outcome.error, secrets)}\n`);
+      if (needsTrustHint(account.company, outcome.error)) {
+        process.stderr.write(
+          `${name}: if the bank asked for a code, this computer is new to it. Run \`orla-il-banks trust ${account.company}\` once, log in on the bank's page, then run again.\n`,
+        );
+      }
       failed += 1;
       continue;
     }
@@ -168,7 +215,8 @@ async function run(flags: Record<string, string | boolean>): Promise<number> {
       throw error;
     }
   } else {
-    ({ read, failed } = await readBanks(config, only, flags["show-browser"] === true, secrets));
+    const profileBase = optional(flags, "profile-dir") ?? defaultProfileBase(process.env);
+    ({ read, failed } = await readBanks(config, only, flags["show-browser"] === true, secrets, profileBase));
   }
 
   if (saveJson && !fromJson) {
@@ -252,6 +300,51 @@ async function run(flags: Record<string, string | boolean>): Promise<number> {
   return failed ? EXIT.failure : EXIT.ok;
 }
 
+async function trust(company: string | undefined, flags: Record<string, string | boolean>): Promise<number> {
+  const unknown = Object.keys(flags).filter((flag) => !TRUST_FLAGS.has(flag));
+  if (unknown.length) fail(`unknown flag ${unknown.map((f) => `--${f}`).join(", ")}. See --help.`, EXIT.usage);
+  if (!company || !isCompany(company)) fail(`trust needs a company id. See \`orla-il-banks companies\`.`, EXIT.usage);
+  const spec = COMPANIES[company];
+  if (!("trustedDevice" in spec)) {
+    fail(`${spec.name} does not need a trusted computer; \`orla-il-banks run\` logs in on its own.`, EXIT.usage);
+  }
+  if (process.env["GITHUB_ACTIONS"] === "true") {
+    fail("trust needs a person at a screen and a browser profile kept on this computer; it does not run in GitHub Actions.", EXIT.usage);
+  }
+  let config: Config;
+  let dirs: string[];
+  try {
+    // the config only names the profile: one per login, as `run` will use it
+    config = loadConfig({ file: optional(flags, "config"), env: process.env, needToken: false });
+    const base = optional(flags, "profile-dir") ?? defaultProfileBase(process.env);
+    dirs = config.accounts
+      .filter((account) => account.company === company)
+      .map((account) => profileDir(base, company, account.credentials));
+  } catch (error) {
+    if (error instanceof ConfigError) fail(error.message, EXIT.usage);
+    throw error;
+  }
+  SECRETS = secretsOf(config);
+  if (!dirs.length) fail(`no ${spec.name} login in the config: add it first, then run trust.`, EXIT.usage);
+  let failed = 0;
+  for (const [index, dir] of dirs.entries()) {
+    const which = dirs.length > 1 ? ` (login ${index + 1} of ${dirs.length})` : "";
+    process.stdout.write(
+      `${spec.name}${which}: a browser window opens on the bank's own login page. Log in there with the code the bank sends. The window closes by itself when the bank shows your accounts; you have 10 minutes.\n`,
+    );
+    const outcome = await trustDevice(company, { profileDir: dir, env: process.env });
+    if (outcome === "trusted") {
+      process.stdout.write(`${spec.name}${which}: this computer is known to the bank now. \`orla-il-banks run\` logs in from it.\n`);
+    } else {
+      process.stderr.write(
+        `${spec.name}${which}: ${outcome === "closed" ? "the window was closed before the bank showed your accounts" : "no login within 10 minutes"}. Run trust again when ready.\n`,
+      );
+      failed += 1;
+    }
+  }
+  return failed ? EXIT.failure : EXIT.ok;
+}
+
 async function main(argv: string[]): Promise<number> {
   const { words, flags } = parse(argv);
   if (flags["version"]) {
@@ -277,6 +370,7 @@ async function main(argv: string[]): Promise<number> {
     }
   }
   if (command === "run") return run(flags);
+  if (command === "trust") return trust(words[1], flags);
   fail(`unknown command "${command}". See --help.`, EXIT.usage);
 }
 

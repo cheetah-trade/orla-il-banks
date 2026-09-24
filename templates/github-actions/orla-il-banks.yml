@@ -3,6 +3,10 @@
 # files the rows into Orla. The runner refuses to start in a public
 # repository, because public repositories have public run logs.
 #
+# Bank Hapoalim is skipped here: it asks for a code whenever a login comes
+# from a device it has not seen, and a GitHub runner is new every time. Run
+# it from your own computer (README, "Bank Hapoalim and a new computer").
+#
 # Two secrets, under Settings, Secrets and variables, Actions:
 #   ORLA_TOKEN        the key from Orla: Integrations, Israeli banks
 #   ORLA_IL_ACCOUNTS  your logins, as JSON. See the README for the shape.

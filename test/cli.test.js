@@ -193,3 +193,45 @@ test("a saved scrape is written readable by its owner only", async () => {
   strictEqual(code, 0);
   strictEqual(statSync(path).mode & 0o777, 0o600);
 });
+
+test("Hapoalim in GitHub Actions is skipped with the reason, not tried from a new device", async () => {
+  const event = write("event-private.json", { repository: { private: true } });
+  const { code, stderr } = await run(["run", "--dry-run"], {
+    GITHUB_ACTIONS: "true",
+    GITHUB_EVENT_PATH: event,
+    ORLA_IL_ACCOUNTS: JSON.stringify([{ company: "hapoalim", userCode: "AB1234", password: "pa55word" }]),
+  });
+  strictEqual(code, 1);
+  match(stderr, /Bank Hapoalim: skipped\. .*GitHub runner is new every time/);
+  ok(!stderr.includes("AB1234"));
+});
+
+test("trust refuses a bank that does not need it, and a login that is not in the config", async () => {
+  const accounts = JSON.stringify([{ company: "max", username: "u", password: "p" }]);
+  const notNeeded = await run(["trust", "max"], { ORLA_IL_ACCOUNTS: accounts });
+  strictEqual(notNeeded.code, 2);
+  match(notNeeded.stderr, /Max does not need a trusted computer/);
+  const missing = await run(["trust", "hapoalim"], { ORLA_IL_ACCOUNTS: accounts, ORLA_IL_PROFILE_DIR: join(dir, "profiles-trust") });
+  strictEqual(missing.code, 2);
+  match(missing.stderr, /no Bank Hapoalim login in the config/);
+  const nothing = await run(["trust"], { ORLA_IL_ACCOUNTS: accounts });
+  strictEqual(nothing.code, 2);
+});
+
+test("trust does not run in GitHub Actions", async () => {
+  const { code, stderr } = await run(["trust", "hapoalim"], {
+    GITHUB_ACTIONS: "true",
+    ORLA_IL_ACCOUNTS: JSON.stringify([{ company: "hapoalim", userCode: "u", password: "p" }]),
+  });
+  strictEqual(code, 2);
+  match(stderr, /does not run in GitHub Actions/);
+});
+
+test("Hapoalim in the Docker image is skipped the same way", async () => {
+  const { code, stderr } = await run(["run", "--dry-run"], {
+    ORLA_IL_EPHEMERAL: "1",
+    ORLA_IL_ACCOUNTS: JSON.stringify([{ company: "hapoalim", userCode: "u", password: "p" }]),
+  });
+  strictEqual(code, 1);
+  match(stderr, /this container is new every time/);
+});

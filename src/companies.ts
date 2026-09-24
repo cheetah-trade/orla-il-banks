@@ -27,10 +27,22 @@ export interface Company {
   fields: readonly string[];
   /** asks for a one-time code at every login, so it cannot run unattended */
   otp?: true;
+  /** asks for a code when the login comes from a device it has not seen, so
+   *  it runs from a kept browser profile that the person introduced to the
+   *  bank once (`orla-il-banks trust`), and never from a fresh one */
+  trustedDevice?: true;
 }
 
 export const COMPANIES = {
-  hapoalim: { name: "Bank Hapoalim", kind: "bank", billedByBank: false, fields: ["userCode", "password"] },
+  hapoalim: {
+    name: "Bank Hapoalim",
+    kind: "bank",
+    billedByBank: false,
+    fields: ["userCode", "password"],
+    // since March 2026 the bank sends an SMS code to a login from an unknown
+    // device (upstream issue #1077, closed as not planned)
+    trustedDevice: true,
+  },
   leumi: { name: "Bank Leumi", kind: "bank", billedByBank: false, fields: ["username", "password"] },
   mizrahi: { name: "Mizrahi Bank", kind: "bank", billedByBank: false, fields: ["username", "password"] },
   discount: { name: "Discount Bank", kind: "bank", billedByBank: false, fields: ["id", "password", "num"] },

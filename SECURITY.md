@@ -27,6 +27,12 @@ which types them into your bank's website in a local browser.
 - In GitHub Actions a public repository is refused, and every password is
   masked in the log one by one.
 - No failure screenshots are taken: a screenshot of a bank page is a statement.
+- For a bank that checks devices (Bank Hapoalim), a browser profile is kept on
+  this computer, one per login, in a folder readable by you only; a folder
+  anyone else can read is refused. It holds a logged-in bank session. It is
+  never kept in GitHub Actions or Docker, and deleting it forgets the device.
+  `trust` opens the bank's own page for you to log in: the password and the
+  code are typed there, not into this program.
 - Every message that reaches a log has your passwords and key replaced with
   `***`, including errors nobody expected.
 

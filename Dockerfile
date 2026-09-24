@@ -23,7 +23,8 @@ RUN apt-get update \
 ENV NODE_ENV=production \
     PUPPETEER_SKIP_DOWNLOAD=true \
     PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium \
-    ORLA_IL_NO_SANDBOX=1
+    ORLA_IL_NO_SANDBOX=1 \
+    ORLA_IL_EPHEMERAL=1
 WORKDIR /app
 COPY package.json npm-shrinkwrap.json ./
 RUN npm ci --omit=dev --ignore-scripts --no-fund --no-audit

@@ -26,7 +26,7 @@ statement would show.
 
 | Id | Institution | Kind in Orla |
 |---|---|---|
-| `hapoalim` | Bank Hapoalim | bank |
+| `hapoalim` | Bank Hapoalim | bank, **from your own computer**, after `trust` once (see below) |
 | `leumi` | Bank Leumi | bank |
 | `mizrahi` | Mizrahi Tefahot | bank |
 | `discount` | Discount Bank | bank |
@@ -45,6 +45,33 @@ statement would show.
 | `beyahadBishvilha` | Beyahad Bishvilha | card (prepaid) |
 
 `orla-il-banks companies` prints the fields each one needs.
+
+### Bank Hapoalim and a new computer
+
+Since March 2026 Bank Hapoalim sends an SMS code when a login comes from a
+device it has not seen, and the scraping library has no way through that page
+(upstream [#1077](https://github.com/eshaham/israeli-bank-scrapers/issues/1077)).
+A browser started fresh is a new device every time, so the runner keeps one
+browser profile per Hapoalim login on your computer, and you introduce it to
+the bank once:
+
+```bash
+npx orla-il-banks@0.1.0 trust hapoalim --config ~/.orla-il-banks.json
+```
+
+A browser window opens on the bank's own login page. Log in there, with the
+code the bank sends; the window closes by itself when the bank shows your
+accounts. Your password and the code go into the bank's page, not into this
+program. From then on `run` logs in from that profile.
+
+- The profile lives in `~/.orla-il-banks/profiles` (move it with
+  `--profile-dir` or `ORLA_IL_PROFILE_DIR`), readable by you only. It holds a
+  bank session: delete the folder to make this computer a stranger again.
+- Not in GitHub Actions and not in Docker: a runner is a new device on every
+  run, and keeping the profile there would put a bank session in a cache. The
+  runner skips Hapoalim there and says so.
+- Whether the bank keeps recognising the profile, and for how long, is the
+  bank's call. If a run fails with a hint to trust again, do.
 
 Not supported: **Behatsdaa**. It is the order history of a benefits shop, and
 each order there was paid with a card; with that card connected too, every
@@ -96,7 +123,8 @@ to `.github/workflows/` in it, and add two secrets:
    {"company": "max", "username": "...", "password": "..."}]
   ```
 
-The runner checks that the repository is private and stops if it is not:
+Bank Hapoalim does not run here (see above): the runner skips it with the
+reason. The runner checks that the repository is private and stops if it is not:
 public repositories have public run logs. It also masks every password in the
 log one by one, since GitHub masks the whole secret but not the values inside
 it.
@@ -155,6 +183,7 @@ for its rows**: later runs recognise them and do not file them again.
 | It says | Do |
 |---|---|
 | `the browser did not start` | Run `check-browser`. On Ubuntu 24.04, see the `sysctl` line in the template. |
+| `Bank Hapoalim: ... this computer is new to it` | Run `orla-il-banks trust hapoalim` once and log in on the bank's page. |
 | `Orla refused the key` | The key expired or was revoked. Issue a new one on the Israeli banks card. |
 | `<bank>: failed. invalidPassword` | Log in on the bank's site by hand once; banks lock after a few failures. |
 | `<bank>: failed. changePassword` | The bank wants a new password. Change it on the site, then in your config. |

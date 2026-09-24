@@ -34,4 +34,16 @@ export function optional(flags: Flags, name: string): string | undefined {
 
 //: Every flag `run` understands. Anything else is a typo, and a typo in
 //: `--dry-run` would otherwise send the rows the person meant to preview.
-export const RUN_FLAGS = new Set(["config", "days", "dry-run", "only", "from-json", "save-json", "show-browser"]);
+export const RUN_FLAGS = new Set([
+  "config",
+  "days",
+  "dry-run",
+  "only",
+  "from-json",
+  "save-json",
+  "show-browser",
+  "profile-dir",
+]);
+
+//: What `trust` understands. It reads the config only to name the profile.
+export const TRUST_FLAGS = new Set(["config", "profile-dir"]);

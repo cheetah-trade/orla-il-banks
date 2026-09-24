@@ -19,6 +19,7 @@
 
 import { createScraper, type ScraperCredentials } from "israeli-bank-scrapers";
 
+import { browserArgs } from "./browser.js";
 import { COMPANIES } from "./companies.js";
 import type { AccountConfig } from "./config.js";
 import type { ScrapedAccount } from "./map.js";
@@ -33,13 +34,11 @@ export interface ScrapeOptions {
   /** asks the person at the terminal; used for One Zero's login code */
   ask: (question: string) => Promise<string>;
   env: NodeJS.ProcessEnv;
+  /** a kept browser profile (`profile.ts`), for a bank that must know the device */
+  profileDir?: string;
 }
 
-export function browserArgs(env: NodeJS.ProcessEnv): string[] {
-  // Chromium's sandbox needs kernel features a container or a hardened CI
-  // runner often lacks. Turned off only when asked, and the Docker image asks.
-  return env["ORLA_IL_NO_SANDBOX"] === "1" ? ["--no-sandbox", "--disable-setuid-sandbox"] : [];
-}
+export { browserArgs };
 
 /**
  * Start the browser on an empty page and close it: the one check of a machine
@@ -74,16 +73,36 @@ export async function scrape(account: AccountConfig, options: ScrapeOptions): Pr
       options.ask(`${COMPANIES[company].name} sent a code to ${account.credentials["phoneNumber"] ?? "your phone"}. Code: `);
   }
   const executablePath = options.env["PUPPETEER_EXECUTABLE_PATH"];
+  // A bank that must know the device gets a browser we start ourselves on its
+  // kept profile; the library takes it as an external browser. Everything else
+  // gets the library's own fresh browser, and no bank session stays on disk.
+  let own: import("puppeteer").Browser | undefined;
   try {
-    const scraper = createScraper({
+    if (options.profileDir) {
+      const { default: puppeteer } = await import("puppeteer");
+      own = await puppeteer.launch({
+        headless: !options.showBrowser,
+        userDataDir: options.profileDir,
+        args: browserArgs(options.env),
+        ...(executablePath ? { executablePath } : {}),
+      });
+    }
+    const common = {
       companyId: company as never,
       startDate: options.startDate,
       combineInstallments: false,
-      showBrowser: options.showBrowser,
-      args: browserArgs(options.env),
-      ...(executablePath ? { executablePath } : {}),
       outputData: { enableTransactionsFilterByDate: false },
-    });
+    };
+    const scraper = createScraper(
+      own
+        ? { ...common, browser: own, skipCloseBrowser: true }
+        : {
+            ...common,
+            showBrowser: options.showBrowser,
+            args: browserArgs(options.env),
+            ...(executablePath ? { executablePath } : {}),
+          },
+    );
     const result = await scraper.scrape(credentials as unknown as ScraperCredentials);
     if (!result.success) {
       return { company, ok: false, error: `${result.errorType ?? "error"}: ${result.errorMessage ?? "no message"}` };
@@ -91,5 +110,9 @@ export async function scrape(account: AccountConfig, options: ScrapeOptions): Pr
     return { company, ok: true, accounts: (result.accounts ?? []) as unknown as ScrapedAccount[] };
   } catch (error) {
     return { company, ok: false, error: error instanceof Error ? error.message : String(error) };
+  } finally {
+    // closed here and not by the library, so the profile is flushed to disk
+    // whether the scrape went through or not
+    if (own?.connected) await own.close();
   }
 }
