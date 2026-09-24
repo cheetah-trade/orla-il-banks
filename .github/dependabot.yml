@@ -7,6 +7,16 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 3
+    ignore:
+      # Moves with israeli-bank-scrapers, never on its own: the library is
+      # tested against the puppeteer it resolves (RELEASING.md).
+      - dependency-name: puppeteer
+      # The runtime is Node 22; types for a newer Node describe APIs it lacks.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      # A compiler major is a decision, not a weekly bump.
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
