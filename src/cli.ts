@@ -182,7 +182,13 @@ async function run(flags: Record<string, string | boolean>): Promise<number> {
   }
 
   const today = israelDay(new Date());
-  const rows: PushRow[] = [];
+  //: One delivery per login, never one for everything. Orla links two rows of
+  //: one delivery as a transfer by itself (same day, same amount, one each
+  //: way), a rule written for one login at one institution. Across
+  //: institutions it would take a card refund and an unrelated bank debit of
+  //: the same amount for a transfer and hide the expense. Per login, the card's
+  //: cycle row and the bank's line meet as a suggestion instead: one click.
+  const deliveries: { name: string; rows: PushRow[] }[] = [];
   for (const saved of read) {
     if (!isCompany(saved.company)) {
       process.stderr.write(`${saved.company}: not a company this runner knows, left out\n`);
@@ -190,6 +196,8 @@ async function run(flags: Record<string, string | boolean>): Promise<number> {
       continue;
     }
     const company: CompanyId = saved.company;
+    const rows: PushRow[] = [];
+    deliveries.push({ name: COMPANIES[company].name, rows });
     for (const account of saved.accounts) {
       const mapped = mapAccount(company, account, today);
       rows.push(...mapped.rows);
@@ -204,17 +212,26 @@ async function run(flags: Record<string, string | boolean>): Promise<number> {
     }
   }
 
+  const count = deliveries.reduce((sum, d) => sum + d.rows.length, 0);
   if (dryRun) {
-    process.stdout.write(`dry run: ${rows.length} rows ready, nothing sent\n`);
+    process.stdout.write(`dry run: ${count} rows ready, nothing sent\n`);
     return failed ? EXIT.failure : EXIT.ok;
   }
-  if (!rows.length) {
+  if (!count) {
     process.stdout.write("nothing to send\n");
     return failed ? EXIT.failure : EXIT.ok;
   }
 
   try {
-    const totals = await push(config.url, config.token, rows);
+    const totals = { booked: 0, duplicates: 0, skipped_closed: 0, rejected: [] as Array<Record<string, string>> };
+    for (const delivery of deliveries) {
+      if (!delivery.rows.length) continue;
+      const out = await push(config.url, config.token, delivery.rows);
+      totals.booked += out.booked;
+      totals.duplicates += out.duplicates;
+      totals.skipped_closed += out.skipped_closed;
+      totals.rejected.push(...out.rejected);
+    }
     process.stdout.write(
       `Orla: ${totals.booked} new, ${totals.duplicates} already there` +
         (totals.skipped_closed ? `, ${totals.skipped_closed} in closed months` : "") +

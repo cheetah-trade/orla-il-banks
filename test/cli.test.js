@@ -109,22 +109,25 @@ const SAVED = [
   },
 ];
 
-test("a saved scrape is sent: purchases, the card's cycle row and the bank's line", async () => {
+test("a saved scrape is sent: one delivery per login, the card's cycle row apart from the bank's line", async () => {
   received = [];
   const config = write("config.json", { orla: { url: base, token: "tok_test_1" } });
   const saved = write("saved.json", SAVED);
   const { code, stdout, stderr } = await run(["run", "--config", config, "--from-json", saved]);
   strictEqual(code, 0, stderr);
-  strictEqual(received.length, 1);
-  strictEqual(received[0].url, "/api/integration/transactions");
-  strictEqual(received[0].auth, "Bearer tok_test_1");
-  const rows = received[0].body.rows;
+  // Orla links two rows of ONE delivery as a transfer by itself. The cycle row
+  // and the bank's line must not share one: across institutions that rule
+  // would also glue a card refund to an unrelated bank debit of the same sum.
+  strictEqual(received.length, 2);
+  for (const call of received) {
+    strictEqual(call.url, "/api/integration/transactions");
+    strictEqual(call.auth, "Bearer tok_test_1");
+  }
   deepStrictEqual(
-    rows.map((r) => `${r.account_name}|${r.occurred_on}|${r.amount}|${r.payee}`),
+    received.map((call) => call.body.rows.map((r) => `${r.account_name}|${r.occurred_on}|${r.amount}|${r.payee}`)),
     [
-      "Isracard ••4580|2026-08-20|-120.00|RAMI LEVY",
-      "Isracard ••4580|2026-09-02|120.00|Billing cycle payment",
-      "Bank Hapoalim ••3456|2026-09-02|-120.00|ישראכרט",
+      ["Isracard ••4580|2026-08-20|-120.00|RAMI LEVY", "Isracard ••4580|2026-09-02|120.00|Billing cycle payment"],
+      ["Bank Hapoalim ••3456|2026-09-02|-120.00|ישראכרט"],
     ],
   );
   match(stdout, /Isracard ••4580: 1 rows, 1 billing cycles \(left out: 1 pending\)/);

@@ -286,7 +286,7 @@ export function mapAccount(company: CompanyId, account: ScrapedAccount, today: s
       // The card charged -X; the bank paid +X into it.
       amount: formatCents(-cycle.cents),
       payee: "Billing cycle payment",
-      note: `The card's charges for ${cycle.day}, ${cycle.count} rows. Link it to the bank's line for the same day.`,
+      note: `The card's charges for ${cycle.day}, ${cycle.count} rows. Link it to the bank's line for the same day when Orla suggests.`,
     });
   }
 

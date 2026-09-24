@@ -139,9 +139,16 @@ sandbox off: containers usually lack what the sandbox needs.
   by hand. A cycle row is sent only once its billing day has come.
 - **Account numbers do not travel.** Orla gets a hash to recognise the account
   and a name like `Bank Hapoalim ••8901`.
+- **One delivery per login.** Orla links a move between two accounts of the same
+  login as a transfer by itself, the way it does for a bank it connects. Across
+  banks and cards it only suggests: a card refund and an unrelated bank payment
+  of the same amount on the same day must never be glued into a transfer. It
+  also means Orla's Connections page lists each bank's run on its own, and you
+  can undo one without the others.
 
 Every row has its own id, so running twice, or re-running after a failure,
-files nothing twice.
+files nothing twice. For the same reason **undoing a delivery in Orla is final
+for its rows**: later runs recognise them and do not file them again.
 
 ## When something fails
 
