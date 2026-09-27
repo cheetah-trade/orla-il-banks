@@ -22,14 +22,15 @@ jobs:
       - run: npm ci --ignore-scripts --no-fund --no-audit
       - run: npm run check
       - run: npm run build
-      - name: The runner installs its own browser
-        run: node dist/cli.js check-browser --install
       # Ubuntu 24.04 stops unprivileged user namespaces, which Chrome's sandbox
       # needs. Lifted on this throwaway runner instead of turning the sandbox
       # off; the template in templates/github-actions does the same. Before the
-      # tests, because one of them starts a browser on a kept profile and would
-      # otherwise skip itself here, where it matters most.
+      # browser's first start, and before the tests, because one of them
+      # starts a browser on a kept profile and would otherwise skip itself
+      # here, where it matters most.
       - run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+      - name: The runner installs its own browser
+        run: node dist/cli.js check-browser --install
       - run: npm test
       - name: The browser starts on a stock runner
         run: node dist/cli.js check-browser
