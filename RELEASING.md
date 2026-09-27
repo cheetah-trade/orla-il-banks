@@ -1,16 +1,21 @@
 # Releasing
 
-## One-time setup
+## One-time setup (done 24-27.09.2026)
 
-1. **Make the repository public** once the owner has read it: the Orla app
-   links here, and a private repository is a 404 to everyone else.
-2. **Claim the npm name.** The first publish cannot come from CI, because a
-   trusted publisher can only be set on a package that exists. From a machine
-   logged into npm with 2FA on: `npm publish --access public`.
-3. **Configure trusted publishing** on npmjs.com for `orla-il-banks`:
-   repository `cheetah-trade/orla-il-banks`, workflow `release.yml`.
-4. **Turn on private vulnerability reporting** in the repository's Security
-   settings, so `SECURITY.md` points somewhere that works.
+1. The repository is public: the Orla app links here.
+2. 0.1.0 was published by hand, from a machine logged into npm with a
+   security key (npm 11 in a real terminal: npm 10 and a terminal-less npm 11
+   cannot pass a security key on publish).
+3. Trusted publishing is set on npmjs.com for `orla-il-banks`: repository
+   `cheetah-trade/orla-il-banks`, workflow `release.yml`, with **Allow npm
+   publish** on. That is the owner's call of 27.09.2026, against npm's own
+   advice to leave it off: a `v*` tag publishes straight away, and publishing
+   is held by access to this repository and its CI, not by a person with a
+   second factor. To go back to staged releases (CI prepares with
+   `npm stage publish`, a person promotes it), untick it on npmjs.com and
+   change the publish step in `release.yml`.
+4. Private vulnerability reporting is on, so `SECURITY.md` points somewhere
+   that works.
 
 ## Cutting a release
 
