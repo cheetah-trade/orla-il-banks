@@ -71,13 +71,14 @@ function xml(text: string): string {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
+//: Mac paths in Mac form, whatever runs this: the job is tested on Windows too
 export function launchdPath(home: string): string {
-  return join(home, "Library", "LaunchAgents", `${LAUNCHD_LABEL}.plist`);
+  return posix.join(home, "Library", "LaunchAgents", `${LAUNCHD_LABEL}.plist`);
 }
 
 export function launchdPlist(target: Target): string {
   const args = [npxPath(target), ...runArgs(target)].map((a) => `    <string>${xml(a)}</string>`).join("\n");
-  const log = join(logDir(target.home), "launchd.log");
+  const log = posix.join(target.home, ".orla-il-banks", "logs", "launchd.log");
   return `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
