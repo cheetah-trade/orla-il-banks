@@ -56,7 +56,7 @@ browser profile per Hapoalim login on your computer, and you introduce it to
 the bank once. Setup offers to do it right away; later, or again:
 
 ```bash
-npx orla-il-banks@0.2.0 trust hapoalim
+npx orla-il-banks@0.3.0 trust hapoalim
 ```
 
 A browser window opens on the bank's own login page. Log in there, with the
@@ -95,7 +95,7 @@ your bank's website.
 4. **Run setup** and answer its questions:
 
    ```bash
-   npx orla-il-banks@0.2.0 setup
+   npx orla-il-banks@0.3.0 setup
    ```
 
    The first time, npx asks `Ok to proceed? (y)`: press Enter. Then setup
@@ -104,11 +104,12 @@ your bank's website.
    each. It saves them in a file only you can read, downloads the browser the
    runner drives (about 170 MB, once), and for Bank Hapoalim opens the bank's
    own login page so you can introduce this computer (see below). At the end it
-   offers to run.
-5. **Whenever you want fresh transactions**, open the terminal again and run:
+   offers to run it every day by itself, and to run now.
+5. **Whenever you want fresh transactions** (or if you said no to the daily
+   run), open the terminal again and run:
 
    ```bash
-   npx orla-il-banks@0.2.0 run
+   npx orla-il-banks@0.3.0 run
    ```
 
    The first run brings 90 days; `--days 365` brings a year. `--dry-run` logs
@@ -117,8 +118,25 @@ your bank's website.
 **Running setup again** asks what for: a new Orla key with your logins kept
 (a key runs out; issue a new one on the card), a bank added or a login changed
 (a new password: type the login again and it replaces the saved one), or
-starting over. To run it every day by itself, use cron or launchd on a Mac,
-Task Scheduler on Windows, or a private GitHub repository (below).
+starting over.
+
+### Every day by itself
+
+Setup offers it; `npx orla-il-banks@0.3.0 schedule --at 07:00` sets it up later,
+and `npx orla-il-banks@0.3.0 unschedule` removes it. On a Mac it is a launchd job
+(a run the Mac slept through happens at wake-up), on Windows a Task Scheduler
+task that runs while you are logged on (a run missed while the computer was off
+happens when it is back; Windows is not given your Windows password). Linux gets
+the cron line to add.
+
+- Each run writes to `~/.orla-il-banks/logs`, one file a day, the last 30 kept.
+- A run that fails shows a notification with the reason, for example a bank
+  asking for a new password or an Orla key that ran out.
+- One Zero is left out: it asks for a code at every login.
+- The job runs the version that set it up. A newer `setup` sets it up again with
+  the newer version.
+
+The machine has to be on. A private GitHub repository (below) runs without it.
 
 **On Windows, in PowerShell** rather than Command Prompt, `npx` may stop with
 *running scripts is disabled on this system*. Type `npx.cmd` instead of `npx`,
@@ -134,8 +152,8 @@ readable by you only: the runner refuses a file anyone else can read.
 cp examples/orla-il-banks.example.json ~/.orla-il-banks.json
 chmod 600 ~/.orla-il-banks.json
 # edit it: your Orla key, then one entry per bank or card
-npx orla-il-banks@0.2.0 check-browser --install
-npx orla-il-banks@0.2.0 run --dry-run
+npx orla-il-banks@0.3.0 check-browser --install
+npx orla-il-banks@0.3.0 run --dry-run
 ```
 
 `check-browser` starts the browser on an empty page and closes it; it touches
@@ -200,6 +218,10 @@ sandbox off: containers usually lack what the sandbox needs.
   a transfer: one click per card per month. If the two amounts differ (a fee,
   a card billed in two currencies), there is no suggestion and you link them
   by hand. A cycle row is sent only once its billing day has come.
+- **The balance the bank states.** Orla shows it as the account's balance,
+  the way it does for a bank it connects itself, instead of adding up the rows
+  it was sent: ninety days of rows are not an account's history. A card shows
+  what is owed. A mirror in a second currency (`(USD)`) has rows and no balance.
 - **Account numbers do not travel.** Orla gets a hash to recognise the account
   and a name like `Bank Hapoalim ••8901`.
 - **One delivery per login.** Orla links a move between two accounts of the same
@@ -237,8 +259,9 @@ read it through before posting.
 
 1. In Orla, on the Israeli banks card: undo its deliveries first if you want
    the rows gone too, then revoke the source. The key stops working at once.
-2. On the computer, delete `~/.orla-il-banks.json` (your logins), the folder
-   `~/.orla-il-banks` (browser profiles, one per Hapoalim login), and
+2. On the computer, run `npx orla-il-banks@0.3.0 unschedule` if you set up the
+   daily run, then delete `~/.orla-il-banks.json` (your logins), the folder
+   `~/.orla-il-banks` (browser profiles and logs), and
    `~/.cache/puppeteer` (the browser, unless something else of yours uses it).
    On Windows `~` is your user folder, `C:\Users\<you>`.
 

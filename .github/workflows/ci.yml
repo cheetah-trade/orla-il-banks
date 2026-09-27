@@ -81,6 +81,32 @@ jobs:
       - run: npm test
       - name: The browser starts
         run: node dist/cli.js check-browser
+      # The scheduler itself, not a stand-in: the job goes in, the system
+      # shows it, and it comes out. It is not run: the version it names is the
+      # one this change is about to publish.
+      - name: The daily run goes into launchd and comes out
+        if: runner.os == 'macOS'
+        run: |
+          printf '{"orla":{"token":"oit_ci_placeholder"},"accounts":[]}' > "$RUNNER_TEMP/ci-config.json"
+          chmod 600 "$RUNNER_TEMP/ci-config.json"
+          node dist/cli.js schedule --at 06:45 --config "$RUNNER_TEMP/ci-config.json"
+          launchctl print "gui/$(id -u)/finance.orla.il-banks" | grep -E "state|program"
+          plutil -lint "$HOME/Library/LaunchAgents/finance.orla.il-banks.plist"
+          node dist/cli.js unschedule
+          ! launchctl print "gui/$(id -u)/finance.orla.il-banks" 2>/dev/null
+      - name: The daily run goes into Task Scheduler and comes out
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          '{"orla":{"token":"oit_ci_placeholder"},"accounts":[]}' | Set-Content "$env:RUNNER_TEMP\ci-config.json"
+          node dist/cli.js schedule --at 06:45 --config "$env:RUNNER_TEMP\ci-config.json"
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          schtasks /Query /TN "Orla Israeli banks" /XML | Select-String -Pattern "StartWhenAvailable|conhost|06:45"
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          node dist/cli.js unschedule
+          schtasks /Query /TN "Orla Israeli banks" 2>$null
+          if ($LASTEXITCODE -eq 0) { Write-Error "the task is still there"; exit 1 }
+          exit 0
 
   docker:
     runs-on: ubuntu-24.04

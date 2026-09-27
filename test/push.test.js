@@ -136,3 +136,57 @@ test("a key is checked with an empty delivery, and each refusal is told apart", 
   strictEqual(down.result, "unreachable");
   await rejects(checkKey("http://app.orla.finance", "tok", { fetch: answer(422, {}) }), /use https/);
 });
+
+const BALANCE = {
+  account_key: "il:hapoalim:abc",
+  account_name: "Bank Hapoalim ••3456",
+  account_kind: "bank",
+  currency: "ILS",
+  balance: "25000.50",
+  as_of: "2026-09-27T07:00:00.000Z",
+};
+
+test("balances ride with the first call of a delivery, never repeated", async () => {
+  const bodies = [];
+  const fetch = async (_url, init) => {
+    const body = JSON.parse(init.body);
+    bodies.push(body);
+    return reply(200, { booked: body.rows.length, duplicates: 0, batch_id: "b", balances_set: body.balances?.length ?? 0 });
+  };
+  const totals = await push("https://x.test", "tok", Array.from({ length: 600 }, (_, i) => row(i)), { fetch }, [BALANCE]);
+  deepStrictEqual(bodies.map((b) => b.balances?.length ?? 0), [1, 0]);
+  strictEqual(totals.balances_set, 1);
+  strictEqual(totals.booked, 600);
+});
+
+test("a login with a balance and no new rows sends the balance alone", async () => {
+  const bodies = [];
+  const fetch = async (_url, init) => {
+    bodies.push(JSON.parse(init.body));
+    return reply(200, { booked: 0, duplicates: 0, batch_id: "b", balances_set: 1 });
+  };
+  const totals = await push("https://x.test", "tok", [], { fetch }, [BALANCE]);
+  deepStrictEqual(bodies, [{ rows: [], balances: [BALANCE] }]);
+  strictEqual(totals.balances_set, 1);
+});
+
+test("a door from before balances reads a balance-only call as empty, and nothing fails", async () => {
+  // released before Orla takes balances: the rows must keep flowing
+  const fetch = async () => reply(422, { error: "push_source.no_rows", detail: "No rows to file" });
+  const totals = await push("https://x.test", "tok", [], { fetch }, [BALANCE]);
+  strictEqual(totals.balances_set, 0);
+  strictEqual(totals.booked, 0);
+});
+
+test("an empty delivery with nothing to say makes no call at all", async () => {
+  let called = false;
+  const totals = await push("https://x.test", "tok", [], { fetch: async () => ((called = true), reply(200, {})) }, []);
+  strictEqual(called, false);
+  strictEqual(totals.booked, 0);
+});
+
+test("rows still refused as empty when the door sees no rows and no balances were sent", async () => {
+  // no_rows with rows in the call is a contract error, not a missing feature
+  const fetch = async () => reply(422, { error: "push_source.no_rows", detail: "No rows to file" });
+  await rejects(push("https://x.test", "tok", [row(1)], { fetch }), /refused the delivery/);
+});

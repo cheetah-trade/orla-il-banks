@@ -37,6 +37,12 @@ which types them into your bank's website in a local browser.
   code are typed there, not into this program.
 - Every message that reaches a log has your passwords and key replaced with
   `***`, including errors nobody expected.
+- The daily run (`schedule`) runs as you, from your own scheduler, with the
+  same config file. On Windows it runs only while you are logged on, so Windows
+  is never handed your Windows password. Its logs (`~/.orla-il-banks/logs`,
+  readable by you only) hold what the terminal would have shown, and a failure
+  notification carries the first line of it: a bank's name and its error,
+  never a password.
 
 ## Supply chain
 

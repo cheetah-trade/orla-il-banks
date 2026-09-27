@@ -53,6 +53,9 @@ export interface ScrapedTxn {
 export interface ScrapedAccount {
   accountNumber: string;
   currency?: string;
+  /** what the bank shows as the account's balance now; on a card, what is
+   *  owed, negative (Max: the credit used, Cal: the next charge) */
+  balance?: number;
   txns: ScrapedTxn[];
 }
 
@@ -67,6 +70,20 @@ export interface PushRow {
   amount: string;
   payee: string;
   note: string;
+}
+
+/** The balance a bank states for one account (`PushBalanceIn` on the Orla
+ *  side). Orla shows it as the account's balance, the way it shows a
+ *  connected bank's, instead of adding up the rows it was sent: ninety days of
+ *  rows are not an account's history, and their sum is not what is in it. */
+export interface PushBalance {
+  account_key: string;
+  account_name: string;
+  account_kind: Kind;
+  currency: string;
+  balance: string;
+  /** when the bank said it: an older reading never replaces a newer one */
+  as_of: string;
 }
 
 export interface Mapped {
@@ -309,4 +326,22 @@ export function mapAccount(company: CompanyId, account: ScrapedAccount, today: s
   }
 
   return { rows, cycles: cycleRows, skipped };
+}
+
+/** The account's balance as the bank states it, or null when the library read
+ *  none (most card scrapers for some cards, and any bank that did not say).
+ *  On the account's own key and in its own currency: the bank states one
+ *  balance per account, the mirrors in other currencies (`mirrorFor`) hold the
+ *  rows the card billed in them and no balance of their own. */
+export function balanceOf(company: CompanyId, account: ScrapedAccount, asOf: Date): PushBalance | null {
+  if (typeof account.balance !== "number" || !Number.isFinite(account.balance)) return null;
+  const { key, name } = accountIdentity(company, account.accountNumber);
+  return {
+    account_key: key,
+    account_name: name,
+    account_kind: COMPANIES[company].kind,
+    currency: currencyCode(account.currency) ?? "ILS",
+    balance: formatCents(toCents(account.balance)),
+    as_of: asOf.toISOString(),
+  };
 }

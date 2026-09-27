@@ -5,7 +5,7 @@
 import { deepStrictEqual, match, notStrictEqual, ok, strictEqual, throws } from "node:assert/strict";
 import { test } from "node:test";
 
-import { accountIdentity, currencyCode, formatCents, israelDay, mapAccount, toCents } from "../dist/map.js";
+import { accountIdentity, balanceOf, currencyCode, formatCents, israelDay, mapAccount, toCents } from "../dist/map.js";
 
 const TODAY = "2026-09-24";
 
@@ -266,4 +266,21 @@ test("long text is cut to what the door takes, not refused", () => {
   strictEqual(row.payee.length, 200);
   strictEqual(row.note.length, 2000);
   ok(row.external_id.length <= 120);
+});
+
+test("a balance the bank states is sent on the account's own key and currency; none is not guessed", () => {
+  const at = new Date("2026-09-27T07:00:00Z");
+  const bank = balanceOf("hapoalim", { accountNumber: "12-600-123456", balance: 25000.5, txns: [] }, at);
+  deepStrictEqual(bank, {
+    account_key: accountIdentity("hapoalim", "12-600-123456").key,
+    account_name: "Bank Hapoalim ••3456",
+    account_kind: "bank",
+    currency: "ILS",
+    balance: "25000.50",
+    as_of: "2026-09-27T07:00:00.000Z",
+  });
+  // a card states what is owed, negative, and it stays negative
+  strictEqual(balanceOf("max", { accountNumber: "1234", balance: -812.4, txns: [] }, at).balance, "-812.40");
+  strictEqual(balanceOf("max", { accountNumber: "1234", txns: [] }, at), null);
+  strictEqual(balanceOf("max", { accountNumber: "1234", balance: Number.NaN, txns: [] }, at), null);
 });

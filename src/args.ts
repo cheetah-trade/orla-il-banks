@@ -43,6 +43,7 @@ export const RUN_FLAGS = new Set([
   "save-json",
   "show-browser",
   "profile-dir",
+  "scheduled",
 ]);
 
 //: What `trust` understands. It reads the config only to name the profile.
@@ -50,6 +51,9 @@ export const TRUST_FLAGS = new Set(["config", "profile-dir"]);
 
 //: What `setup` understands: where to write the config, and the profiles.
 export const SETUP_FLAGS = new Set(["config", "profile-dir"]);
+
+//: What `schedule` understands: when, and which config the daily run reads.
+export const SCHEDULE_FLAGS = new Set(["at", "config"]);
 
 //: The oldest Node the runner is built and tested on (package.json `engines`).
 //: npm only warns about `engines`, so an older Node would run it anyway and

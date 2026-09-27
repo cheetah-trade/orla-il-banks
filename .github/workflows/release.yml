@@ -45,6 +45,17 @@ jobs:
             echo "::error::tag $GITHUB_REF_NAME does not match package.json version $pkg"
             exit 1
           fi
+      # People copy these commands; 0.2.1 went out with the README still
+      # naming 0.2.0.
+      - name: README and the Actions template name this version
+        run: |
+          pkg="$(node -p "require('./package.json').version")"
+          stale="$(grep -rnoE 'orla-il-banks@[0-9]+\.[0-9]+\.[0-9]+' README.md templates | grep -v "@$pkg\$" || true)"
+          if [ -n "$stale" ]; then
+            echo "::error::these still name another version than $pkg:"
+            echo "$stale"
+            exit 1
+          fi
       - run: npm publish --access public
 
   image:
