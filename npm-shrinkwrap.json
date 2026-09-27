@@ -1,12 +1,12 @@
 {
   "name": "orla-il-banks",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
       "name": "orla-il-banks",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "license": "MIT",
       "dependencies": {
         "israeli-bank-scrapers": "6.12.1",
