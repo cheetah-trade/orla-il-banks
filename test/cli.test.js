@@ -9,8 +9,10 @@ import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { after, before, test } from "node:test";
+import { fileURLToPath } from "node:url";
 
-const CLI = new URL("../dist/cli.js", import.meta.url).pathname;
+// fileURLToPath, not .pathname: on Windows the latter is "/D:/..."
+const CLI = fileURLToPath(new URL("../dist/cli.js", import.meta.url));
 const dir = mkdtempSync(join(tmpdir(), "orla-il-cli-"));
 
 let server;

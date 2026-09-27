@@ -31,9 +31,9 @@ jobs:
       - run: npm ci --ignore-scripts --no-fund --no-audit
       - run: npm run check
       - run: npm run build
-      - run: node dist/cli.js check-browser --install
       # as in ci.yml: Chrome's sandbox needs the user namespaces 24.04 stops
       - run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+      - run: node dist/cli.js check-browser --install
       - run: npm test
       # The tag and the manifest agree, or `npm view` and `git tag` stop
       # telling the same story.
