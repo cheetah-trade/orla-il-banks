@@ -5,7 +5,7 @@
 import { deepStrictEqual, match, notStrictEqual, ok, strictEqual, throws } from "node:assert/strict";
 import { test } from "node:test";
 
-import { accountIdentity, balanceOf, currencyCode, formatCents, israelDay, mapAccount, toCents } from "../dist/map.js";
+import { accountIdentity, balanceOf, balancesOf, currencyCode, formatCents, israelDay, mapAccount, toCents } from "../dist/map.js";
 
 const TODAY = "2026-09-24";
 
@@ -283,4 +283,28 @@ test("a balance the bank states is sent on the account's own key and currency; n
   strictEqual(balanceOf("max", { accountNumber: "1234", balance: -812.4, txns: [] }, at).balance, "-812.40");
   strictEqual(balanceOf("max", { accountNumber: "1234", txns: [] }, at), null);
   strictEqual(balanceOf("max", { accountNumber: "1234", balance: Number.NaN, txns: [] }, at), null);
+});
+
+test("a card's second-currency mirror is stated at zero once the card states its debt", () => {
+  // the shekel debt is taken off the whole credit frame, dollar purchases
+  // included: left to its rows, the dollar mirror would count them again
+  const at = new Date("2026-09-27T07:00:00Z");
+  const card = {
+    accountNumber: "1234",
+    balance: -812.4,
+    txns: [txn({ chargedAmount: -15.99, chargedCurrency: "USD", description: "NETFLIX" }), txn({ chargedAmount: -230 })],
+  };
+  const { rows } = mapAccount("max", card, TODAY);
+  const stated = balancesOf("max", card, rows, at);
+  deepStrictEqual(
+    stated.map((b) => `${b.account_name}|${b.currency}|${b.balance}`),
+    ["Max ••1234|ILS|-812.40", "Max ••1234 (USD)|USD|0.00"],
+  );
+  strictEqual(stated[1].account_key, `${accountIdentity("max", "1234").key}:usd`);
+  // the same keys the rows file under, so the zero lands on the mirror they fill
+  deepStrictEqual(new Set(rows.map((r) => r.account_key)), new Set(stated.map((b) => b.account_key)));
+  // a card that stated no debt leaves every mirror to its rows
+  deepStrictEqual(balancesOf("max", { ...card, balance: undefined }, rows, at), []);
+  // a bank in one currency states its own balance and nothing else
+  strictEqual(balancesOf("hapoalim", { accountNumber: "12-600-1", balance: 10, txns: [] }, [], at).length, 1);
 });
