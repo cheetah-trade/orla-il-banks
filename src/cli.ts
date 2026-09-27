@@ -12,7 +12,7 @@
 import { chmodSync, readFileSync, writeFileSync } from "node:fs";
 import { createInterface } from "node:readline/promises";
 
-import { optional, parse, RUN_FLAGS, SETUP_FLAGS, TRUST_FLAGS } from "./args.js";
+import { NODE_MIN_MAJOR, nodeTooOld, optional, parse, RUN_FLAGS, SETUP_FLAGS, TRUST_FLAGS } from "./args.js";
 import { findBrowser, installBrowser } from "./browser.js";
 import { COMPANIES, type CompanyId, isCompany, LEFT_OUT } from "./companies.js";
 import {
@@ -26,7 +26,7 @@ import {
   secretsOf,
   type Config,
 } from "./config.js";
-import { israelDay, mapAccount, type PushRow, type ScrapedAccount } from "./map.js";
+import { accountIdentity, israelDay, mapAccount, type PushRow, type ScrapedAccount } from "./map.js";
 import { defaultProfileBase, profileDir } from "./profile.js";
 import { Cancelled, confirm, terminalIo, type Io } from "./prompt.js";
 import { checkKey, push, PushError } from "./push.js";
@@ -322,7 +322,7 @@ async function run(flags: Record<string, string | boolean>): Promise<number> {
     for (const account of saved.accounts) {
       const mapped = mapAccount(company, account, today);
       rows.push(...mapped.rows);
-      const name = mapped.rows[0]?.account_name ?? COMPANIES[company].name;
+      const { name } = accountIdentity(company, account.accountNumber);
       const left = Object.entries(mapped.skipped)
         .filter(([, count]) => count > 0)
         .map(([why, count]) => `${count} ${why}`);
@@ -359,6 +359,7 @@ async function run(flags: Record<string, string | boolean>): Promise<number> {
         (totals.rejected.length ? `, ${totals.rejected.length} refused` : "") +
         "\n",
     );
+    if (totals.booked) process.stdout.write("See them in Orla: Integrations, Israeli banks, What it filed.\n");
     for (const refusal of totals.rejected) {
       process.stderr.write(`refused ${refusal["external_id"] ?? "a row"}: ${refusal["reason"] ?? JSON.stringify(refusal)}\n`);
     }
@@ -406,7 +407,7 @@ async function trust(company: string | undefined, flags: Record<string, string |
   for (const [index, dir] of dirs.entries()) {
     const which = dirs.length > 1 ? ` (login ${index + 1} of ${dirs.length})` : "";
     process.stdout.write(
-      `${spec.name}${which}: a browser window opens on the bank's own login page. Log in there with the code the bank sends. The window closes by itself when the bank shows your accounts; you have 10 minutes.\n`,
+      `${spec.name}${which}: a browser window opens on the bank's own login page. Log in there with the code the bank sends. The window closes by itself when the bank shows your accounts; you have 10 minutes. (It says Chrome is controlled by automated software: that is this program, waiting for you.)\n`,
     );
     const outcome = await trustDevice(company, { profileDir: dir, env: process.env });
     if (outcome === "trusted") {
@@ -472,6 +473,12 @@ async function setup(flags: Record<string, string | boolean>): Promise<number> {
 }
 
 async function main(argv: string[]): Promise<number> {
+  if (nodeTooOld(process.version)) {
+    fail(
+      `this needs Node.js ${NODE_MIN_MAJOR} or newer, and this computer has ${process.version}. Install the LTS version from https://nodejs.org, then run the command again.`,
+      EXIT.usage,
+    );
+  }
   const { words, flags } = parse(argv);
   if (flags["version"]) {
     process.stdout.write(`${VERSION}\n`);

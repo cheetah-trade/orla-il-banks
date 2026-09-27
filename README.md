@@ -11,7 +11,7 @@ and the delivery to Orla.
 
 > **Status: early.** The mapping is covered by tests against the library's data
 > shapes. The maintainers have not yet run it live against every bank below. If
-> yours misbehaves, open an issue with what the run printed (it prints no
+> yours misbehaves, tell us what the run printed (it prints no
 > passwords and no account numbers).
 
 ## Why it works this way
@@ -114,9 +114,11 @@ your bank's website.
    The first run brings 90 days; `--days 365` brings a year. `--dry-run` logs
    into the banks and prints what it would send, without sending.
 
-Running setup again adds banks to the ones already saved, or starts over if
-you say so. To run it every day by itself, use cron or launchd on a Mac, Task
-Scheduler on Windows, or a private GitHub repository (below).
+**Running setup again** asks what for: a new Orla key with your logins kept
+(a key runs out; issue a new one on the card), a bank added or a login changed
+(a new password: type the login again and it replaces the saved one), or
+starting over. To run it every day by itself, use cron or launchd on a Mac,
+Task Scheduler on Windows, or a private GitHub repository (below).
 
 **On Windows, in PowerShell** rather than Command Prompt, `npx` may stop with
 *running scripts is disabled on this system*. Type `npx.cmd` instead of `npx`,
@@ -185,7 +187,9 @@ sandbox off: containers usually lack what the sandbox needs.
   charged**, for the amount charged that month. The note says
   `Installment 3 of 12, purchase total 1200.00 ILS`.
 - **The amount charged**, in the currency charged. A purchase abroad keeps its
-  original amount in the note.
+  original amount in the note. A card that bills some purchases in dollars or
+  euros gets a second account for them, named with the currency
+  (`Max ••1234 (USD)`): an account in Orla holds one currency.
 - **Israeli days.** A purchase at 00:30 in Tel Aviv books on that day, wherever
   the runner runs.
 - **One money-in row per billing cycle on each credit card.** Your bank pays
@@ -216,13 +220,27 @@ for its rows**: later runs recognise them and do not file them again.
 | `the browser the runner needs is not on this computer yet` | Run `check-browser --install`. |
 | `the browser did not start` | Run `check-browser`. On Ubuntu 24.04, see the `sysctl` line in the template. |
 | `Bank Hapoalim: ... this computer is new to it` | Run `orla-il-banks trust hapoalim` once and log in on the bank's page. |
-| `Orla refused the key` | The key expired or was revoked. Issue a new one on the Israeli banks card. |
+| `Orla refused the key` | The key expired or was revoked. Issue a new one on the Israeli banks card, then run `setup` and choose 1. |
 | `<bank>: failed. invalidPassword` | Log in on the bank's site by hand once; banks lock after a few failures. |
-| `<bank>: failed. changePassword` | The bank wants a new password. Change it on the site, then in your config. |
-| `N refused` | Orla named the field for each refused row. Open an issue with the message. |
+| `<bank>: failed. changePassword` | The bank wants a new password. Change it on the bank's site, then run `setup` and choose 2. |
+| `N refused` | Orla named the reason for each refused row. Send it to us (below). |
 
 Exit status: `0` everything went through, `1` a bank or the delivery failed,
 `2` the command line or the config is wrong, `130` setup was stopped with Ctrl-C.
+
+Reporting a problem: send what the run printed to
+[support@orla.finance](mailto:support@orla.finance), or open an issue here. It
+prints no passwords and no full account numbers, but issues here are public, so
+read it through before posting.
+
+## Removing it
+
+1. In Orla, on the Israeli banks card: undo its deliveries first if you want
+   the rows gone too, then revoke the source. The key stops working at once.
+2. On the computer, delete `~/.orla-il-banks.json` (your logins), the folder
+   `~/.orla-il-banks` (browser profiles, one per Hapoalim login), and
+   `~/.cache/puppeteer` (the browser, unless something else of yours uses it).
+   On Windows `~` is your user folder, `C:\Users\<you>`.
 
 ## Updating
 

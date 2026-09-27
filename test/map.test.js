@@ -228,6 +228,34 @@ test("a cycle is summed per currency", () => {
   deepStrictEqual(cycles.map((r) => `${r.amount} ${r.currency}`).sort(), ["10.00 ILS", "3.00 USD"]);
 });
 
+test("each currency of a card files into a mirror of its own", () => {
+  // Orla fixes a mirror's currency by its first row and refuses the others:
+  // one key for a card billed in shekels and dollars lost one of the two, and
+  // which one depended on the order the rows came in.
+  const out = mapAccount(
+    "max",
+    account([txn({ chargedAmount: -3, chargedCurrency: "USD", description: "NETFLIX" }), txn({ chargedAmount: -10 })]),
+    TODAY,
+  );
+  const byCurrency = new Map();
+  for (const row of out.rows) {
+    const keys = byCurrency.get(row.currency) ?? new Set();
+    keys.add(`${row.account_key}|${row.account_name}`);
+    byCurrency.set(row.currency, keys);
+  }
+  deepStrictEqual([...byCurrency.keys()].sort(), ["ILS", "USD"]);
+  for (const keys of byCurrency.values()) strictEqual(keys.size, 1, "a currency split across two mirrors");
+  const [ils] = [...byCurrency.get("ILS")];
+  const [usd] = [...byCurrency.get("USD")];
+  const [ilsKey, ilsName] = ils.split("|");
+  const [usdKey, usdName] = usd.split("|");
+  // the account's own currency keeps the key rows already filed under
+  strictEqual(ilsKey, accountIdentity("max", "1234").key);
+  strictEqual(usdKey, `${ilsKey}:usd`);
+  strictEqual(ilsName, "Max ••1234");
+  strictEqual(usdName, "Max ••1234 (USD)");
+});
+
 test("pending rows are not in the cycle", () => {
   const out = mapAccount("max", account([txn({ chargedAmount: -10 }), txn({ status: "pending", chargedAmount: -99 })]), TODAY);
   strictEqual(out.rows.find((r) => r.payee === "Billing cycle payment").amount, "10.00");

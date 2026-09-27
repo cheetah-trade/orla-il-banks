@@ -50,3 +50,13 @@ export const TRUST_FLAGS = new Set(["config", "profile-dir"]);
 
 //: What `setup` understands: where to write the config, and the profiles.
 export const SETUP_FLAGS = new Set(["config", "profile-dir"]);
+
+//: The oldest Node the runner is built and tested on (package.json `engines`).
+//: npm only warns about `engines`, so an older Node would run it anyway and
+//: fail somewhere deep with a message about something else.
+export const NODE_MIN_MAJOR = 22;
+
+export function nodeTooOld(version: string): boolean {
+  const major = Number(/^v?(\d+)/.exec(version)?.[1] ?? 0);
+  return major < NODE_MIN_MAJOR;
+}

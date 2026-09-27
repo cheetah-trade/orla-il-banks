@@ -8,7 +8,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 
-import { bankMenu, parseBankChoice, runSetup } from "../dist/setup.js";
+import { bankMenu, identityOf, loginLabel, mergeLogins, parseBankChoice, runSetup } from "../dist/setup.js";
 
 const POSIX = process.platform !== "win32";
 
@@ -116,16 +116,84 @@ test("a space where the door is off still gets set up, with the reason said", as
   match(said.join("\n"), /not switched on for your space yet/);
 });
 
-test("an existing setup is kept and added to when the person says so", async () => {
+function existingSetup(accounts, token = "oit_old_key_1234567") {
   const dir = mkdtempSync(join(tmpdir(), "orla-il-setup-"));
   const path = join(dir, "config.json");
-  writeFileSync(path, JSON.stringify({ orla: { token: "oit_old_key_1234567" }, accounts: [{ company: "leumi", username: "u", password: "p" }] }));
+  writeFileSync(path, JSON.stringify({ orla: { token }, accounts }));
   if (POSIX) chmodSync(path, 0o600);
-  const { io } = scripted(["15", "user1", "", "n"], [KEY, "pw"]);
+  return path;
+}
+
+test("run again, 1: a new key goes in and every login stays", async () => {
+  const path = existingSetup([{ company: "leumi", username: "u", password: "p" }]);
+  const { io, said } = scripted(["1", "n"], [KEY]);
+  const d = deps(path);
+  deepStrictEqual(await runSetup(io, d.value), { saved: true, runNow: false });
+  const file = JSON.parse(readFileSync(path, "utf8"));
+  strictEqual(file.orla.token, KEY);
+  deepStrictEqual(file.accounts, [{ company: "leumi", username: "u", password: "p" }]);
+  deepStrictEqual(d.calls.checkKey, [KEY]);
+  match(said.join("\n"), /Bank Leumi \(…u\)/);
+});
+
+test("run again, 2: a bank is added under the key that works, without asking for it", async () => {
+  const path = existingSetup([{ company: "leumi", username: "u", password: "p" }]);
+  const { io } = scripted(["2", "15", "user1", "n"], ["pw"]);
+  const d = deps(path);
+  await runSetup(io, d.value);
+  const file = JSON.parse(readFileSync(path, "utf8"));
+  strictEqual(file.orla.token, "oit_old_key_1234567");
+  deepStrictEqual(d.calls.checkKey, [], "the kept key is not asked for again");
+  deepStrictEqual(file.accounts.map((a) => a.company), ["leumi", "max"]);
+});
+
+test("run again, 2: a login typed again replaces the saved one, never sits beside it", async () => {
+  // two entries for one login would log in twice a run, once with the old
+  // password, and a bank locks a login after a few failures
+  const path = existingSetup([
+    { company: "max", username: "user1", password: "old-pw" },
+    { company: "max", username: "user2", password: "other-pw" },
+  ]);
+  const { io, said } = scripted(["2", "15", "user1", "n"], ["new-pw"]);
   await runSetup(io, deps(path).value);
   const file = JSON.parse(readFileSync(path, "utf8"));
-  strictEqual(file.orla.token, KEY, "the new key replaces the old one");
-  deepStrictEqual(file.accounts.map((a) => a.company), ["leumi", "max"]);
+  deepStrictEqual(file.accounts, [
+    { company: "max", username: "user1", password: "new-pw" },
+    { company: "max", username: "user2", password: "other-pw" },
+  ]);
+  match(said.join("\n"), /Max \(…ser1\): the saved login is replaced/);
+  ok(!said.join("\n").includes("new-pw"));
+});
+
+test("run again, 3: starting over keeps nothing of the old setup", async () => {
+  const path = existingSetup([{ company: "leumi", username: "u", password: "p" }]);
+  const { io } = scripted(["3", "15", "user2", "n"], [KEY, "pw"]);
+  await runSetup(io, deps(path).value);
+  const file = JSON.parse(readFileSync(path, "utf8"));
+  strictEqual(file.orla.token, KEY);
+  deepStrictEqual(file.accounts, [{ company: "max", username: "user2", password: "pw" }]);
+});
+
+test("run again with no clear answer changes nothing", async () => {
+  const path = existingSetup([{ company: "leumi", username: "u", password: "p" }]);
+  const before = readFileSync(path, "utf8");
+  const { io } = scripted(["x", "", "4"], []);
+  deepStrictEqual(await runSetup(io, deps(path).value), { saved: false, runNow: false });
+  strictEqual(readFileSync(path, "utf8"), before);
+});
+
+test("mergeLogins tells logins apart by the field that is not a password", () => {
+  const { accounts, replaced } = mergeLogins(
+    [{ company: "isracard", id: "111", card6Digits: "458012", password: "a" }],
+    [
+      { company: "isracard", id: "111", card6Digits: "458012", password: "b" },
+      { company: "isracard", id: "222", card6Digits: "458012", password: "c" },
+    ],
+  );
+  deepStrictEqual(accounts.map((a) => `${a.id}:${a.password}`), ["111:b", "222:c"]);
+  deepStrictEqual(replaced.map((a) => a.id), ["111"]);
+  strictEqual(identityOf({ company: "hapoalim", userCode: "AB12", password: "x" }), "AB12");
+  strictEqual(loginLabel({ company: "discount", id: "012345678", password: "x", num: "1" }), "Discount Bank (…5678)");
 });
 
 test("no browser means no trust and no offer to run now", async () => {
