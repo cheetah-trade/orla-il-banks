@@ -29,7 +29,7 @@ import {
   secretsOf,
   type Config,
 } from "./config.js";
-import { accountIdentity, balanceOf, israelDay, mapAccount, type PushBalance, type PushRow, type ScrapedAccount } from "./map.js";
+import { accountIdentity, balancesOf, israelDay, mapAccount, type PushBalance, type PushRow, type ScrapedAccount } from "./map.js";
 import { defaultProfileBase, profileDir } from "./profile.js";
 import { Cancelled, confirm, terminalIo, type Io } from "./prompt.js";
 import {
@@ -396,8 +396,7 @@ async function run(flags: Record<string, string | boolean>): Promise<number> {
     for (const account of saved.accounts) {
       const mapped = mapAccount(company, account, today);
       rows.push(...mapped.rows);
-      const balance = balanceOf(company, account, readAt);
-      if (balance) balances.push(balance);
+      balances.push(...balancesOf(company, account, mapped.rows, readAt));
       const { name } = accountIdentity(company, account.accountNumber);
       const left = Object.entries(mapped.skipped)
         .filter(([, count]) => count > 0)

@@ -221,7 +221,10 @@ sandbox off: containers usually lack what the sandbox needs.
 - **The balance the bank states.** Orla shows it as the account's balance,
   the way it does for a bank it connects itself, instead of adding up the rows
   it was sent: ninety days of rows are not an account's history. A card shows
-  what is owed. A mirror in a second currency (`(USD)`) has rows and no balance.
+  what is owed. A card's account in a second currency (`(USD)`) shows zero once
+  the card states its debt: that debt is taken off the whole credit frame, the
+  dollar purchases included, so its rows are the dollar history and are not
+  counted a second time.
 - **Account numbers do not travel.** Orla gets a hash to recognise the account
   and a name like `Bank Hapoalim ••8901`.
 - **One delivery per login.** Orla links a move between two accounts of the same

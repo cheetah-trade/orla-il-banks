@@ -331,8 +331,8 @@ export function mapAccount(company: CompanyId, account: ScrapedAccount, today: s
 /** The account's balance as the bank states it, or null when the library read
  *  none (most card scrapers for some cards, and any bank that did not say).
  *  On the account's own key and in its own currency: the bank states one
- *  balance per account, the mirrors in other currencies (`mirrorFor`) hold the
- *  rows the card billed in them and no balance of their own. */
+ *  balance per account. For the mirrors in other currencies see
+ *  `balancesOf`. */
 export function balanceOf(company: CompanyId, account: ScrapedAccount, asOf: Date): PushBalance | null {
   if (typeof account.balance !== "number" || !Number.isFinite(account.balance)) return null;
   const { key, name } = accountIdentity(company, account.accountNumber);
@@ -344,4 +344,32 @@ export function balanceOf(company: CompanyId, account: ScrapedAccount, asOf: Dat
     balance: formatCents(toCents(account.balance)),
     as_of: asOf.toISOString(),
   };
+}
+
+/**
+ * Every balance to state for one account: its own, and zero for each mirror
+ * the card has in another currency.
+ *
+ * Why zero: an Israeli card states what is owed as one figure off its credit
+ * frame, in shekels (Max: the limit minus what is open to buy; Isracard and
+ * Amex: what was used of the frame; Cal: the next debit), and a purchase in
+ * dollars uses the same frame. Left without a balance, the dollar mirror's
+ * balance is the sum of its rows, and a dollar purchase not yet billed would
+ * lower net worth twice: there, and inside the shekel debt. Stated as zero,
+ * the dollar mirror keeps its rows as history and the debt is counted once.
+ * Only when the account's own balance was stated: without it the rows are all
+ * the books have, in every currency.
+ */
+export function balancesOf(company: CompanyId, account: ScrapedAccount, rows: PushRow[], asOf: Date): PushBalance[] {
+  const own = balanceOf(company, account, asOf);
+  if (!own) return [];
+  const identity = accountIdentity(company, account.accountNumber);
+  const others = new Set(rows.filter((r) => r.currency !== own.currency).map((r) => r.currency));
+  return [
+    own,
+    ...[...others].sort().map((currency) => {
+      const mirror = mirrorFor(identity, own.currency, currency);
+      return { ...own, account_key: mirror.key, account_name: mirror.name, currency, balance: "0.00" };
+    }),
+  ];
 }
