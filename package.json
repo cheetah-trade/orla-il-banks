@@ -1,6 +1,6 @@
 {
   "name": "orla-il-banks",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Israeli bank and card transactions into your Orla books. Runs on your machine; your bank password never reaches Orla.",
   "license": "MIT",
   "author": "Digital Flow Pte. Ltd.",

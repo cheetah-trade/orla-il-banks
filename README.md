@@ -56,7 +56,7 @@ browser profile per Hapoalim login on your computer, and you introduce it to
 the bank once. Setup offers to do it right away; later, or again:
 
 ```bash
-npx orla-il-banks@0.3.0 trust hapoalim
+npx orla-il-banks@0.3.1 trust hapoalim
 ```
 
 A browser window opens on the bank's own login page. Log in there, with the
@@ -95,7 +95,7 @@ your bank's website.
 4. **Run setup** and answer its questions:
 
    ```bash
-   npx orla-il-banks@0.3.0 setup
+   npx orla-il-banks@0.3.1 setup
    ```
 
    The first time, npx asks `Ok to proceed? (y)`: press Enter. Then setup
@@ -109,7 +109,7 @@ your bank's website.
    run), open the terminal again and run:
 
    ```bash
-   npx orla-il-banks@0.3.0 run
+   npx orla-il-banks@0.3.1 run
    ```
 
    The first run brings 90 days; `--days 365` brings a year. `--dry-run` logs
@@ -122,8 +122,8 @@ starting over.
 
 ### Every day by itself
 
-Setup offers it; `npx orla-il-banks@0.3.0 schedule --at 07:00` sets it up later,
-and `npx orla-il-banks@0.3.0 unschedule` removes it. On a Mac it is a launchd job
+Setup offers it; `npx orla-il-banks@0.3.1 schedule --at 07:00` sets it up later,
+and `npx orla-il-banks@0.3.1 unschedule` removes it. On a Mac it is a launchd job
 (a run the Mac slept through happens at wake-up), on Windows a Task Scheduler
 task that runs while you are logged on (a run missed while the computer was off
 happens when it is back; Windows is not given your Windows password). Linux gets
@@ -152,8 +152,8 @@ readable by you only: the runner refuses a file anyone else can read.
 cp examples/orla-il-banks.example.json ~/.orla-il-banks.json
 chmod 600 ~/.orla-il-banks.json
 # edit it: your Orla key, then one entry per bank or card
-npx orla-il-banks@0.3.0 check-browser --install
-npx orla-il-banks@0.3.0 run --dry-run
+npx orla-il-banks@0.3.1 check-browser --install
+npx orla-il-banks@0.3.1 run --dry-run
 ```
 
 `check-browser` starts the browser on an empty page and closes it; it touches
@@ -262,7 +262,7 @@ read it through before posting.
 
 1. In Orla, on the Israeli banks card: undo its deliveries first if you want
    the rows gone too, then revoke the source. The key stops working at once.
-2. On the computer, run `npx orla-il-banks@0.3.0 unschedule` if you set up the
+2. On the computer, run `npx orla-il-banks@0.3.1 unschedule` if you set up the
    daily run, then delete `~/.orla-il-banks.json` (your logins), the folder
    `~/.orla-il-banks` (browser profiles and logs), and
    `~/.cache/puppeteer` (the browser, unless something else of yours uses it).

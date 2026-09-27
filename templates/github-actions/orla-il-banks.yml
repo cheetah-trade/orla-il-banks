@@ -43,9 +43,9 @@ jobs:
       # Pinned to one version, which installs one exact set of dependencies.
       # Raise it on purpose, after reading the release notes.
       - name: The browser the runner drives
-        run: npx --yes orla-il-banks@0.3.0 check-browser --install
+        run: npx --yes orla-il-banks@0.3.1 check-browser --install
       - name: Read the banks and file the rows into Orla
         env:
           ORLA_TOKEN: ${{ secrets.ORLA_TOKEN }}
           ORLA_IL_ACCOUNTS: ${{ secrets.ORLA_IL_ACCOUNTS }}
-        run: npx --yes orla-il-banks@0.3.0 run
+        run: npx --yes orla-il-banks@0.3.1 run
