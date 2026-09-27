@@ -111,3 +111,28 @@ test("the space's limit stops the delivery with the server's words", async () =>
   const fetch = async () => reply(429, { error: "push_source.quota", detail: "20000 rows this month" });
   await rejects(push("https://x.test", "tok", [row(1)], { fetch }), /20000 rows this month/);
 });
+
+test("a key is checked with an empty delivery, and each refusal is told apart", async () => {
+  const { checkKey } = await import("../dist/push.js");
+  const bodies = [];
+  const answer = (status, body) => async (_url, init) => {
+    bodies.push(JSON.parse(init.body));
+    return reply(status, body);
+  };
+  const cases = [
+    [422, { error: "push_source.no_rows", detail: "No rows to file" }, "ok"],
+    [422, { error: "push_source.disabled", detail: "not switched on" }, "door-off"],
+    [422, { error: "push_source.revoked", detail: "revoked" }, "revoked"],
+    [401, { error: "authentication_error", detail: "Invalid token" }, "rejected"],
+    [403, { error: "authorization_error", detail: "scope" }, "wrong-scope"],
+    [500, { error: "internal" }, "unreachable"],
+  ];
+  for (const [status, body, expected] of cases) {
+    const out = await checkKey("https://x.test", "tok", { fetch: answer(status, body) });
+    strictEqual(out.result, expected, `${status} ${body.error}`);
+  }
+  deepStrictEqual(bodies[0], { rows: [] }, "nothing is filed by a check");
+  const down = await checkKey("https://x.test", "tok", { fetch: async () => { throw new TypeError("fetch failed"); } });
+  strictEqual(down.result, "unreachable");
+  await rejects(checkKey("http://app.orla.finance", "tok", { fetch: answer(422, {}) }), /use https/);
+});

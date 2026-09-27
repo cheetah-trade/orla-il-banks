@@ -53,10 +53,10 @@ device it has not seen, and the scraping library has no way through that page
 (upstream [#1077](https://github.com/eshaham/israeli-bank-scrapers/issues/1077)).
 A browser started fresh is a new device every time, so the runner keeps one
 browser profile per Hapoalim login on your computer, and you introduce it to
-the bank once:
+the bank once. Setup offers to do it right away; later, or again:
 
 ```bash
-npx orla-il-banks@0.1.0 trust hapoalim --config ~/.orla-il-banks.json
+npx orla-il-banks@0.2.0 trust hapoalim
 ```
 
 A browser window opens on the bank's own login page. Log in there, with the
@@ -77,37 +77,68 @@ Not supported: **Behatsdaa**. It is the order history of a benefits shop, and
 each order there was paid with a card; with that card connected too, every
 order would count twice.
 
-## Set up
+## Set up on your computer (about 5 minutes)
 
-1. **In Orla**, open Integrations, then **Israeli banks**, and issue a key. It
-   is shown once. It can only add transactions to this one source, and it
-   expires (you choose when, up to a year).
-2. **Check the browser** on the machine that will run this:
+You need a Mac or a Windows computer, an Orla account, and the login you use on
+your bank's website.
+
+1. **Install Node.js**, once. Download the LTS installer from
+   [nodejs.org](https://nodejs.org/en/download) (version 22 or newer: the
+   `.pkg` on a Mac, the `.msi` on Windows) and click through it with the
+   defaults.
+2. **Issue a key in Orla.** Open Integrations, then **Israeli banks**, and
+   issue a key. Copy it: it is shown once. It can only add transactions to this
+   one source, and it expires (you choose when, up to a year).
+3. **Open a terminal.** On a Mac: **Terminal** (press Cmd+Space, type
+   `Terminal`, press Enter). On Windows: **Command Prompt** (press the Windows
+   key, type `cmd`, press Enter).
+4. **Run setup** and answer its questions:
 
    ```bash
-   npx orla-il-banks@0.1.0 check-browser
+   npx orla-il-banks@0.2.0 setup
    ```
 
-   It starts the browser on an empty page and closes it. It touches no bank.
+   The first time, npx asks `Ok to proceed? (y)`: press Enter. Then setup
+   asks for the key from Orla (paste it: nothing appears on the screen while
+   you paste, on purpose), which banks and cards you use, and the login of
+   each. It saves them in a file only you can read, downloads the browser the
+   runner drives (about 170 MB, once), and for Bank Hapoalim opens the bank's
+   own login page so you can introduce this computer (see below). At the end it
+   offers to run.
+5. **Whenever you want fresh transactions**, open the terminal again and run:
 
-3. Pick one of the three ways to run it below.
+   ```bash
+   npx orla-il-banks@0.2.0 run
+   ```
 
-### On your computer
+   The first run brings 90 days; `--days 365` brings a year. `--dry-run` logs
+   into the banks and prints what it would send, without sending.
 
-Write a config file and make it readable by you only; the runner refuses a file
-anyone else can read.
+Running setup again adds banks to the ones already saved, or starts over if
+you say so. To run it every day by itself, use cron or launchd on a Mac, Task
+Scheduler on Windows, or a private GitHub repository (below).
+
+**On Windows, in PowerShell** rather than Command Prompt, `npx` may stop with
+*running scripts is disabled on this system*. Type `npx.cmd` instead of `npx`,
+or use Command Prompt.
+
+### By hand, without setup
+
+Setup writes `~/.orla-il-banks.json`. You can write it yourself instead, from
+[`examples/orla-il-banks.example.json`](examples/orla-il-banks.example.json),
+readable by you only: the runner refuses a file anyone else can read.
 
 ```bash
 cp examples/orla-il-banks.example.json ~/.orla-il-banks.json
 chmod 600 ~/.orla-il-banks.json
 # edit it: your Orla key, then one entry per bank or card
-npx orla-il-banks@0.1.0 run --config ~/.orla-il-banks.json --dry-run
-npx orla-il-banks@0.1.0 run --config ~/.orla-il-banks.json
+npx orla-il-banks@0.2.0 check-browser --install
+npx orla-il-banks@0.2.0 run --dry-run
 ```
 
-`--dry-run` logs into the banks and prints what it would send, without
-sending. Run it daily with cron or launchd. The first time, `--days 365` brings
-a year of history.
+`check-browser` starts the browser on an empty page and closes it; it touches
+no bank. With `--install` it first downloads the browser if it is missing.
+`--config <file>` points `run` at a config somewhere else.
 
 ### In a private GitHub repository
 
@@ -182,6 +213,7 @@ for its rows**: later runs recognise them and do not file them again.
 
 | It says | Do |
 |---|---|
+| `the browser the runner needs is not on this computer yet` | Run `check-browser --install`. |
 | `the browser did not start` | Run `check-browser`. On Ubuntu 24.04, see the `sysctl` line in the template. |
 | `Bank Hapoalim: ... this computer is new to it` | Run `orla-il-banks trust hapoalim` once and log in on the bank's page. |
 | `Orla refused the key` | The key expired or was revoked. Issue a new one on the Israeli banks card. |
@@ -190,7 +222,7 @@ for its rows**: later runs recognise them and do not file them again.
 | `N refused` | Orla named the field for each refused row. Open an issue with the message. |
 
 Exit status: `0` everything went through, `1` a bank or the delivery failed,
-`2` the command line or the config is wrong.
+`2` the command line or the config is wrong, `130` setup was stopped with Ctrl-C.
 
 ## Updating
 

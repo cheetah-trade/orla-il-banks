@@ -22,7 +22,9 @@ which types them into your bank's website in a local browser.
 - Orla receives transaction rows: date, amount, currency, description, a hashed
   account key and the account's last four digits. Never a login, never a full
   account number.
-- A config file anyone but you can read is refused. A saved scrape
+- A config file anyone but you can read is refused. `setup` writes it
+  readable by you only (on Windows, in your user folder, which other users
+  cannot open), and reads the key and the passwords with the echo off. A saved scrape
   (`--save-json`) is written readable by you only.
 - In GitHub Actions a public repository is refused, and every password is
   masked in the log one by one.
@@ -38,9 +40,13 @@ which types them into your bank's website in a local browser.
 
 ## Supply chain
 
-This package ships `npm-shrinkwrap.json`: `npx orla-il-banks@<version>` installs
-the exact dependency tree that was tested for that version, not the newest
-versions its ranges allow. The code that sees your password is this package,
+`npx orla-il-banks@<version>` installs the exact dependency tree that was
+tested for that version, not the newest versions its ranges allow: the tree
+travels inside the package (`bundleDependencies`), because npm 12 ignores a
+published `npm-shrinkwrap.json`. The shrinkwrap still ships, for npm 10 and 11.
+No dependency's install script is needed: the browser is downloaded by the
+runner itself (`setup`, or `check-browser --install`), from Google's Chrome for
+Testing, the exact build puppeteer is made for. The code that sees your password is this package,
 israeli-bank-scrapers, and puppeteer with the browser it drives; we read the
 first two in full at each upgrade of the library.
 

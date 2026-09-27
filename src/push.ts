@@ -156,3 +156,43 @@ export async function push(base: string, token: string, rows: PushRow[], options
   }
   return totals;
 }
+
+export type KeyCheck = "ok" | "door-off" | "revoked" | "rejected" | "wrong-scope" | "unreachable";
+
+/**
+ * Whether Orla takes this key, asked with an empty delivery. The door refuses
+ * an empty delivery only after it has let the key in and checked that it is
+ * switched on for the space, and before it writes anything, so the refusal it
+ * gives says which of those failed. A key Orla does not know, one that ran out
+ * and one whose space the push rollout does not cover all come back as the
+ * same 401: the key is refused before the door is asked, and the message has
+ * to name all three.
+ */
+export async function checkKey(
+  base: string,
+  token: string,
+  options: PushOptions = {},
+): Promise<{ result: KeyCheck; detail: string }> {
+  const doFetch = options.fetch ?? fetch;
+  let response: Response;
+  try {
+    response = await doFetch(doorUrl(base), {
+      method: "POST",
+      redirect: "error",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ rows: [] }),
+    });
+  } catch (error) {
+    if (error instanceof PushError) throw error;
+    return { result: "unreachable", detail: error instanceof Error ? error.message : String(error) };
+  }
+  const body = (await readJson(response)) as { error?: unknown } | null;
+  const code = typeof body?.error === "string" ? body.error : "";
+  const detail = detailOf(body);
+  if (response.status === 401) return { result: "rejected", detail };
+  if (response.status === 403) return { result: "wrong-scope", detail };
+  if (code === "push_source.no_rows") return { result: "ok", detail };
+  if (code === "push_source.disabled") return { result: "door-off", detail };
+  if (code === "push_source.revoked" || code === "push_source.unbound") return { result: "revoked", detail };
+  return { result: "unreachable", detail: `HTTP ${response.status}${detail ? `: ${detail}` : ""}` };
+}

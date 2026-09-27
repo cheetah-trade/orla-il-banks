@@ -11,7 +11,9 @@
  * bank counts, and enough of those lock the account.
  */
 
-import { readFileSync, statSync } from "node:fs";
+import { chmodSync, existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { homedir } from "node:os";
+import { join } from "node:path";
 
 import { COMPANIES, type CompanyId, isCompany, LEFT_OUT } from "./companies.js";
 
@@ -218,4 +220,48 @@ export function guardActions(
   if (isPrivate !== true) {
     write("::warning::could not tell whether this repository is private. Its run logs must not be public.");
   }
+}
+
+/** Where `setup` writes the config, and where `run` looks when told nothing. */
+export function defaultConfigPath(): string {
+  return join(homedir(), ".orla-il-banks.json");
+}
+
+/** The config file as `setup` writes it and a person may edit it. */
+export interface ConfigFile {
+  orla: { url?: string; token: string };
+  days?: number;
+  accounts: Array<Record<string, string>>;
+}
+
+/** Read an existing config to add to it; refuses one others can read, like `run`. */
+export function readConfigFile(path: string): ConfigFile | null {
+  if (!existsSync(path)) return null;
+  const parsed = readFile(path);
+  const accounts = Array.isArray(parsed.accounts) ? (parsed.accounts as Array<Record<string, string>>) : [];
+  const token = typeof parsed.orla?.token === "string" ? parsed.orla.token : "";
+  const url = typeof parsed.orla?.url === "string" ? parsed.orla.url : undefined;
+  const days = typeof parsed.days === "number" ? parsed.days : undefined;
+  return { orla: { ...(url ? { url } : {}), token }, ...(days ? { days } : {}), accounts };
+}
+
+/**
+ * Write the config readable by its owner only. The file is created or emptied
+ * with that mode first and then written: a mode given to a write applies only
+ * to a file being created, so an existing one is narrowed before it holds a
+ * password.
+ */
+export function saveConfig(path: string, file: ConfigFile, platform: NodeJS.Platform = process.platform): void {
+  writeFileSync(path, "", { mode: 0o600 });
+  if (platform !== "win32") chmodSync(path, 0o600);
+  writeFileSync(path, `${JSON.stringify(file, null, 2)}\n`);
+}
+
+/** The file `run` reads when no --config is given: the one `setup` wrote, if
+ *  there is one and the environment carries no accounts of its own. */
+export function configToUse(flag: string | undefined, env: NodeJS.ProcessEnv): string | undefined {
+  if (flag) return flag;
+  if (env["ORLA_IL_ACCOUNTS"]) return undefined;
+  const path = defaultConfigPath();
+  return existsSync(path) ? path : undefined;
 }

@@ -16,11 +16,14 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
-      # The shrinkwrapped tree, exactly as a person's `npx` will install it.
-      # Install scripts run here on purpose: puppeteer's fetches the browser
-      # the next step starts.
-      - run: npm ci --no-fund --no-audit
+      # The shrinkwrapped tree, exactly as a person's `npx` will install it,
+      # and without install scripts, as npm 12 installs it: the browser comes
+      # from the runner's own `check-browser --install`, the step `setup` runs.
+      - run: npm ci --ignore-scripts --no-fund --no-audit
       - run: npm run check
+      - run: npm run build
+      - name: The runner installs its own browser
+        run: node dist/cli.js check-browser --install
       # Ubuntu 24.04 stops unprivileged user namespaces, which Chrome's sandbox
       # needs. Lifted on this throwaway runner instead of turning the sandbox
       # off; the template in templates/github-actions does the same. Before the
@@ -30,19 +33,53 @@ jobs:
       - run: npm test
       - name: The browser starts on a stock runner
         run: node dist/cli.js check-browser
-      # What `npm publish` would upload. The shrinkwrap is the point: without
+      # What `npm publish` would upload. The pinned tree is the point: without
       # it `npx` resolves the dependency ranges afresh on every install, and
       # the tree next to the password is whatever was newest that morning.
+      # npm 12 ignores a published shrinkwrap, so the tree travels inside the
+      # package (bundleDependencies); the shrinkwrap stays for npm 10 and 11.
       - name: The package carries its binary and its pinned tree
         run: |
           test -f dist/cli.js
           npm pack --dry-run --json | node -e '
-            const files = JSON.parse(require("fs").readFileSync(0, "utf8"))[0].files.map((f) => f.path);
-            for (const need of ["dist/cli.js", "npm-shrinkwrap.json"]) {
-              if (!files.includes(need)) { console.error(`::error::${need} is not in the package`); process.exit(1); }
+            const pack = JSON.parse(require("fs").readFileSync(0, "utf8"))[0];
+            const files = pack.files.map((f) => f.path);
+            const need = [
+              "dist/cli.js", "dist/setup.js", "npm-shrinkwrap.json",
+              "node_modules/puppeteer/package.json",
+              "node_modules/israeli-bank-scrapers/package.json",
+              "node_modules/@puppeteer/browsers/package.json",
+            ];
+            for (const path of need) {
+              if (!files.includes(path)) { console.error(`::error::${path} is not in the package`); process.exit(1); }
             }
-            console.log(files.join("\n"));
+            if (files.some((f) => f.startsWith("node_modules/typescript/"))) {
+              console.error("::error::a dev dependency is bundled"); process.exit(1);
+            }
+            console.log(`${files.length} files, ${pack.bundled.length} bundled packages, ${pack.size} bytes packed`);
           '
+
+  # Mac and Windows: where the people who run `npx orla-il-banks setup` are.
+  # No bank here either; the same tests, and a real browser download and start.
+  desktop:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15, windows-2025]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      - run: npm ci --ignore-scripts --no-fund --no-audit
+      - run: npm run check
+      - run: npm run build
+      - name: The runner installs its own browser
+        run: node dist/cli.js check-browser --install
+      - run: npm test
+      - name: The browser starts
+        run: node dist/cli.js check-browser
 
   docker:
     runs-on: ubuntu-24.04

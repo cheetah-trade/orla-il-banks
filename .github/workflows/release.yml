@@ -24,9 +24,16 @@ jobs:
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org
-      - run: npm install -g npm@latest
-      - run: npm ci --no-fund --no-audit
+      # Trusted publishing needs npm 11.5.1 or later; the one bundled with Node 22
+      # is older. Pinned to 11 and not `latest`: npm 12 (September 2026) refuses
+      # `npm ci` on an npm-shrinkwrap.json, and 0.1.1 failed to publish on it.
+      - run: npm install -g npm@11
+      - run: npm ci --ignore-scripts --no-fund --no-audit
       - run: npm run check
+      - run: npm run build
+      - run: node dist/cli.js check-browser --install
+      # as in ci.yml: Chrome's sandbox needs the user namespaces 24.04 stops
+      - run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
       - run: npm test
       # The tag and the manifest agree, or `npm view` and `git tag` stop
       # telling the same story.

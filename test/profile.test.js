@@ -20,7 +20,7 @@ test("a profile is named by a hash of the login, never by the login", () => {
   notStrictEqual(profileName("hapoalim", { ...creds, userCode: "ZZ9999" }), name);
 });
 
-test("the folders are created readable by their owner only", () => {
+test("the folders are created readable by their owner only", { skip: process.platform === "win32" && "file modes are POSIX" }, () => {
   const base = join(mkdtempSync(join(tmpdir(), "orla-il-base-")), "profiles");
   const dir = profileDir(base, "hapoalim", creds);
   strictEqual(statSync(base).mode & 0o777, 0o700);
@@ -28,7 +28,7 @@ test("the folders are created readable by their owner only", () => {
   strictEqual(profileDir(base, "hapoalim", creds), dir, "the same login finds the same profile");
 });
 
-test("a profile folder others can read is refused, with the fix", () => {
+test("a profile folder others can read is refused, with the fix", { skip: process.platform === "win32" && "file modes are POSIX" }, () => {
   const base = mkdtempSync(join(tmpdir(), "orla-il-open-"));
   chmodSync(base, 0o755);
   throws(() => profileDir(base, "hapoalim", creds), /chmod 700/);
