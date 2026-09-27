@@ -9,10 +9,13 @@
  * A bank that fails does not stop the others, and nothing is sent for it.
  */
 
-import { chmodSync, readFileSync, writeFileSync } from "node:fs";
+import { spawn } from "node:child_process";
+import { appendFileSync, chmodSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { homedir } from "node:os";
+import { dirname, join } from "node:path";
 import { createInterface } from "node:readline/promises";
 
-import { NODE_MIN_MAJOR, nodeTooOld, optional, parse, RUN_FLAGS, SETUP_FLAGS, TRUST_FLAGS } from "./args.js";
+import { NODE_MIN_MAJOR, nodeTooOld, optional, parse, RUN_FLAGS, SCHEDULE_FLAGS, SETUP_FLAGS, TRUST_FLAGS } from "./args.js";
 import { findBrowser, installBrowser } from "./browser.js";
 import { COMPANIES, type CompanyId, isCompany, LEFT_OUT } from "./companies.js";
 import {
@@ -26,9 +29,19 @@ import {
   secretsOf,
   type Config,
 } from "./config.js";
-import { accountIdentity, israelDay, mapAccount, type PushRow, type ScrapedAccount } from "./map.js";
+import { accountIdentity, balanceOf, israelDay, mapAccount, type PushBalance, type PushRow, type ScrapedAccount } from "./map.js";
 import { defaultProfileBase, profileDir } from "./profile.js";
 import { Cancelled, confirm, terminalIo, type Io } from "./prompt.js";
+import {
+  type At,
+  DEFAULT_AT,
+  formatAt,
+  install as installSchedule,
+  logDir,
+  notificationCommand,
+  parseAt,
+  uninstall as uninstallSchedule,
+} from "./schedule.js";
 import { checkKey, push, PushError } from "./push.js";
 import { runSetup } from "./setup.js";
 import { needsTrustHint, trustDevice } from "./trust.js";
@@ -42,6 +55,56 @@ const EXIT = { ok: 0, failure: 1, usage: 2, cancelled: 130 } as const;
 //: Every password and key of this run, once the config is read, so that even
 //: an error nobody expected is printed without them.
 let SECRETS: string[] = [];
+
+//: Set by `run --scheduled`, the daily job: no person at the screen.
+let SCHEDULED = false;
+
+/**
+ * The daily job's two duties to a person who is not watching: a log of what
+ * happened, and a notification when something needs them. Everything written
+ * to the terminal also goes to the day's log (the messages are the ones a
+ * person would have seen, with passwords already masked), and a run that ends
+ * in anything but success leaves a notification with its first complaint.
+ * Hooked on `exit` because `fail()` exits on the spot; the notifier is started
+ * detached, so it outlives this process.
+ */
+function scheduledMode(home: string): string {
+  SCHEDULED = true;
+  const dir = logDir(home);
+  mkdirSync(dir, { recursive: true, mode: 0o700 });
+  const logs = readdirSync(dir).filter((f) => /^run-\d{4}-\d{2}-\d{2}\.log$/.test(f)).sort();
+  for (const old of logs.slice(0, Math.max(0, logs.length - 30))) rmSync(join(dir, old), { force: true });
+  const file = join(dir, `run-${new Date().toISOString().slice(0, 10)}.log`);
+  appendFileSync(file, `\n--- ${new Date().toISOString()} orla-il-banks ${VERSION} run --scheduled\n`, { mode: 0o600 });
+  let complaint = "";
+  const tee = (stream: NodeJS.WriteStream, isErr: boolean) => {
+    const write = stream.write.bind(stream);
+    stream.write = ((chunk: string | Uint8Array, ...rest: unknown[]) => {
+      const text = typeof chunk === "string" ? chunk : Buffer.from(chunk).toString("utf8");
+      try {
+        appendFileSync(file, text);
+      } catch {
+        // a full disk must not turn a run that worked into one that failed
+      }
+      if (isErr && !complaint) complaint = text.replace(/^orla-il-banks: /, "").split("\n")[0] ?? "";
+      return (write as (...a: unknown[]) => boolean)(chunk, ...rest);
+    }) as typeof stream.write;
+  };
+  tee(process.stdout, false);
+  tee(process.stderr, true);
+  process.on("exit", (code) => {
+    if (code === 0 || process.env["ORLA_IL_NO_NOTIFY"] === "1") return;
+    const text = `${complaint || "The daily run did not go through."} Open Terminal and run: npx orla-il-banks@${VERSION} run`;
+    const command = notificationCommand(process.platform, "Orla: Israeli banks", text.slice(0, 240));
+    if (!command) return;
+    try {
+      spawn(command[0], command[1], { detached: true, stdio: "ignore", windowsHide: true }).unref();
+    } catch {
+      // no notifier: the log still says it
+    }
+  });
+  return file;
+}
 
 const VERSION: string = (JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8")) as { version: string })
   .version;
@@ -57,6 +120,8 @@ Start here:
   orla-il-banks run                   reads your banks and sends the rows to Orla
 
 Also:
+  orla-il-banks schedule [--at 07:00]     run it every day by itself (setup offers it)
+  orla-il-banks unschedule                stop the daily run
   orla-il-banks companies
   orla-il-banks check-browser [--install]
   orla-il-banks trust <company> [--config <file>]
@@ -73,6 +138,8 @@ run:
   --from-json <file>  send a saved file instead of reading the banks
   --show-browser      show the browser while it logs in, for debugging
   --profile-dir <dir> where kept browser profiles live (default ~/.orla-il-banks/profiles)
+  --scheduled         the daily run: logs to ~/.orla-il-banks/logs, notifies on failure,
+                      leaves out banks that ask for a code at every login
 
 check-browser starts the browser on an empty page and closes it; it touches
 no bank. With --install it first downloads the browser if it is missing.
@@ -203,6 +270,11 @@ async function readBanks(
     const spec = COMPANIES[account.company];
     const name = spec.name;
     if ("otp" in spec && !process.stdin.isTTY) {
+      if (SCHEDULED) {
+        // expected in the daily run, and said at setup: not a failure to wake anybody for
+        process.stdout.write(`${name}: not in the daily run, it asks for a code at every login. Run it from a terminal.\n`);
+        continue;
+      }
       process.stderr.write(`${name}: skipped. It asks for a code at every login, so it only runs from a terminal.\n`);
       failed += 1;
       continue;
@@ -309,7 +381,8 @@ async function run(flags: Record<string, string | boolean>): Promise<number> {
   //: institutions it would take a card refund and an unrelated bank debit of
   //: the same amount for a transfer and hide the expense. Per login, the card's
   //: cycle row and the bank's line meet as a suggestion instead: one click.
-  const deliveries: { name: string; rows: PushRow[] }[] = [];
+  const deliveries: { name: string; rows: PushRow[]; balances: PushBalance[] }[] = [];
+  const readAt = new Date();
   for (const saved of read) {
     if (!isCompany(saved.company)) {
       process.stderr.write(`${saved.company}: not a company this runner knows, left out\n`);
@@ -318,10 +391,13 @@ async function run(flags: Record<string, string | boolean>): Promise<number> {
     }
     const company: CompanyId = saved.company;
     const rows: PushRow[] = [];
-    deliveries.push({ name: COMPANIES[company].name, rows });
+    const balances: PushBalance[] = [];
+    deliveries.push({ name: COMPANIES[company].name, rows, balances });
     for (const account of saved.accounts) {
       const mapped = mapAccount(company, account, today);
       rows.push(...mapped.rows);
+      const balance = balanceOf(company, account, readAt);
+      if (balance) balances.push(balance);
       const { name } = accountIdentity(company, account.accountNumber);
       const left = Object.entries(mapped.skipped)
         .filter(([, count]) => count > 0)
@@ -334,27 +410,30 @@ async function run(flags: Record<string, string | boolean>): Promise<number> {
   }
 
   const count = deliveries.reduce((sum, d) => sum + d.rows.length, 0);
+  const stated = deliveries.reduce((sum, d) => sum + d.balances.length, 0);
   if (dryRun) {
-    process.stdout.write(`dry run: ${count} rows ready, nothing sent\n`);
+    process.stdout.write(`dry run: ${count} rows and ${stated} balance${stated === 1 ? "" : "s"} ready, nothing sent\n`);
     return failed ? EXIT.failure : EXIT.ok;
   }
-  if (!count) {
+  if (!count && !stated) {
     process.stdout.write("nothing to send\n");
     return failed ? EXIT.failure : EXIT.ok;
   }
 
   try {
-    const totals = { booked: 0, duplicates: 0, skipped_closed: 0, rejected: [] as Array<Record<string, string>> };
+    const totals = { booked: 0, duplicates: 0, skipped_closed: 0, balances: 0, rejected: [] as Array<Record<string, string>> };
     for (const delivery of deliveries) {
-      if (!delivery.rows.length) continue;
-      const out = await push(config.url, config.token, delivery.rows);
+      if (!delivery.rows.length && !delivery.balances.length) continue;
+      const out = await push(config.url, config.token, delivery.rows, {}, delivery.balances);
       totals.booked += out.booked;
       totals.duplicates += out.duplicates;
       totals.skipped_closed += out.skipped_closed;
+      totals.balances += out.balances_set;
       totals.rejected.push(...out.rejected);
     }
     process.stdout.write(
       `Orla: ${totals.booked} new, ${totals.duplicates} already there` +
+        (totals.balances ? `, ${totals.balances} balance${totals.balances === 1 ? "" : "s"}` : "") +
         (totals.skipped_closed ? `, ${totals.skipped_closed} in closed months` : "") +
         (totals.rejected.length ? `, ${totals.rejected.length} refused` : "") +
         "\n",
@@ -458,6 +537,9 @@ async function setup(flags: Record<string, string | boolean>): Promise<number> {
         return false;
       }
     },
+    ...(process.platform === "darwin" || process.platform === "win32"
+      ? { schedule: (at: At) => installSchedule(scheduleTarget(at, configPath)) }
+      : {}),
     trust: async (company, credentials) =>
       (await trustDevice(company, { profileDir: profileDir(base, company, credentials), env: process.env })) === "trusted",
     });
@@ -470,6 +552,37 @@ async function setup(flags: Record<string, string | boolean>): Promise<number> {
   if (!outcome.saved) return EXIT.failure;
   if (!outcome.runNow) return EXIT.ok;
   return run({ config: configPath });
+}
+
+function scheduleTarget(at: At, configPath: string) {
+  return {
+    platform: process.platform,
+    home: homedir(),
+    nodeDir: dirname(process.execPath),
+    version: VERSION,
+    configPath,
+    at,
+  };
+}
+
+async function schedule(flags: Record<string, string | boolean>): Promise<number> {
+  const unknown = Object.keys(flags).filter((flag) => !SCHEDULE_FLAGS.has(flag));
+  if (unknown.length) fail(`unknown flag ${unknown.map((f) => `--${f}`).join(", ")}. See --help.`, EXIT.usage);
+  const atText = optional(flags, "at");
+  const at = atText === undefined ? DEFAULT_AT : parseAt(atText);
+  if (!at) fail(`--at takes a time of day, like 07:00 or 19:30.`, EXIT.usage);
+  const configPath = optional(flags, "config") ?? defaultConfigPath();
+  if (!existsSync(configPath)) {
+    fail(`there is no setup at ${configPath} yet. Run \`npx orla-il-banks@${VERSION} setup\` first.`, EXIT.usage);
+  }
+  const outcome = await installSchedule(scheduleTarget(at, configPath));
+  process.stdout.write(`${outcome.message}\n`);
+  if (outcome.ok) {
+    process.stdout.write(
+      `Each run leaves a log in ${logDir(homedir())}; a run that fails shows a notification. To stop it: npx orla-il-banks@${VERSION} unschedule\n`,
+    );
+  }
+  return outcome.ok ? EXIT.ok : EXIT.failure;
 }
 
 async function main(argv: string[]): Promise<number> {
@@ -509,7 +622,16 @@ async function main(argv: string[]): Promise<number> {
     }
   }
   if (command === "setup") return setup(flags);
-  if (command === "run") return run(flags);
+  if (command === "run") {
+    if (flags["scheduled"] === true) scheduledMode(homedir());
+    return run(flags);
+  }
+  if (command === "schedule") return schedule(flags);
+  if (command === "unschedule") {
+    const outcome = await uninstallSchedule(process.platform, homedir());
+    process.stdout.write(`${outcome.message}\n`);
+    return EXIT.ok;
+  }
   if (command === "trust") return trust(words[1], flags);
   fail(`unknown command "${command}". See --help.`, EXIT.usage);
 }

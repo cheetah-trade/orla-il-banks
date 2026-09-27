@@ -14,7 +14,7 @@
  *   The door does not redirect, so one arriving means the address is wrong.
  */
 
-import type { PushRow } from "./map.js";
+import type { PushBalance, PushRow } from "./map.js";
 
 //: `MAX_ROWS_PER_CALL` on the Orla side. More in one call is refused whole.
 export const ROWS_PER_CALL = 500;
@@ -27,6 +27,8 @@ export interface PushTotals {
   skipped_closed: number;
   accounts_created: string[];
   rejected: Array<Record<string, string>>;
+  /** balances Orla took; 0 from a door that does not take them yet */
+  balances_set: number;
 }
 
 export type PushFailure = "key" | "contract" | "limit" | "unreachable" | "refused";
@@ -85,7 +87,15 @@ export interface PushOptions {
 
 const pause = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
-async function sendChunk(url: string, token: string, rows: PushRow[], options: PushOptions): Promise<PushTotals> {
+const NONE: PushTotals = { booked: 0, duplicates: 0, skipped_closed: 0, accounts_created: [], rejected: [], balances_set: 0 };
+
+async function sendChunk(
+  url: string,
+  token: string,
+  rows: PushRow[],
+  options: PushOptions,
+  balances: PushBalance[] = [],
+): Promise<PushTotals> {
   const doFetch = options.fetch ?? fetch;
   const sleep = options.sleep ?? pause;
   let lastProblem = "";
@@ -96,7 +106,7 @@ async function sendChunk(url: string, token: string, rows: PushRow[], options: P
         method: "POST",
         redirect: "error",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ rows }),
+        body: JSON.stringify(balances.length ? { rows, balances } : { rows }),
       });
     } catch (error) {
       lastProblem = error instanceof Error ? error.message : String(error);
@@ -112,9 +122,19 @@ async function sendChunk(url: string, token: string, rows: PushRow[], options: P
         skipped_closed: out?.skipped_closed ?? 0,
         accounts_created: out?.accounts_created ?? [],
         rejected: out?.rejected ?? [],
+        balances_set: out?.balances_set ?? 0,
       };
     }
     const detail = detailOf(body);
+    const code = body && typeof body === "object" && typeof (body as { error?: unknown }).error === "string"
+      ? (body as { error: string }).error
+      : "";
+    if (!rows.length && code === "push_source.no_rows") {
+      // Balances alone, to a door from before it took them: it read an empty
+      // delivery. Nothing is lost, the balance comes with the next release of
+      // Orla, and rows are never held back for it.
+      return { ...NONE, accounts_created: [], rejected: [] };
+    }
     if (response.status === 401) {
       throw new PushError(
         "key",
@@ -143,16 +163,28 @@ async function sendChunk(url: string, token: string, rows: PushRow[], options: P
   throw new PushError("unreachable", `Orla could not be reached after ${ATTEMPTS} attempts (${lastProblem})`);
 }
 
-export async function push(base: string, token: string, rows: PushRow[], options: PushOptions = {}): Promise<PushTotals> {
+/** One delivery: the rows in calls of `ROWS_PER_CALL`, the balances with the
+ *  first of them (or alone, when a login brought balances and no new rows). */
+export async function push(
+  base: string,
+  token: string,
+  rows: PushRow[],
+  options: PushOptions = {},
+  balances: PushBalance[] = [],
+): Promise<PushTotals> {
   const url = doorUrl(base);
-  const totals: PushTotals = { booked: 0, duplicates: 0, skipped_closed: 0, accounts_created: [], rejected: [] };
-  for (let start = 0; start < rows.length; start += ROWS_PER_CALL) {
-    const out = await sendChunk(url, token, rows.slice(start, start + ROWS_PER_CALL), options);
+  const totals: PushTotals = { ...NONE, accounts_created: [], rejected: [] };
+  const calls = Math.max(1, Math.ceil(rows.length / ROWS_PER_CALL));
+  if (!rows.length && !balances.length) return totals;
+  for (let call = 0; call < calls; call += 1) {
+    const chunk = rows.slice(call * ROWS_PER_CALL, (call + 1) * ROWS_PER_CALL);
+    const out = await sendChunk(url, token, chunk, options, call === 0 ? balances : []);
     totals.booked += out.booked;
     totals.duplicates += out.duplicates;
     totals.skipped_closed += out.skipped_closed;
     totals.accounts_created.push(...out.accounts_created);
     totals.rejected.push(...out.rejected);
+    totals.balances_set += out.balances_set;
   }
   return totals;
 }

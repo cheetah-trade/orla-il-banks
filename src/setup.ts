@@ -11,7 +11,8 @@
  * 5. The browser, downloaded when this computer does not have the one the
  *    runner needs, after asking.
  * 6. Bank Hapoalim introduced to this computer (`trust`), when it is chosen.
- * 7. An offer to run now.
+ * 7. An offer to run it every day by itself (launchd, Task Scheduler), and
+ *    to run now.
  *
  * Run again on a computer set up already, it asks first what for: a new Orla
  * key with the logins kept (a key runs out), a bank added or a login changed
@@ -25,6 +26,7 @@
 import { COMPANIES, type CompanyId, isCompany } from "./companies.js";
 import { type ConfigFile, readConfigFile, saveConfig } from "./config.js";
 import { confirm, type Io } from "./prompt.js";
+import { type At, DEFAULT_AT, formatAt, parseAt } from "./schedule.js";
 import type { KeyCheck } from "./push.js";
 
 //: What each login field is called when asked, in the words the banks use.
@@ -48,6 +50,8 @@ export interface SetupDeps {
   checkKey: (token: string) => Promise<{ result: KeyCheck; detail: string }>;
   ensureBrowser: (io: Io) => Promise<boolean>;
   trust: (company: CompanyId, credentials: Record<string, string>) => Promise<boolean>;
+  /** sets the daily run up; absent where this computer has no scheduler we know */
+  schedule?: (at: At) => Promise<{ ok: boolean; message: string }>;
 }
 
 export interface SetupOutcome {
@@ -192,7 +196,35 @@ async function askMode(io: Io, existing: ConfigFile): Promise<Mode | null> {
   return null;
 }
 
-async function finish(io: Io, deps: SetupDeps, typed: Array<Record<string, string>>): Promise<SetupOutcome> {
+/** The daily run, offered once everything else is in place. */
+async function offerSchedule(io: Io, deps: SetupDeps, all: Array<Record<string, string>>): Promise<void> {
+  if (!deps.schedule) return;
+  const daily = await confirm(io, "\nRun it every day by itself, so Orla stays up to date without you?");
+  if (!daily) {
+    io.say(`Later: npx orla-il-banks@${deps.version} schedule`);
+    return;
+  }
+  let at: At | null = null;
+  for (let attempt = 1; attempt <= 3 && !at; attempt += 1) {
+    const answer = await io.ask(`At what time? (for example 07:00; Enter for ${formatAt(DEFAULT_AT)}) `);
+    at = answer.trim() ? parseAt(answer) : DEFAULT_AT;
+    if (!at) io.say("A time of day, please, like 07:00 or 19:30.");
+  }
+  const outcome = await deps.schedule(at ?? DEFAULT_AT);
+  io.say(outcome.message);
+  if (!outcome.ok) return;
+  io.say(`If a run fails, this computer shows a notification. To stop the daily run: npx orla-il-banks@${deps.version} unschedule`);
+  if (all.some((a) => a["company"] === "oneZero")) {
+    io.say("One Zero is not in the daily run: it asks for a code at every login, so run it yourself when you want it.");
+  }
+}
+
+async function finish(
+  io: Io,
+  deps: SetupDeps,
+  typed: Array<Record<string, string>>,
+  all: Array<Record<string, string>>,
+): Promise<SetupOutcome> {
   const browserReady = await deps.ensureBrowser(io);
 
   if (browserReady) {
@@ -210,8 +242,9 @@ async function finish(io: Io, deps: SetupDeps, typed: Array<Record<string, strin
   }
 
   io.say(
-    `\nAll set. To read your banks and send the transactions to Orla, run:\n  npx orla-il-banks@${deps.version} run\nRun it again whenever you want fresh transactions. To change a password or the Orla key later, run setup again.`,
+    `\nAll set. To read your banks and send the transactions to Orla, run:\n  npx orla-il-banks@${deps.version} run\nTo change a password or the Orla key later, run setup again.`,
   );
+  if (browserReady) await offerSchedule(io, deps, all);
   const runNow = browserReady && (await confirm(io, "Run it now?"));
   return { saved: true, runNow };
 }
@@ -242,7 +275,7 @@ export async function runSetup(io: Io, deps: SetupDeps): Promise<SetupOutcome> {
   if (mode === "key" && existing) {
     saveConfig(deps.configPath, { ...existing, orla: { ...existing.orla, token: key } });
     io.say(`\nThe new key is saved. Your ${existing.accounts.length} login(s) are kept.`);
-    return finish(io, deps, []);
+    return finish(io, deps, [], existing.accounts);
   }
 
   const banks = await askBanks(io);
@@ -261,5 +294,5 @@ export async function runSetup(io: Io, deps: SetupDeps): Promise<SetupOutcome> {
   }
   saveConfig(deps.configPath, file);
   io.say(`\nSaved to ${deps.configPath}, readable by you only.`);
-  return finish(io, deps, typed);
+  return finish(io, deps, typed, file.accounts);
 }

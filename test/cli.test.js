@@ -4,7 +4,7 @@
  */
 import { deepStrictEqual, match, ok, strictEqual } from "node:assert/strict";
 import { spawn } from "node:child_process";
-import { chmodSync, existsSync, mkdirSync, mkdtempSync, statSync, writeFileSync } from "node:fs";
+import { chmodSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -25,9 +25,14 @@ before(async () => {
     req.on("data", (chunk) => (body += chunk));
     req.on("end", () => {
       received.push({ url: req.url, auth: req.headers.authorization, body: JSON.parse(body) });
-      const rows = received.at(-1).body.rows;
+      const { rows, balances = [] } = received.at(-1).body;
       res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ booked: rows.length, duplicates: 0, batch_id: "b", accounts_created: [], skipped_closed: 0, rejected: [] }));
+      res.end(
+        JSON.stringify({
+          booked: rows.length, duplicates: 0, batch_id: "b", accounts_created: [], skipped_closed: 0, rejected: [],
+          balances_set: balances.length,
+        }),
+      );
     });
   });
   await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
@@ -94,6 +99,7 @@ const SAVED = [
     accounts: [
       {
         accountNumber: "12-600-123456",
+        balance: 25000.5,
         txns: [
           {
             type: "normal",
@@ -133,7 +139,14 @@ test("a saved scrape is sent: one delivery per login, the card's cycle row apart
     ],
   );
   match(stdout, /Isracard ••4580: 1 rows, 1 billing cycles \(left out: 1 pending\)/);
-  match(stdout, /Orla: 3 new, 0 already there/);
+  match(stdout, /Orla: 3 new, 0 already there, 1 balance\b/);
+  // the bank's own balance rides with its login's delivery; the card read none
+  deepStrictEqual(received[0].body.balances, undefined);
+  deepStrictEqual(
+    received[1].body.balances.map((b) => `${b.account_name}|${b.account_kind}|${b.currency}|${b.balance}`),
+    ["Bank Hapoalim ••3456|bank|ILS|25000.50"],
+  );
+  ok(!Number.isNaN(Date.parse(received[1].body.balances[0].as_of)));
 });
 
 test("a dry run reads and counts, and sends nothing", async () => {
@@ -142,7 +155,7 @@ test("a dry run reads and counts, and sends nothing", async () => {
   const { code, stdout } = await run(["run", "--from-json", saved, "--dry-run"], { ORLA_URL: base });
   strictEqual(code, 0);
   strictEqual(received.length, 0);
-  match(stdout, /dry run: 3 rows ready, nothing sent/);
+  match(stdout, /dry run: 3 rows and 1 balance ready, nothing sent/);
 });
 
 test("a config others can read stops the run before anything happens", { skip: process.platform === "win32" && "file modes are POSIX" }, async () => {
@@ -264,4 +277,44 @@ test("run finds the config setup wrote, with no --config", async () => {
   strictEqual(code, 0, stderr);
   ok(received.length > 0);
   strictEqual(received[0].auth, "Bearer tok_default");
+});
+
+function scheduledHome() {
+  const home = mkdtempSync(join(tmpdir(), "orla-il-sched-"));
+  return { home, env: { HOME: home, USERPROFILE: home, ORLA_IL_NO_NOTIFY: "1" } };
+}
+
+function todaysLog(home) {
+  const logs = join(home, ".orla-il-banks", "logs");
+  const file = readdirSync(logs).find((f) => /^run-\d{4}-\d{2}-\d{2}\.log$/.test(f));
+  return file ? readFileSync(join(logs, file), "utf8") : "";
+}
+
+test("the daily run leaves One Zero out without calling it a failure, and logs what it said", async () => {
+  const { home, env } = scheduledHome();
+  const accounts = JSON.stringify([{ company: "oneZero", email: "a@b.c", password: "pw123", phoneNumber: "+972500000000" }]);
+  const { code, stdout } = await run(["run", "--dry-run", "--scheduled"], { ...env, ORLA_IL_ACCOUNTS: accounts });
+  strictEqual(code, 0);
+  match(stdout, /One Zero: not in the daily run/);
+  const log = todaysLog(home);
+  match(log, /run --scheduled/);
+  match(log, /One Zero: not in the daily run/);
+  ok(!log.includes("pw123"));
+});
+
+test("a daily run that cannot start still leaves its reason in the log", async () => {
+  const { home, env } = scheduledHome();
+  const { code } = await run(["run", "--scheduled"], env);
+  strictEqual(code, 2);
+  match(todaysLog(home), /orla-il-banks: .*(config|ORLA_TOKEN|setup)/i);
+});
+
+test("schedule asks for a setup first and for a real time of day", async () => {
+  const { env } = scheduledHome();
+  const none = await run(["schedule"], env);
+  strictEqual(none.code, 2);
+  match(none.stderr, /no setup at .* yet/);
+  const bad = await run(["schedule", "--at", "25:00"], env);
+  strictEqual(bad.code, 2);
+  match(bad.stderr, /--at takes a time of day/);
 });

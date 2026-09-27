@@ -2,7 +2,7 @@
  * The setup wizard, driven by scripted answers: what it asks, what it keeps,
  * and what never reaches the screen.
  */
-import { deepStrictEqual, match, ok, strictEqual } from "node:assert/strict";
+import assert, { deepStrictEqual, match, ok, strictEqual } from "node:assert/strict";
 import { existsSync, mkdtempSync, readFileSync, statSync, writeFileSync, chmodSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -204,4 +204,46 @@ test("no browser means no trust and no offer to run now", async () => {
   deepStrictEqual(await runSetup(io, d.value), { saved: true, runNow: false });
   deepStrictEqual(d.calls.trust, []);
   ok(!said.join("\n").includes("knows this computer"));
+});
+
+test("setup offers the daily run and sets it at the time typed", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "orla-il-setup-"));
+  const path = join(dir, "config.json");
+  const asked = [];
+  // banks, login, daily yes, a bad time, a good one, run now no
+  const { io, said } = scripted(["15", "user1", "", "7pm", "19:30", "n"], [KEY, "pw"]);
+  const d = deps(path, {
+    schedule: async (at) => (asked.push(at), { ok: true, message: "It runs every day at 19:30." }),
+  });
+  await runSetup(io, d.value);
+  deepStrictEqual(asked, [{ hour: 19, minute: 30 }]);
+  const screen = said.join("\n");
+  match(screen, /A time of day, please/);
+  match(screen, /It runs every day at 19:30\./);
+  match(screen, /npx orla-il-banks@9\.9\.9 unschedule/);
+  ok(!screen.includes("One Zero is not in the daily run"));
+});
+
+test("Enter takes 07:00; One Zero is said to stay out of the daily run", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "orla-il-setup-"));
+  const path = join(dir, "config.json");
+  const asked = [];
+  // banks 12 (One Zero): email, phone; daily yes, Enter for the time, run now no
+  const { io, said } = scripted(["12", "a@b.c", "+972500000000", "", "", "n"], [KEY, "pw"]);
+  await runSetup(io, deps(path, { schedule: async (at) => (asked.push(at), { ok: true, message: "ok" }) }).value);
+  deepStrictEqual(asked, [{ hour: 7, minute: 0 }]);
+  match(said.join("\n"), /One Zero is not in the daily run/);
+});
+
+test("declining the daily run says how to set it later, and a computer without a scheduler is not asked", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "orla-il-setup-"));
+  const path = join(dir, "config.json");
+  const { io, said } = scripted(["15", "user1", "n", "n"], [KEY, "pw"]);
+  await runSetup(io, deps(path, { schedule: async () => assert.fail("not asked for") }).value);
+  match(said.join("\n"), /Later: npx orla-il-banks@9\.9\.9 schedule/);
+
+  const path2 = join(dir, "config2.json");
+  const plain = scripted(["15", "user1", "n"], [KEY, "pw"]);
+  await runSetup(plain.io, deps(path2).value);
+  ok(!plain.asked.some((q) => /every day/.test(q)));
 });
