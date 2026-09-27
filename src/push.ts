@@ -118,7 +118,7 @@ async function sendChunk(url: string, token: string, rows: PushRow[], options: P
     if (response.status === 401) {
       throw new PushError(
         "key",
-        `Orla refused the key${detail ? ` (${detail})` : ""}. It may have expired or been revoked: issue a new one in Orla under Integrations, Israeli banks.`,
+        `Orla refused the key${detail ? ` (${detail})` : ""}. It may have expired or been revoked: issue a new one in Orla under Integrations, Israeli banks, then run setup again and choose 1 to put it in.`,
       );
     }
     if (response.status === 403) {

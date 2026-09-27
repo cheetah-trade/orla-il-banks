@@ -214,9 +214,25 @@ function fingerprint(company: CompanyId, accountKey: string, txn: ScrapedTxn): s
   );
 }
 
+/** The mirror a row in this currency goes to. Orla keeps one currency per
+ *  mirror account, fixed by the first row it ever receives, and refuses rows
+ *  in any other. A card that bills foreign purchases in dollars (Max, Isracard)
+ *  sends both, so the account's own currency keeps the plain key and each
+ *  other currency gets a mirror of its own, named with it: a single key would
+ *  have tied the whole card to whichever currency happened to arrive first. */
+export function mirrorFor(
+  identity: { key: string; name: string },
+  own: string,
+  currency: string,
+): { key: string; name: string } {
+  if (currency === own) return identity;
+  return { key: `${identity.key}:${currency.toLowerCase()}`, name: cut(`${identity.name} (${currency})`, NAME_MAX) };
+}
+
 export function mapAccount(company: CompanyId, account: ScrapedAccount, today: string): Mapped {
   const spec = COMPANIES[company];
-  const { key, name } = accountIdentity(company, account.accountNumber);
+  const identity = accountIdentity(company, account.accountNumber);
+  const { key } = identity;
   const fallbackCurrency = currencyCode(account.currency) ?? "ILS";
   const rows: PushRow[] = [];
   const skipped = { pending: 0, zero: 0, currency: 0 };
@@ -250,10 +266,11 @@ export function mapAccount(company: CompanyId, account: ScrapedAccount, today: s
     const ordinal = seen.get(fp) ?? 0;
     seen.set(fp, ordinal + 1);
 
+    const mirror = mirrorFor(identity, fallbackCurrency, currency);
     rows.push({
       external_id: `il:${company}:${fp}:${ordinal}`,
-      account_key: key,
-      account_name: name,
+      account_key: mirror.key,
+      account_name: mirror.name,
       account_kind: spec.kind,
       currency,
       occurred_on: occurredOn,
@@ -276,10 +293,11 @@ export function mapAccount(company: CompanyId, account: ScrapedAccount, today: s
     // Refunds equal to the purchases: the bank charged nothing that day.
     if (cycle.cents === 0) continue;
     cycleRows += 1;
+    const mirror = mirrorFor(identity, fallbackCurrency, cycle.currency);
     rows.push({
       external_id: `il:${company}:cycle:${key.split(":")[2]}:${cycle.day}:${cycle.currency}`,
-      account_key: key,
-      account_name: name,
+      account_key: mirror.key,
+      account_name: mirror.name,
       account_kind: spec.kind,
       currency: cycle.currency,
       occurred_on: cycle.day,
