@@ -21,7 +21,7 @@ function file(name, content, mode = 0o600) {
 
 const HAPOALIM = { company: "hapoalim", userCode: "AB1234", password: "s3cret-pass" };
 
-test("a config others can read is refused, with the fix", () => {
+test("a config others can read is refused, with the fix", { skip: process.platform === "win32" && "file modes are POSIX" }, () => {
   const path = file("open.json", { accounts: [HAPOALIM] }, 0o644);
   throws(() => checkPrivate(path), /chmod 600/);
   throws(() => loadConfig({ file: path, env: {}, needToken: false }), ConfigError);

@@ -26,7 +26,26 @@ git push --follow-tags
 
 The tag publishes to npm with provenance and pushes the Docker image to
 `ghcr.io/cheetah-trade/orla-il-banks:<version>`. Then raise the version in
-`templates/github-actions/orla-il-banks.yml` and in the README.
+`templates/github-actions/orla-il-banks.yml` and in the README, and in the
+Orla app (`RUNNER_VERSION` in `IsraeliBanksSetup.tsx`), which shows the
+commands people copy.
+
+## npm 12
+
+npm 12 (npm's `latest` since September 2026) changed three things this package
+depends on, and 0.1.1 is the version that found out: its tag never reached npm.
+
+- It refuses `npm ci` when the lock file is `npm-shrinkwrap.json`. The release
+  job pins npm 11 (trusted publishing needs 11.5.1 or later); raise the pin
+  only after `npm ci` passes on the new one.
+- It ignores the shrinkwrap inside a published package, so a person's `npx`
+  resolved the ranges afresh (4 of 101 packages differed on the day). The tree
+  now travels in the tarball, as `bundleDependencies`, and CI checks it is
+  there.
+- It runs no dependency's install script unless the person approves it, so
+  puppeteer no longer fetches Chrome on install. The runner downloads it
+  itself (`setup`, `check-browser --install`), and CI installs with
+  `--ignore-scripts` to go the same way.
 
 ## Raising israeli-bank-scrapers
 
@@ -38,5 +57,6 @@ for a release. Before raising the pin:
    nothing else. `grep -rhoE "https?://[a-zA-Z0-9.-]+" node_modules/israeli-bank-scrapers/lib`
    lists every host it names.
 2. Check that no install script appeared in it (`npm view israeli-bank-scrapers@<v> scripts`).
-3. `npm install israeli-bank-scrapers@<v> --save-exact`, keep `puppeteer` equal
-   to the version it resolves, `npm shrinkwrap`, and run the tests.
+3. `npm install israeli-bank-scrapers@<v> --save-exact --ignore-scripts`, keep
+   `puppeteer` and `@puppeteer/browsers` equal to the versions it resolves,
+   `npm shrinkwrap`, and run the tests.

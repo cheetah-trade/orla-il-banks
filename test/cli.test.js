@@ -4,7 +4,7 @@
  */
 import { deepStrictEqual, match, ok, strictEqual } from "node:assert/strict";
 import { spawn } from "node:child_process";
-import { chmodSync, mkdtempSync, statSync, writeFileSync } from "node:fs";
+import { chmodSync, existsSync, mkdirSync, mkdtempSync, statSync, writeFileSync } from "node:fs";
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -143,7 +143,7 @@ test("a dry run reads and counts, and sends nothing", async () => {
   match(stdout, /dry run: 3 rows ready, nothing sent/);
 });
 
-test("a config others can read stops the run before anything happens", async () => {
+test("a config others can read stops the run before anything happens", { skip: process.platform === "win32" && "file modes are POSIX" }, async () => {
   received = [];
   const config = write("open.json", { orla: { url: base, token: "t" } }, 0o644);
   const saved = write("saved3.json", SAVED);
@@ -182,7 +182,7 @@ test("One Zero outside a terminal is skipped and the run says so", async () => {
   match(stderr, /only runs from a terminal/);
 });
 
-test("a saved scrape is written readable by its owner only", async () => {
+test("a saved scrape is written readable by its owner only", { skip: process.platform === "win32" && "file modes are POSIX" }, async () => {
   const path = join(dir, "out.json");
   writeFileSync(path, "old");
   chmodSync(path, 0o644);
@@ -234,4 +234,32 @@ test("Hapoalim in the Docker image is skipped the same way", async () => {
   });
   strictEqual(code, 1);
   match(stderr, /this container is new every time/);
+});
+
+test("setup outside a terminal says where to run it", async () => {
+  const { code, stderr } = await run(["setup"]);
+  strictEqual(code, 2);
+  match(stderr, /run it in a terminal window/);
+});
+
+test("check-browser on a computer without the browser says how to get it, and downloads nothing unasked", async () => {
+  const cache = join(dir, "empty-cache");
+  const { code, stderr } = await run(["check-browser"], { PUPPETEER_CACHE_DIR: cache });
+  strictEqual(code, 1);
+  match(stderr, /check-browser --install/);
+  ok(!existsSync(join(cache, "chrome")));
+});
+
+test("run finds the config setup wrote, with no --config", async () => {
+  received = [];
+  const home = join(dir, "home-default");
+  mkdirSync(home, { recursive: true });
+  const config = join(home, ".orla-il-banks.json");
+  writeFileSync(config, JSON.stringify({ orla: { url: base, token: "tok_default" } }));
+  chmodSync(config, 0o600);
+  const saved = write("saved-default.json", SAVED);
+  const { code, stderr } = await run(["run", "--from-json", saved], { HOME: home, USERPROFILE: home });
+  strictEqual(code, 0, stderr);
+  ok(received.length > 0);
+  strictEqual(received[0].auth, "Bearer tok_default");
 });

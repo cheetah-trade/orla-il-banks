@@ -44,11 +44,17 @@
     "test": "npm run build && node --test test/*.test.js"
   },
   "dependencies": {
+    "@puppeteer/browsers": "2.13.2",
     "israeli-bank-scrapers": "6.12.1",
     "puppeteer": "24.43.1"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
     "typescript": "^5.7.2"
-  }
+  },
+  "bundleDependencies": [
+    "@puppeteer/browsers",
+    "israeli-bank-scrapers",
+    "puppeteer"
+  ]
 }

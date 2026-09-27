@@ -47,3 +47,6 @@ export const RUN_FLAGS = new Set([
 
 //: What `trust` understands. It reads the config only to name the profile.
 export const TRUST_FLAGS = new Set(["config", "profile-dir"]);
+
+//: What `setup` understands: where to write the config, and the profiles.
+export const SETUP_FLAGS = new Set(["config", "profile-dir"]);
