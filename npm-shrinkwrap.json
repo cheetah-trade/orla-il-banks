@@ -1,12 +1,12 @@
 {
   "name": "orla-il-banks",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
       "name": "orla-il-banks",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "bundleDependencies": [
         "@puppeteer/browsers",
         "israeli-bank-scrapers",
