@@ -44,7 +44,7 @@
     "test": "npm run build && node --test test/*.test.js"
   },
   "dependencies": {
-    "@puppeteer/browsers": "2.13.2",
+    "@puppeteer/browsers": "3.2.3",
     "israeli-bank-scrapers": "6.12.1",
     "puppeteer": "24.43.1"
   },
