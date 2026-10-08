@@ -15,7 +15,7 @@
       "license": "MIT",
       "dependencies": {
         "@puppeteer/browsers": "2.13.2",
-        "israeli-bank-scrapers": "6.12.1",
+        "israeli-bank-scrapers": "6.12.2",
         "puppeteer": "24.43.1"
       },
       "bin": {
@@ -682,9 +682,9 @@
       }
     },
     "node_modules/israeli-bank-scrapers": {
-      "version": "6.12.1",
-      "resolved": "https://registry.npmjs.org/israeli-bank-scrapers/-/israeli-bank-scrapers-6.12.1.tgz",
-      "integrity": "sha512-HT+nwHg7eYThee0MIBlig9YTrIri7PsIvwkKC45hEMppM+1c7e6TaGpf5uWkugTvNWAZCtqvVHvrVusD48iG5Q==",
+      "version": "6.12.2",
+      "resolved": "https://registry.npmjs.org/israeli-bank-scrapers/-/israeli-bank-scrapers-6.12.2.tgz",
+      "integrity": "sha512-/37GD0nOQ2FqNSniOOKWKd92yk02qHZ9OFyjcwn9rBVCILkSE40KeZHxVmHQTOKDqBhpSY8iNx9YVKb+vdEExg==",
       "inBundle": true,
       "license": "MIT",
       "dependencies": {
