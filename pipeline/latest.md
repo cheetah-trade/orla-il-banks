@@ -1,4 +1,4 @@
-# Pipeline of cheetah-trade/orla-il-banks, last 7 days (collected 2026-10-13 12:58)
+# Pipeline of cheetah-trade/orla-il-banks, last 7 days (collected 2026-10-13 19:07)
 
 ## CI by workflow
 
@@ -31,4 +31,4 @@ Not run yet: red only because a two-tier CI has not run its suites yet (light ti
 ## Pull requests
 
 - Merged: 0 (0 by bots); to merge: median None h, p90 None h.
-- Open (not drafts): 3; oldest: #8 Bump @puppeteer/browsers from 2.13.2 to 3.2.3 (11.6 d); #9 Bump @types/node from 22.20.4 to 22.20.5 (4.6 d); #10 Bump israeli-bank-scrapers from 6.12.1 to 6.12.2 (4.6 d).
+- Open (not drafts): 3; oldest: #8 Bump @puppeteer/browsers from 2.13.2 to 3.2.3 (11.9 d); #9 Bump @types/node from 22.20.4 to 22.20.5 (4.9 d); #10 Bump israeli-bank-scrapers from 6.12.1 to 6.12.2 (4.9 d).
