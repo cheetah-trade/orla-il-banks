@@ -1,7 +1,7 @@
 ---
 type: scope
 department: devops
-status: proposed
+status: active
 rev: 1
 author: Antons-Mac-mini · task 0f16eb7fd601
 date: 2026-10-15
