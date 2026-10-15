@@ -5,7 +5,7 @@ title: Черновик приглашения для тех, кто прове�
 department: product
 file: live-check-invite-draft.md
 kind: text
-status: draft
+status: approved
 author: Antons-Mac-mini · task 0f16eb7fd601
 date: 2026-10-15
 task: 0f16eb7fd601
