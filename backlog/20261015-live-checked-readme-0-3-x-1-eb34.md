@@ -2,8 +2,8 @@
 type: backlog
 id: 20261015-live-checked-readme-0-3-x-1-eb34
 department: development
-status: proposed
-take: owner
+status: ready
+take: agents
 priority: high
 author: Antons-Mac-mini · task 0f16eb7fd601
 date: 2026-10-15
@@ -11,9 +11,9 @@ task:
 after: 20261015-item-6c75
 goal: 
 epic: Фаза 1: проверено живым запуском
-rank: 
+rank: -500.000000
 found_in: 
-updated: 2026-10-15T11:11:28Z
+updated: 2026-10-15T11:16:20Z
 cod: value 5 · urgency 3 · risk 2 · size 2
 cod_by: Development lead · task b3cd9835632d
 cod_note: Сам заметный клиенту результат фазы 1 (критерии 1 и 3); работа небольшая, идёт последней, срок до 30.10.
