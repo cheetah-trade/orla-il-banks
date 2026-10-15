@@ -1,4 +1,4 @@
-# Pipeline of cheetah-trade/orla-il-banks, last 7 days (collected 2026-10-15 09:53)
+# Pipeline of cheetah-trade/orla-il-banks, last 7 days (collected 2026-10-15 16:00)
 
 ## CI by workflow
 
@@ -6,8 +6,8 @@ Not run yet: red only because a two-tier CI has not run its suites yet (light ti
 
 | Workflow | Runs | Failed | Not run yet | Failure rate | Reruns | Median min | p90 min |
 |---|---|---|---|---|---|---|---|
-| dco | 2 | 0 | 0 | 0% | 0 | 0.2 | 0.2 |
-| ci | 2 | 0 | 0 | 0% | 0 | 1.1 | 1.2 |
+| dco | 3 | 0 | 0 | 0% | 0 | 0.1 | 0.2 |
+| ci | 3 | 0 | 0 | 0% | 0 | 1.2 | 1.6 |
 | Dependabot Updates | 1 | 0 | 0 | 0% | 0 | 0.9 | 0.9 |
 
 ## Where it fails (jobs of recent failed runs)
@@ -31,4 +31,4 @@ Not run yet: red only because a two-tier CI has not run its suites yet (light ti
 ## Pull requests
 
 - Merged: 0 (0 by bots); to merge: median None h, p90 None h.
-- Open (not drafts): 3; oldest: #8 Bump @puppeteer/browsers from 2.13.2 to 3.2.3 (13.5 d); #9 Bump @types/node from 22.20.4 to 22.20.5 (6.5 d); #10 Bump israeli-bank-scrapers from 6.12.1 to 6.12.2 (6.5 d).
+- Open (not drafts): 3; oldest: #8 Bump @puppeteer/browsers from 2.13.2 to 3.2.3 (13.8 d); #9 Bump @types/node from 22.20.4 to 22.20.5 (6.8 d); #10 Bump israeli-bank-scrapers from 6.12.1 to 6.12.2 (6.8 d).
