@@ -1,4 +1,4 @@
-# Delivery of orla-il-banks (counted 2026-10-14 07:35 from Task Floor's run logs and linked pull requests; counts only)
+# Delivery of orla-il-banks (counted 2026-10-15 09:52 from Task Floor's run logs and linked pull requests; counts only)
 
 KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge = merged / (merged + closed unmerged + reverted). Goal for nudges: zero (answers, permissions, «go on», status checks, restarts, stops for the owner).
 
@@ -6,15 +6,17 @@ KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge =
 
 | Agent | Tasks | Output tokens | PRs opened | Merged | Wait median h | Wait mean h | Conversion | Closed / reverted / open / no PR | Nudges | Runaway | Rating |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| Owner's conversations | 1 | 4k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 4 (status checks 1, stops for you 3) | 0 | — |
-| **All** | 1 | 4k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 4 (status checks 1, stops for you 3) | 0 | — |
+| Product lead | 1 | 2k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — |
+| Owner's conversations | 1 | 2k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 3 (stops for you 3) | 0 | — |
+| **All** | 2 | 4k | 0 | 0 | — | — | — | 0 / 0 / 0 / 2 | 3 (stops for you 3) | 0 | — |
 
 ## Last 7 days
 
 | Agent | Tasks | Output tokens | PRs opened | Merged | Wait median h | Wait mean h | Conversion | Closed / reverted / open / no PR | Nudges | Runaway | Rating |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| Owner's conversations | 1 | 4k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 4 (status checks 1, stops for you 3) | 0 | — |
-| **All** | 1 | 4k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 4 (status checks 1, stops for you 3) | 0 | — |
+| Product lead | 1 | 2k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — |
+| Owner's conversations | 1 | 7k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 7 (status checks 1, stops for you 6) | 0 | — |
+| **All** | 2 | 9k | 0 | 0 | — | — | — | 0 / 0 / 0 / 2 | 7 (status checks 1, stops for you 6) | 0 | — |
 
 ## Context compactions by model and effort
 
@@ -22,7 +24,8 @@ Runs ended in the last 7 days; a long run has 46 turns or more. A compaction dro
 
 | Model | Effort | Runs | Compactions | Per run | Runs compacted | Long runs | Per long run |
 |---|---|---|---|---|---|---|---|
-| claude-opus-5-5 | medium | 2 | 0 | 0 | 0 | 0 | — |
+| claude-opus-5-5 | medium | 3 | 0 | 0 | 0 | 0 | — |
+| claude-opus-5-5 | high | 2 | 0 | 0 | 0 | 0 | — |
 
 ## Runaway runs
 
@@ -42,19 +45,21 @@ Work as a share of task time that was not «off» (owner: waits for the owner, i
 
 | Department | 2026-10-12 |
 |---|---|
-| product | 0% (3.65 h; owner 100%) |
+| product | 0% (18.4 h; owner 90%) |
 
 ## What hangs now
 
-- ask: «как получить полный интерфейс таскфлора?» (83fe9571494c): a question waited 214 min
-- needs attention: «как получить полный интерфейс таскфлора?» (83fe9571494c): needs attention
 - offline: «Roman Dubina's Mac» (member-4c77dcbf): Roman Dubina's Mac silent since 13.10 19:51
+- offline: «Anton MacBook Pro Old» (member-6d504cb7): Anton MacBook Pro Old silent since 14.10 11:12
+- offline: «Anton Mac Mini» (member-70ee94bc): Anton Mac Mini silent since 14.10 21:48
 
 ## Quality by agent and model
 
 The owner's ratings, grade verdicts, the claims judge and the Academy on real work, per model the run used; each figure with its sample (n). Small samples and harder tasks mislead: a report, not a routing rule.
 
-- Nothing measured yet.
+| Agent | Model | Rating (n) | As is (n) | Claims checked: confirmed / unseen / contradicted | Exams: score (n) |
+|---|---|---|---|---|---|
+| Product lead | claude-opus-5-5 | — | — | 1: 0 / 0 / 0 | — |
 
 ## Quality under load
 
@@ -62,25 +67,31 @@ Outcomes by how many other runs were going as a run started (last 30 days): on i
 
 | Load | Other runs | Runs | Failed | Stopped by you | Rating (n) | As is (n) | Claims contradicted (n) |
 |---|---|---|---|---|---|---|---|
-| Same subscription | 0 | 2 | 0% | 0% | — | — | — |
-| Same Mac | 0 | 2 | 0% | 0% | — | — | — |
+| Same subscription | 0 | 4 | 0% | 0% | — | — | — |
+| Same subscription | 2–3 | 1 | 0% | 0% | — | — | — |
+| Same Mac | 0 | 3 | 0% | 0% | — | — | — |
+| Same Mac | 1 | 1 | 0% | 0% | — | — | — |
+| Same Mac | 4–7 | 1 | 0% | 0% | — | — | — |
+| Same agent | 1 | 1 | 0% | 0% | — | — | — |
+| Same agent | 4–7 | 1 | 0% | 0% | — | — | — |
 
 ### All projects
 
 | Load | Other runs | Runs | Failed | Stopped by you | Rating (n) | As is (n) | Claims contradicted (n) |
 |---|---|---|---|---|---|---|---|
-| Same subscription | 0 | 124 | 15% | 0% | — | 0% (1) | 2% (52) |
-| Same subscription | 1 | 83 | 13% | 1% | — | — | 9% (22) |
-| Same subscription | 2–3 | 82 | 6% | 4% | — | — | 4% (47) |
-| Same Mac | 0 | 91 | 16% | 0% | — | — | 5% (38) |
-| Same Mac | 1 | 54 | 17% | 0% | — | — | 10% (10) |
-| Same Mac | 2–3 | 85 | 9% | 1% | — | — | 4% (52) |
-| Same Mac | 4–7 | 57 | 5% | 4% | — | 0% (1) | 0% (21) |
-| Same Mac | 8+ | 2 | 0% | 50% | — | — | — |
-| Same agent | 0 | 109 | 11% | 1% | — | — | 2% (50) |
-| Same agent | 1 | 65 | 14% | 0% | — | 0% (1) | 5% (21) |
-| Same agent | 2–3 | 65 | 12% | 2% | — | — | 6% (34) |
-| Same agent | 4–7 | 16 | 31% | 12% | — | — | 0% (5) |
+| Same subscription | 0 | 339 | 7% | 0% | — | 0% (3) | 2% (83) |
+| Same subscription | 1 | 179 | 9% | 1% | — | 0% (2) | 9% (33) |
+| Same subscription | 2–3 | 253 | 3% | 1% | — | 0% (3) | 2% (102) |
+| Same Mac | 0 | 256 | 8% | 0% | — | 0% (1) | 6% (50) |
+| Same Mac | 1 | 162 | 8% | 0% | — | 0% (2) | 5% (40) |
+| Same Mac | 2–3 | 172 | 6% | 1% | — | 0% (3) | 3% (64) |
+| Same Mac | 4–7 | 165 | 2% | 1% | — | 0% (2) | 0% (59) |
+| Same Mac | 8+ | 16 | 0% | 6% | — | — | 0% (5) |
+| Same agent | 0 | 290 | 8% | 0% | — | 0% (3) | 2% (91) |
+| Same agent | 1 | 150 | 7% | 0% | — | 0% (3) | 2% (49) |
+| Same agent | 2–3 | 117 | 7% | 1% | — | 0% (2) | 4% (47) |
+| Same agent | 4–7 | 37 | 14% | 5% | — | — | 0% (9) |
+| Same agent | 8+ | 1 | 0% | 0% | — | — | 0% (1) |
 
 ## Owner stops per backlog item
 
