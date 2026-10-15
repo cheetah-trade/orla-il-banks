@@ -14,6 +14,9 @@ epic: Фаза 1: проверено живым запуском
 rank: 
 found_in: 
 updated: 2026-10-15T11:11:28Z
+cod: value 5 · urgency 3 · risk 2 · size 2
+cod_by: Development lead · task b3cd9835632d
+cod_note: Сам заметный клиенту результат фазы 1 (критерии 1 и 3); работа небольшая, идёт последней, срок до 30.10.
 ---
 # Колонка «Live-checked» в README и релиз 0.3.x по итогам фазы 1
 
