@@ -15,6 +15,9 @@ rank:
 found_in: 
 updated: 2026-10-19T08:27:27Z
 checks: security
+cod: value 4 · urgency 4 · risk 4 · size 3
+cod_by: Development lead · task 827759d992a3
+cod_note: Банки меняют сайты, закреплённая 6.12.1 стареет, PR #10 и #8 висят 10–17 дней; живые проверки фазы 2 нужны на свежей версии; риск — регрессии парсеров.
 ---
 # Поднять israeli-bank-scrapers до актуальной версии по RELEASING.md
 
