@@ -1,4 +1,4 @@
-# Delivery of orla-il-banks (counted 2026-10-20 06:00 from Task Floor's run logs and linked pull requests; counts only)
+# Delivery of orla-il-banks (counted 2026-10-21 09:51 from Task Floor's run logs and linked pull requests; counts only)
 
 KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge = merged / (merged + closed unmerged + reverted). Goal for nudges: zero (answers, permissions, «go on», status checks, restarts, stops for the owner). Outcomes: change failure = (reverted + hotfixes) / (merged + reverted); rework = finished work the owner sent back to verify or restart, or another task continued; time to restore = a reverted change's merge to its revert's.
 
@@ -6,27 +6,25 @@ KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge =
 
 | Agent | Tasks | Output tokens | PRs opened | Merged | Wait median h | Wait mean h | Conversion | Closed / reverted / open / no PR | Nudges | Runaway | Rating | Change failure | Rework | Restore h |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Product lead | 3 | 34k | 0 | 0 | — | — | — | 0 / 0 / 1 / 1 | 5 (stops for you 4, answers 1) | 0 | — | — | 50% | — |
-| Owner's conversations | 2 | 4k | 0 | 0 | — | — | — | 0 / 0 / 0 / 2 | 0 | 0 | — | — | 0% | — |
-| Development lead | 1 | 3k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — | — | 0% | — |
-| Backlog steward | 1 | 5k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 1 (stops for you 1) | 0 | — | — | 0% | — |
-| Artifact steward | 1 | 1k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — | — | 0% | — |
-| **All** | 8 | 47k | 0 | 0 | — | — | — | 0 / 0 / 1 / 6 | 6 (stops for you 5, answers 1) | 0 | — | — | 14% | — |
+| Product lead | 1 | 3k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 1 (stops for you 1) | 0 | — | — | 0% | — |
+| Artifact steward | 1 | 6k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 2 (stops for you 2) | 0 | — | — | 0% | — |
+| Backlog steward | 1 | 4k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 1 (stops for you 1) | 0 | — | — | 0% | — |
+| **All** | 3 | 13k | 0 | 0 | — | — | — | 0 / 0 / 0 / 3 | 4 (stops for you 4) | 0 | — | — | 0% | — |
 
 ## Last 7 days
 
 | Agent | Tasks | Output tokens | PRs opened | Merged | Wait median h | Wait mean h | Conversion | Closed / reverted / open / no PR | Nudges | Runaway | Rating | Change failure | Rework | Restore h |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Backlog steward | 6 | 23k | 0 | 0 | — | — | — | 0 / 0 / 0 / 6 | 6 (stops for you 6) | 0 | — | — | 0% | — |
-| Artifact steward | 5 | 6k | 0 | 0 | — | — | — | 0 / 0 / 0 / 5 | 2 (stops for you 2) | 0 | — | — | 0% | — |
-| Product lead | 4 | 72k | 1 | 0 | — | — | — | 0 / 0 / 1 / 2 | 9 (stops for you 4, answers 4, restarts 1) | 0 | — | — | 33% | — |
-| Owner's conversations | 3 | 11k | 0 | 0 | — | — | — | 0 / 0 / 0 / 3 | 7 (status checks 1, stops for you 6) | 0 | — | — | 0% | — |
-| Development lead | 3 | 10k | 0 | 0 | — | — | — | 0 / 0 / 0 / 3 | 2 (stops for you 2) | 0 | — | — | 0% | — |
-| **All** | 21 | 122k | 1 | 0 | — | — | — | 0 / 0 / 1 / 19 | 26 (stops for you 20, answers 4, restarts 1, status checks 1) | 0 | — | — | 5% | — |
+| Backlog steward | 7 | 27k | 0 | 0 | — | — | — | 0 / 0 / 0 / 7 | 7 (stops for you 7) | 0 | — | — | 0% | — |
+| Artifact steward | 6 | 12k | 0 | 0 | — | — | — | 0 / 0 / 0 / 6 | 4 (stops for you 4) | 0 | — | — | 0% | — |
+| Product lead | 5 | 76k | 1 | 0 | — | — | — | 0 / 0 / 0 / 3 | 10 (stops for you 5, answers 4, restarts 1) | 0 | — | — | 0% | — |
+| Owner's conversations | 3 | 6k | 0 | 0 | — | — | — | 0 / 0 / 0 / 3 | 3 (stops for you 3) | 0 | — | — | 0% | — |
+| Development lead | 3 | 10k | 0 | 0 | — | — | — | 0 / 0 / 0 / 2 | 2 (stops for you 2) | 0 | — | — | 0% | — |
+| **All** | 24 | 130k | 1 | 0 | — | — | — | 0 / 0 / 0 / 21 | 26 (stops for you 21, answers 4, restarts 1) | 0 | — | — | 0% | — |
 
 ## Outcomes over 30 days
 
-Merged 0, reverted 0, hotfixes 0: change failure —, rework 5% (1 of 20 finished), time to restore median —.
+Merged 0, reverted 0, hotfixes 0: change failure —, rework 0% (0 of 21 finished), time to restore median —.
 
 ## Context compactions by model and effort
 
@@ -34,10 +32,10 @@ Runs ended in the last 7 days; a long run has 46 turns or more. A compaction dro
 
 | Model | Effort | Runs | Compactions | Per run | Runs compacted | Long runs | Per long run |
 |---|---|---|---|---|---|---|---|
-| claude-opus-5-5 | high | 29 | 0 | 0 | 0 | 0 | — |
+| claude-opus-5-5 | high | 33 | 0 | 0 | 0 | 0 | — |
 | claude-sonnet-5-5 | medium | 3 | 0 | 0 | 0 | 0 | — |
-| claude-opus-5-5 | medium | 3 | 0 | 0 | 0 | 0 | — |
 | claude-sonnet-5-5 | low | 2 | 0 | 0 | 0 | 0 | — |
+| claude-opus-5-5 | medium | 1 | 0 | 0 | 0 | 0 | — |
 
 ## Runaway runs
 
@@ -57,15 +55,18 @@ Work as a share of task time that was not «off» (owner: waits for the owner, i
 
 | Department | 2026-10-19 | 2026-10-12 |
 |---|---|---|
-| development | 5% (0.294 h; owner 0%) | 2% (1.8 h; owner 19%) |
-| product | 1% (17.9 h; owner 15%) | 0% (58.2 h; owner 31%) |
-| No department | 1% (4.64 h; owner 0%) | — |
+| development | 0% (25.2 h; owner 0%) | 2% (1.8 h; owner 19%) |
+| product | 0% (77.3 h; owner 5%) | 0% (58.1 h; owner 31%) |
+| No department | 0% (15.6 h; owner 0%) | — |
 
 ## What hangs now
 
-- queued: «Product planning · 19.10» (8e3ccf413e5a): queued 20.0 h: No eligible profile: member-6d504cb7_claude-06: 13% available; this task needs ≥
+- queued: «Канал агентов: взять просьбу Anton MacBook Pro · task 51591cda391c» (a5bfbba8c7e5): queued 11.0 h: No eligible profile: member-1cf130e8_claude-01: paid overage is not confirmed di
+- queued: «Product planning · 19.10» (8e3ccf413e5a): queued 47.9 h: Waiting for its computer: Anton MacBook Pro Old, offline since 00:30
+- queued: «Разбор отчётов живых прогонов: у каждого сбоя исправление или пункт» (2596428c0fb6): queued 138.2 h: No eligible profile: member-70ee94bc_claude-h03: limit reached until 23.10 13:00
+- queued: «Product pulse · 15.10» (0f16eb7fd601): queued 141.9 h: No eligible profile: member-70ee94bc_claude-07: limit reached until 25.10 09:00
 - offline: «Roman Dubina's Mac» (member-4c77dcbf): Roman Dubina's Mac silent since 13.10 19:51
-- offline: «Irina's Mac» (member-fd1d09bf): Irina's Mac silent since 20.10 04:25
+- offline: «Anton MacBook Pro Old» (member-6d504cb7): Anton MacBook Pro Old silent since 21.10 00:30
 
 ## Quality by agent and model
 
@@ -74,8 +75,8 @@ The owner's ratings, grade verdicts, the claims judge and the Academy on real wo
 | Agent | Model | Rating (n) | As is (n) | Claims checked: confirmed / unseen / contradicted | Exams: score (n) |
 |---|---|---|---|---|---|
 | Product lead | claude-opus-5-5 | — | 100% (2) | 3: 2 / 0 / 0 | — |
-| Artifact steward | claude-opus-5-5 | — | — | 2: 1 / 0 / 0 | — |
-| Backlog steward | claude-opus-5-5 | — | — | 1: 1 / 0 / 0 | — |
+| Artifact steward | claude-opus-5-5 | — | — | 3: 1 / 1 / 0 | — |
+| Backlog steward | claude-opus-5-5 | — | — | 2: 1 / 0 / 0 | — |
 
 ## Quality under load
 
@@ -84,32 +85,32 @@ Outcomes by how many other runs were going as a run started (last 30 days): on i
 | Load | Other runs | Runs | Failed | Stopped by you | Rating (n) | As is (n) | Claims contradicted (n) |
 |---|---|---|---|---|---|---|---|
 | Same subscription | 0 | 9 | 0% | 0% | — | — | 0% (1) |
-| Same subscription | 1 | 19 | 0% | 0% | — | — | 0% (4) |
-| Same subscription | 2–3 | 10 | 0% | 0% | — | — | 0% (1) |
+| Same subscription | 1 | 20 | 0% | 0% | — | — | 0% (5) |
+| Same subscription | 2–3 | 13 | 0% | 0% | — | — | 0% (1) |
 | Same Mac | 0 | 11 | 0% | 0% | — | — | — |
-| Same Mac | 1 | 15 | 0% | 0% | — | — | 0% (5) |
-| Same Mac | 2–3 | 11 | 0% | 0% | — | — | 0% (1) |
+| Same Mac | 1 | 18 | 0% | 0% | — | — | 0% (6) |
+| Same Mac | 2–3 | 12 | 0% | 0% | — | — | 0% (1) |
 | Same Mac | 4–7 | 1 | 0% | 0% | — | — | — |
-| Same agent | 0 | 12 | 0% | 0% | — | — | 0% (3) |
+| Same agent | 0 | 14 | 0% | 0% | — | — | 0% (4) |
 | Same agent | 1 | 12 | 0% | 0% | — | — | — |
-| Same agent | 2–3 | 7 | 0% | 0% | — | — | 0% (1) |
+| Same agent | 2–3 | 9 | 0% | 0% | — | — | 0% (1) |
 | Same agent | 4–7 | 1 | 0% | 0% | — | — | — |
 
 ### All projects
 
 | Load | Other runs | Runs | Failed | Stopped by you | Rating (n) | As is (n) | Claims contradicted (n) |
 |---|---|---|---|---|---|---|---|
-| Same subscription | 0 | 1119 | 3% | 0% | — | 0% (25) | 5% (204) |
-| Same subscription | 1 | 1473 | 2% | 0% | — | 0% (23) | 5% (248) |
-| Same subscription | 2–3 | 1053 | 1% | 0% | — | 0% (22) | 7% (227) |
-| Same Mac | 0 | 1079 | 3% | 0% | — | 0% (13) | 4% (173) |
-| Same Mac | 1 | 1162 | 2% | 0% | — | 0% (31) | 10% (223) |
-| Same Mac | 2–3 | 1071 | 2% | 0% | — | 0% (20) | 5% (212) |
+| Same subscription | 0 | 1206 | 3% | 0% | — | 0% (27) | 5% (214) |
+| Same subscription | 1 | 1542 | 2% | 0% | — | 0% (28) | 5% (237) |
+| Same subscription | 2–3 | 1148 | 1% | 0% | — | 0% (25) | 7% (225) |
+| Same Mac | 0 | 1218 | 3% | 0% | — | 0% (18) | 5% (182) |
+| Same Mac | 1 | 1218 | 2% | 0% | — | 0% (36) | 9% (215) |
+| Same Mac | 2–3 | 1127 | 2% | 0% | — | 0% (20) | 5% (208) |
 | Same Mac | 4–7 | 313 | 1% | 1% | — | 0% (6) | 0% (68) |
 | Same Mac | 8+ | 20 | 0% | 5% | — | — | 0% (3) |
-| Same agent | 0 | 1556 | 2% | 0% | — | 0% (36) | 6% (280) |
-| Same agent | 1 | 778 | 3% | 0% | — | 0% (19) | 7% (165) |
-| Same agent | 2–3 | 567 | 2% | 0% | — | 0% (11) | 3% (127) |
+| Same agent | 0 | 1697 | 2% | 0% | — | 0% (41) | 6% (282) |
+| Same agent | 1 | 816 | 3% | 0% | — | 0% (20) | 7% (158) |
+| Same agent | 2–3 | 584 | 2% | 0% | — | 0% (15) | 4% (126) |
 | Same agent | 4–7 | 138 | 5% | 1% | — | 0% (4) | 0% (30) |
 | Same agent | 8+ | 1 | 0% | 0% | — | — | 0% (1) |
 
