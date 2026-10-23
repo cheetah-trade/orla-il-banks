@@ -24,7 +24,7 @@ They go into setup on your computer and into the bank's own page, nowhere else.
 2. Read the bank without sending anything:
 
    ```bash
-   npx orla-il-banks@0.3.1 run --dry-run --only <id>
+   npx orla-il-banks@0.3.2 run --dry-run --only <id>
    ```
 
    `<id>` is the bank's id from the [Supported](../README.md#supported) table,
@@ -33,7 +33,7 @@ They go into setup on your computer and into the bank's own page, nowhere else.
 3. Send it:
 
    ```bash
-   npx orla-il-banks@0.3.1 run --only <id>
+   npx orla-il-banks@0.3.2 run --only <id>
    ```
 
    It ends with `Orla: N new, 0 already there`.
@@ -72,7 +72,7 @@ To whoever asked you to run it, or to
 
 ```text
 Date:
-Version: 0.3.1
+Version: 0.3.2
 Computer: Mac / Windows, version
 Node: (node --version)
 Bank or card id:
