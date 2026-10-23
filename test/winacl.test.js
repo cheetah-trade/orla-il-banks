@@ -27,6 +27,13 @@ test("anyone else let in is named, even by an entry that only passes down to wha
   ]);
 });
 
+test("the built-in Administrator is written LA, and is this account when it runs as it", () => {
+  const admin = "S-1-5-21-3776380004-1005456608-3524014338-500";
+  deepStrictEqual(othersAllowed("D:PAI(A;OICI;FA;;;LA)", admin), []);
+  deepStrictEqual(othersAllowed("D:PAI(A;OICI;FA;;;LA)", ME), ["LA"]);
+  deepStrictEqual(othersAllowed("D:PAI(A;OICI;FA;;;LG)", "S-1-5-21-1-2-3-501"), []);
+});
+
 test("deny entries only take away and are not counted", () => {
   deepStrictEqual(othersAllowed(`D:P(D;OICI;FA;;;WD)(A;OICI;FA;;;${ME})`, ME), []);
 });

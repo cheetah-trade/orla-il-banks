@@ -32,6 +32,19 @@ export interface WindowsAcl {
 /** SYSTEM, Administrators, CREATOR OWNER, OWNER RIGHTS: aliases and SIDs. */
 const MACHINE = new Set(["SY", "S-1-5-18", "BA", "S-1-5-32-544", "CO", "S-1-3-0", "OW", "S-1-3-4"]);
 
+/**
+ * The names SDDL may give this account. Two accounts of the machine have an
+ * alias instead of their SID: the built-in Administrator (RID 500, "LA", what
+ * a CI runner on Windows is) and the built-in Guest (RID 501, "LG").
+ */
+function namesOf(user: string): Set<string> {
+  const names = new Set([user]);
+  const rid = /^S-1-5-21-\d+-\d+-\d+-(\d+)$/.exec(user)?.[1];
+  if (rid === "500") names.add("LA");
+  if (rid === "501") names.add("LG");
+  return names;
+}
+
 /** Allow entries in SDDL: plain, object, callback and callback-object. */
 const ALLOW = new Set(["A", "OA", "XA", "ZA"]);
 
@@ -44,13 +57,14 @@ export function othersAllowed(sddl: string, user: string): string[] {
   const dacl = /D:([A-Z_]*)((?:\([^)]*\))*)/.exec(sddl);
   if (!dacl) return ["everyone (no ACL)"];
   if ((dacl[1] ?? "").includes("NO_ACCESS_CONTROL")) return ["everyone (no access control)"];
+  const me = namesOf(user);
   const others: string[] = [];
   for (const ace of (dacl[2] ?? "").matchAll(/\(([^)]*)\)/g)) {
     const fields = (ace[1] ?? "").split(";");
     const type = fields[0] ?? "";
     const sid = fields[5] ?? "";
     if (!ALLOW.has(type)) continue;
-    if (sid === user || MACHINE.has(sid)) continue;
+    if (me.has(sid) || MACHINE.has(sid)) continue;
     if (!others.includes(sid)) others.push(sid);
   }
   return others;
