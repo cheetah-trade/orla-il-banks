@@ -65,8 +65,11 @@ accounts. Your password and the code go into the bank's page, not into this
 program. From then on `run` logs in from that profile.
 
 - The profile lives in `~/.orla-il-banks/profiles` (move it with
-  `--profile-dir` or `ORLA_IL_PROFILE_DIR`), readable by you only. It holds a
-  bank session: delete the folder to make this computer a stranger again.
+  `--profile-dir` or `ORLA_IL_PROFILE_DIR`), readable by you only; a folder
+  anyone else can read is refused, with the command that closes it (on
+  Windows that is the folder's permissions, read with the system's `icacls`).
+  It holds a bank session: delete the folder to make this computer a stranger
+  again.
 - Not in GitHub Actions and not in Docker: a runner is a new device on every
   run, and keeping the profile there would put a bank session in a cache. The
   runner skips Hapoalim there and says so.
