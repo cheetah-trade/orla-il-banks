@@ -11,6 +11,9 @@ updates:
       # Moves with israeli-bank-scrapers, never on its own: the library is
       # tested against the puppeteer it resolves (RELEASING.md).
       - dependency-name: puppeteer
+      # puppeteer pins its browser downloader exactly; a lone bump puts a
+      # second copy of it into the tree (#8: 102 to 137 packages).
+      - dependency-name: "@puppeteer/browsers"
       # The runtime is Node 22; types for a newer Node describe APIs it lacks.
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]

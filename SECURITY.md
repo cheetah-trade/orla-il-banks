@@ -31,7 +31,12 @@ which types them into your bank's website in a local browser.
 - No failure screenshots are taken: a screenshot of a bank page is a statement.
 - For a bank that checks devices (Bank Hapoalim), a browser profile is kept on
   this computer, one per login, in a folder readable by you only; a folder
-  anyone else can read is refused. It holds a logged-in bank session. It is
+  anyone else can read is refused. On Windows "anyone else" is read from the
+  folder's permissions (its ACL, through the system's `icacls`): a folder the
+  runner creates is closed to every account but yours, and a folder that lets
+  in another account, a group such as Users or Everyone, or that cannot be
+  read at all, is not used. Administrators and the system itself can open it,
+  as an administrator can on any computer. It holds a logged-in bank session. It is
   never kept in GitHub Actions or Docker, and deleting it forgets the device.
   `trust` opens the bank's own page for you to log in: the password and the
   code are typed there, not into this program.
