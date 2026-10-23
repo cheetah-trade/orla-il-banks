@@ -1,4 +1,4 @@
-# Pipeline of cheetah-trade/orla-il-banks, last 7 days (collected 2026-10-23 00:42)
+# Pipeline of cheetah-trade/orla-il-banks, last 7 days (collected 2026-10-23 07:04)
 
 ## CI by workflow
 
@@ -6,8 +6,9 @@ Not run yet: red only because a two-tier CI has not run its suites yet (light ti
 
 | Workflow | Runs | Failed | Not run yet | Failure rate | Reruns | Median min | p90 min |
 |---|---|---|---|---|---|---|---|
-| dco | 1 | 0 | 0 | 0% | 0 | 0.1 | 0.1 |
-| ci | 1 | 0 | 0 | 0% | 0 | 1.6 | 1.6 |
+| ci | 4 | 0 | 0 | 0% | 0 | 1.6 | 2.1 |
+| dco | 1 | 0 | 0 | 0% | 0 | 0.5 | 0.5 |
+| Dependabot Updates | 1 | 0 | 0 | 0% | 0 | 0.9 | 0.9 |
 
 ## Where it fails (jobs of recent failed runs)
 
@@ -29,5 +30,5 @@ Not run yet: red only because a two-tier CI has not run its suites yet (light ti
 
 ## Pull requests
 
-- Merged: 0 (0 by bots); to merge: median None h, p90 None h.
-- Open (not drafts): 4; oldest: #8 Bump @puppeteer/browsers from 2.13.2 to 3.2.3 (21.1 d); #9 Bump @types/node from 22.20.4 to 22.20.5 (14.1 d); #10 Bump israeli-bank-scrapers from 6.12.1 to 6.12.2 (14.1 d); #11 docs: a live check for one bank, by a person with their own login (7.5 d).
+- Merged: 3 (2 by bots); to merge: median 342.1 h, p90 342.1 h.
+- Open (not drafts): 1; oldest: #8 Bump @puppeteer/browsers from 2.13.2 to 3.2.5 (21.4 d).
