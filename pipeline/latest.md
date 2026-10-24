@@ -1,4 +1,4 @@
-# Pipeline of cheetah-trade/orla-il-banks, last 7 days (collected 2026-10-24 02:10)
+# Pipeline of cheetah-trade/orla-il-banks, last 7 days (collected 2026-10-24 08:26)
 
 ## CI by workflow
 
@@ -31,4 +31,4 @@ Not run yet: red only because a two-tier CI has not run its suites yet (light ti
 ## Pull requests
 
 - Merged: 3 (2 by bots); to merge: median 342.1 h, p90 342.1 h.
-- Open (not drafts): 1; oldest: #12 On Windows the browser profile is private by its ACL; release 0.3.2 (0.3 d).
+- Open (not drafts): 1; oldest: #12 On Windows the browser profile is private by its ACL; release 0.3.2 (0.5 d).
