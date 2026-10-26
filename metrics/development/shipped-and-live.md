@@ -6,3 +6,4 @@ better: up
 target: 
 ---
 2026-10-18 0 Task Floor backlog: items done with every criterion met, live a week, not reverted · Task Floor
+2026-10-25 0 Task Floor backlog: items done with every criterion met, live a week, not reverted · Task Floor
