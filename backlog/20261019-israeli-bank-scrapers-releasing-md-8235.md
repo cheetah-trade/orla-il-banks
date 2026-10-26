@@ -14,6 +14,7 @@ epic: Фаза 2: свежая версия и первый запуск сам
 rank: 
 found_in: 
 updated: 2026-10-19T08:27:27Z
+stale: Untouched since 19 Oct: approve it or drop it
 checks: security
 cod: value 4 · urgency 4 · risk 4 · size 3
 cod_by: Development lead · task 827759d992a3
