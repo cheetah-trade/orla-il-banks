@@ -1,28 +1,28 @@
-# Owner queue of orla-il-banks (counted 2026-10-27 06:00 from Task Floor's records; counts only)
+# Owner queue of orla-il-banks (counted 2026-10-28 06:00 from Task Floor's records; counts only)
 
 Everything that waits for the owner's decision. A signal only: nothing is held or delayed by it. Pull request waits to merge and the owner's nudges are in the Delivery report.
 
 | Department | Items | Oldest h | Inbox questions | Knowledge proposals | Open asks | Proposed backlog items | Draft artifacts | Open pull requests | Promotions | Other Inbox items |
 |---|---|---|---|---|---|---|---|---|---|---|
-| Разработка | 2 | 199 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 |
-| Продукт | 2 | 199 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 |
-| No department | 1 | 21 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| **All** | 5 | 199 | 0 | 0 | 0 | 3 | 1 | 0 | 0 | 1 |
+| Разработка | 2 | 223 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 |
+| Продукт | 2 | 223 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 |
+| No department | 1 | 45 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| **All** | 5 | 223 | 0 | 0 | 0 | 3 | 1 | 0 | 0 | 1 |
 
 Oldest: Proposed backlog items: Поднять israeli-bank-scrapers до актуальной версии по RELEASING.md.
-Organisation and house (not tied to a project): 89 items (other inbox items 89); oldest 78.0 h (Other Inbox items: Выкатка codex/hub-809b7fecaac8-2b не удалась).
-All projects: 566 items (inbox questions 6, knowledge proposals 72, proposed backlog items 299, draft artifacts 36, open pull requests 23, other inbox items 130); oldest 415.0 h (Proposed backlog items: Ролик «Вы подписываете мандат»).
-With the knowledge curator, not the owner's yet: 185 lessons.
+Organisation and house (not tied to a project): 90 items (other inbox items 90); oldest 102.0 h (Other Inbox items: Выкатка codex/hub-809b7fecaac8-2b не удалась).
+All projects: 601 items (inbox questions 9, knowledge proposals 72, proposed backlog items 302, draft artifacts 37, open pull requests 22, other inbox items 159); oldest 439.0 h (Proposed backlog items: Ролик «Вы подписываете мандат»).
+With the knowledge curator, not the owner's yet: 219 lessons.
 Reversible questions answered on the owner's silence, last 7 days: 0; the owner changed 0 of them (not counted as the owner's decisions).
 
 ## Owner decisions per day
 
 | Date | Decisions | Inbox | asks | backlog | artifacts | pull requests |
 |---|---|---|---|---|---|---|
-| 2026-10-21 | 3 | 3 | 0 | 0 | 0 | 0 |
 | 2026-10-22 | 1 | 1 | 0 | 0 | 0 | 0 |
 | 2026-10-23 | 7 | 6 | 0 | 0 | 0 | 1 |
 | 2026-10-24 | 0 | 0 | 0 | 0 | 0 | 0 |
 | 2026-10-25 | 0 | 0 | 0 | 0 | 0 | 0 |
 | 2026-10-26 | 4 | 4 | 0 | 0 | 0 | 0 |
 | 2026-10-27 | 2 | 2 | 0 | 0 | 0 | 0 |
+| 2026-10-28 | 0 | 0 | 0 | 0 | 0 | 0 |
