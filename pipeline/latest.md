@@ -1,4 +1,4 @@
-# Pipeline of cheetah-trade/orla-il-banks, last 7 days (collected 2026-10-31 00:23)
+# Pipeline of cheetah-trade/orla-il-banks, last 7 days (collected 2026-10-31 06:31)
 
 ## CI by workflow
 
@@ -6,13 +6,13 @@ Not run yet: red only because a two-tier CI has not run its suites yet (light ti
 
 | Workflow | Runs | Failed | Not run yet | Failure rate | Reruns | Median min | p90 min |
 |---|---|---|---|---|---|---|---|
-| ci | 9 | 1 | 0 | 11% | 0 | 1.3 | 2.1 |
-| dco | 6 | 0 | 0 | 0% | 0 | 0.1 | 0.5 |
-| Dependabot Updates | 2 | 0 | 0 | 0% | 0 | 0.9 | 0.9 |
+| ci | 1 | 0 | 0 | 0% | 0 | 1.3 | 1.3 |
+| dco | 1 | 0 | 0 | 0% | 0 | 0.1 | 0.1 |
+| Dependabot Updates | 1 | 0 | 0 | 0% | 0 | 0.9 | 0.9 |
 
 ## Where it fails (jobs of recent failed runs)
 
-- ci / desktop (windows-2025): 1
+- No failed runs.
 
 ## Why runs fail (error lines of recent failed runs)
 
@@ -30,5 +30,5 @@ Not run yet: red only because a two-tier CI has not run its suites yet (light ti
 
 ## Pull requests
 
-- Merged: 3 (2 by bots); to merge: median 342.1 h, p90 342.1 h.
-- Open (not drafts): 2; oldest: #12 On Windows the browser profile is private by its ACL; release 0.3.2 (7.2 d); #13 Bump @puppeteer/browsers from 2.13.2 to 3.2.6 (1.2 d).
+- Merged: 0 (0 by bots); to merge: median None h, p90 None h.
+- Open (not drafts): 2; oldest: #12 On Windows the browser profile is private by its ACL; release 0.3.2 (7.5 d); #13 Bump @puppeteer/browsers from 2.13.2 to 3.2.6 (1.4 d).
