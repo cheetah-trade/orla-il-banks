@@ -1,4 +1,4 @@
-# Pipeline of cheetah-trade/orla-il-banks, last 7 days (collected 2026-11-01 19:38)
+# Pipeline of cheetah-trade/orla-il-banks, last 7 days (collected 2026-11-02 01:45)
 
 ## CI by workflow
 
@@ -6,9 +6,9 @@ Not run yet: red only because a two-tier CI has not run its suites yet (light ti
 
 | Workflow | Runs | Failed | Not run yet | Failure rate | Reruns | Median min | p90 min |
 |---|---|---|---|---|---|---|---|
-| ci | 1 | 0 | 0 | 0% | 0 | 1.3 | 1.3 |
-| dco | 1 | 0 | 0 | 0% | 0 | 0.1 | 0.1 |
-| Dependabot Updates | 1 | 0 | 0 | 0% | 0 | 0.9 | 0.9 |
+| dco | 2 | 0 | 0 | 0% | 0 | 0.1 | 0.1 |
+| ci | 2 | 0 | 0 | 0% | 0 | 1.2 | 1.3 |
+| Dependabot Updates | 2 | 0 | 0 | 0% | 0 | 0.8 | 0.9 |
 
 ## Where it fails (jobs of recent failed runs)
 
@@ -31,4 +31,4 @@ Not run yet: red only because a two-tier CI has not run its suites yet (light ti
 ## Pull requests
 
 - Merged: 0 (0 by bots); to merge: median None h, p90 None h.
-- Open (not drafts): 2; oldest: #12 On Windows the browser profile is private by its ACL; release 0.3.2 (9.0 d); #13 Bump @puppeteer/browsers from 2.13.2 to 3.2.6 (3.0 d).
+- Open (not drafts): 3; oldest: #12 On Windows the browser profile is private by its ACL; release 0.3.2 (9.3 d); #13 Bump @puppeteer/browsers from 2.13.2 to 3.2.6 (3.2 d); #14 Bump actions/setup-node from 7.0.0 to 7.1.0 (0.2 d).
