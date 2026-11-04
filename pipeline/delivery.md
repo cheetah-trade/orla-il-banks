@@ -1,4 +1,4 @@
-# Delivery of orla-il-banks (counted 2026-11-03 06:00 from Task Floor's run logs and linked pull requests; counts only)
+# Delivery of orla-il-banks (counted 2026-11-04 06:00 from Task Floor's run logs and linked pull requests; counts only)
 
 KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge = merged / (merged + closed unmerged + reverted). Goal for nudges: zero (answers, permissions, «go on», status checks, restarts, stops for the owner). Outcomes: change failure = (reverted + hotfixes) / (merged + reverted); rework = finished work the owner sent back to verify or restart, or another task continued; time to restore = a reverted change's merge to its revert's.
 
@@ -12,9 +12,9 @@ KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge =
 
 | Agent | Tasks | Output tokens | PRs opened | Merged | Wait median h | Wait mean h | Conversion | Closed / reverted / open / no PR | Nudges | Runaway | Rating | Change failure | Rework | Restore h |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Product lead | 3 | 10k | 0 | 0 | — | — | — | 0 / 0 / 0 / 2 | 0 | 0 | — | — | 50% | — |
-| Development lead | 1 | 6k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — | — | 0% | — |
-| **All** | 4 | 17k | 0 | 0 | — | — | — | 0 / 0 / 0 / 3 | 0 | 0 | — | — | 33% | — |
+| Product lead | 2 | 8k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — | — | 0% | — |
+| Development lead | 1 | 3k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — | — | 0% | — |
+| **All** | 3 | 10k | 0 | 0 | — | — | — | 0 / 0 / 0 / 2 | 0 | 0 | — | — | 0% | — |
 
 ## Outcomes over 30 days
 
@@ -26,7 +26,7 @@ Runs ended in the last 7 days; a long run has 46 turns or more. A compaction dro
 
 | Model | Effort | Runs | Compactions | Per run | Runs compacted | Long runs | Per long run |
 |---|---|---|---|---|---|---|---|
-| claude-opus-5-5 | high | 8 | 0 | 0 | 0 | 0 | — |
+| claude-opus-5-5 | high | 4 | 0 | 0 | 0 | 0 | — |
 
 ## Runaway runs
 
@@ -47,21 +47,22 @@ Work as a share of task time that was not «off» (owner: waits for the owner, i
 | Department | 2026-11-02 | 2026-10-26 | 2026-10-19 | 2026-10-12 |
 |---|---|---|---|---|
 | development | — | 0% (31 h; owner 0%) | 0% (69 h; owner 0%) | 2% (1.8 h; owner 19%) |
-| product | 0% (95.9 h; owner 0%) | 0% (73.6 h; owner 21%) | 0% (217 h; owner 2%) | 0% (54.4 h; owner 33%) |
+| product | 0% (192 h; owner 0%) | 0% (73.6 h; owner 21%) | 0% (217 h; owner 2%) | 0% (54.4 h; owner 33%) |
 | No department | — | — | 0% (55.9 h; owner 35%) | — |
 
 ## What hangs now
 
-- queued: «Product planning · 02.11» (fd03b94ccddd): queued 20.5 h: No eligible profile: member-1cf130e8_claude-01: sign-in required; member-500ccf8
-- queued: «Artifact review · 02.11» (8fc7455bfeb3): queued 22.7 h: No eligible profile: member-1cf130e8_claude-01: sign-in required; member-500ccf8
-- queued: «Backlog review · 02.11» (91463e6e11e4): queued 22.8 h: No eligible profile: member-1cf130e8_claude-01: sign-in required; member-500ccf8
-- queued: «Product pulse · 26.10» (7273acc143fe): queued 186.0 h: No eligible profile: member-70ee94bc_claude-default: usage refresh needed after 
+- queued: «Product planning · 02.11» (fd03b94ccddd): queued 44.5 h: No eligible profile: member-1cf130e8_claude-01: sign-in required; member-500ccf8
+- queued: «Artifact review · 02.11» (8fc7455bfeb3): queued 46.7 h: No eligible profile: member-1cf130e8_claude-01: sign-in required; member-500ccf8
+- queued: «Backlog review · 02.11» (91463e6e11e4): queued 46.8 h: No eligible profile: member-1cf130e8_claude-01: sign-in required; member-500ccf8
+- queued: «Product pulse · 26.10» (7273acc143fe): queued 210.0 h: No eligible profile: member-70ee94bc_claude-default: usage refresh needed after 
 - failed: «Разбор отчётов живых прогонов: у каждого сбоя исправление или пункт» (2596428c0fb6): failed
 - offline: «Anton MacBook Air Old» (member-1cf130e8): Anton MacBook Air Old silent since 02.11 18:30
 - offline: «Roman Dubina's Mac» (member-4c77dcbf): Roman Dubina's Mac silent since 13.10 19:51
+- offline: «Anton MacBook Pro» (member-500ccf82): Anton MacBook Pro silent since 04.11 05:13
 - offline: «Gera Skalski's Mac» (member-c20323c4): Gera Skalski's Mac silent since 22.10 16:09
 - offline: «Gera Skalski's Mac» (member-d7405858): Gera Skalski's Mac silent since 22.10 15:59
-- offline: «Irina's Mac» (member-fd1d09bf): Irina's Mac silent since 03.11 05:58
+- offline: «Anton MacBook Air» (member-e1dacae1): Anton MacBook Air silent since 04.11 05:30
 
 ## Quality by agent and model
 
@@ -69,8 +70,7 @@ The owner's ratings, grade verdicts, the claims judge and the Academy on real wo
 
 | Agent | Model | Rating (n) | As is (n) | Claims checked: confirmed / unseen / contradicted | Exams: score (n) |
 |---|---|---|---|---|---|
-| Product lead | claude-opus-5-5 | — | — | 3: 2 / 1 / 0 | — |
-| Development lead | claude-opus-5-5 | — | — | 1: 1 / 1 / 0 | — |
+| Product lead | claude-opus-5-5 | — | — | 2: 1 / 1 / 0 | — |
 
 ## Quality under load
 
