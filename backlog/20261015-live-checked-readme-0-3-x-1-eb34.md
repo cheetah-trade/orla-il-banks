@@ -14,7 +14,6 @@ epic: Фаза 1: проверено живым запуском
 rank: -500.000000
 found_in: 
 updated: 2026-10-15T11:16:20Z
-stale: Waits for «Разбор отчётов живых прогонов: у каждого сбоя исправление или пункт», which is stale
 cod: value 5 · urgency 3 · risk 2 · size 2
 cod_by: Development lead · task b3cd9835632d
 cod_note: Сам заметный клиенту результат фазы 1 (критерии 1 и 3); работа небольшая, идёт последней, срок до 30.10.
