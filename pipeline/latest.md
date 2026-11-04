@@ -1,4 +1,4 @@
-# Pipeline of cheetah-trade/orla-il-banks, last 7 days (collected 2026-11-04 15:32)
+# Pipeline of cheetah-trade/orla-il-banks, last 7 days (collected 2026-11-04 21:45)
 
 ## CI by workflow
 
@@ -31,4 +31,4 @@ Not run yet: red only because a two-tier CI has not run its suites yet (light ti
 ## Pull requests
 
 - Merged: 0 (0 by bots); to merge: median None h, p90 None h.
-- Open (not drafts): 3; oldest: #12 On Windows the browser profile is private by its ACL; release 0.3.2 (11.9 d); #13 Bump @puppeteer/browsers from 2.13.2 to 3.2.6 (5.8 d); #14 Bump actions/setup-node from 7.0.0 to 7.1.0 (2.8 d).
+- Open (not drafts): 3; oldest: #12 On Windows the browser profile is private by its ACL; release 0.3.2 (12.1 d); #13 Bump @puppeteer/browsers from 2.13.2 to 3.2.6 (6.0 d); #14 Bump actions/setup-node from 7.0.0 to 7.1.0 (3.0 d).
