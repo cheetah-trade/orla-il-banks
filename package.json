@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@puppeteer/browsers": "2.13.2",
-    "israeli-bank-scrapers": "6.12.2",
+    "israeli-bank-scrapers": "6.13.0",
     "puppeteer": "24.43.1"
   },
   "devDependencies": {
