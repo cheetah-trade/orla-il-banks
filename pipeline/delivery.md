@@ -1,4 +1,4 @@
-# Delivery of orla-il-banks (counted 2026-11-05 06:00 from Task Floor's run logs and linked pull requests; counts only)
+# Delivery of orla-il-banks (counted 2026-11-06 06:00 from Task Floor's run logs and linked pull requests; counts only)
 
 KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge = merged / (merged + closed unmerged + reverted). Goal for nudges: zero (answers, permissions, «go on», status checks, restarts, stops for the owner). Outcomes: change failure = (reverted + hotfixes) / (merged + reverted); rework = finished work the owner sent back to verify or restart, or another task continued; time to restore = a reverted change's merge to its revert's.
 
@@ -6,9 +6,7 @@ KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge =
 
 | Agent | Tasks | Output tokens | PRs opened | Merged | Wait median h | Wait mean h | Conversion | Closed / reverted / open / no PR | Nudges | Runaway | Rating | Change failure | Rework | Restore h |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Development lead | 1 | 4k | 0 | 0 | — | — | — | 0 / 0 / 0 / 2 | 0 | 0 | — | — | 50% | — |
-| Product lead | 0 | 0 | 0 | 0 | — | — | — | 0 / 0 / 0 / 3 | 0 | 0 | — | — | 33% | — |
-| **All** | 1 | 4k | 0 | 0 | — | — | — | 0 / 0 / 0 / 5 | 0 | 0 | — | — | 40% | — |
+| — | 0 | | | | | | | | | | | | | |
 
 ## Last 7 days
 
@@ -56,10 +54,10 @@ Work as a share of task time that was not «off» (owner: waits for the owner, i
 
 - offline: «Anton MacBook Air Old» (member-1cf130e8): Anton MacBook Air Old silent since 02.11 18:30
 - offline: «Roman Dubina's Mac» (member-4c77dcbf): Roman Dubina's Mac silent since 13.10 19:51
-- offline: «Anton MacBook Pro Old» (member-6d504cb7): Anton MacBook Pro Old silent since 05.11 05:36
+- offline: «Anton MacBook Pro Old» (member-6d504cb7): Anton MacBook Pro Old silent since 06.11 03:42
 - offline: «Gera Skalski's Mac» (member-c20323c4): Gera Skalski's Mac silent since 22.10 16:09
 - offline: «Gera Skalski's Mac» (member-d7405858): Gera Skalski's Mac silent since 22.10 15:59
-- offline: «Irina's Mac» (member-fd1d09bf): Irina's Mac silent since 05.11 05:42
+- offline: «Irina's Mac» (member-fd1d09bf): Irina's Mac silent since 06.11 05:34
 
 ## Quality by agent and model
 
@@ -92,17 +90,17 @@ Outcomes by how many other runs were going as a run started (last 30 days): on i
 
 | Load | Other runs | Runs | Failed | Stopped by you | Rating (n) | As is (n) | Claims contradicted (n) |
 |---|---|---|---|---|---|---|---|
-| Same subscription | 0 | 2187 | 3% | 0% | — | 0% (27) | 4% (440) |
-| Same subscription | 1 | 2371 | 2% | 0% | — | 0% (28) | 6% (373) |
-| Same subscription | 2–3 | 1823 | 2% | 0% | — | 0% (25) | 6% (321) |
-| Same Mac | 0 | 1936 | 3% | 0% | — | 0% (18) | 3% (330) |
-| Same Mac | 1 | 2154 | 2% | 0% | — | 0% (36) | 8% (363) |
-| Same Mac | 2–3 | 1691 | 2% | 0% | — | 0% (20) | 5% (292) |
-| Same Mac | 4–7 | 580 | 3% | 0% | — | 0% (6) | 2% (146) |
+| Same subscription | 0 | 2362 | 2% | 0% | — | 0% (27) | 4% (476) |
+| Same subscription | 1 | 2564 | 2% | 0% | — | 0% (28) | 6% (401) |
+| Same subscription | 2–3 | 1992 | 2% | 0% | — | 0% (25) | 6% (371) |
+| Same Mac | 0 | 2033 | 3% | 0% | — | 0% (18) | 3% (362) |
+| Same Mac | 1 | 2339 | 2% | 0% | — | 0% (36) | 7% (391) |
+| Same Mac | 2–3 | 1930 | 1% | 0% | — | 0% (20) | 5% (340) |
+| Same Mac | 4–7 | 596 | 3% | 0% | — | 0% (6) | 3% (152) |
 | Same Mac | 8+ | 20 | 0% | 5% | — | — | 0% (3) |
-| Same agent | 0 | 2797 | 2% | 0% | — | 0% (41) | 5% (520) |
-| Same agent | 1 | 1266 | 3% | 0% | — | 0% (20) | 6% (226) |
-| Same agent | 2–3 | 906 | 3% | 0% | — | 0% (15) | 5% (177) |
+| Same agent | 0 | 3035 | 2% | 0% | — | 0% (41) | 5% (562) |
+| Same agent | 1 | 1388 | 3% | 0% | — | 0% (20) | 6% (253) |
+| Same agent | 2–3 | 957 | 3% | 0% | — | 0% (15) | 5% (197) |
 | Same agent | 4–7 | 144 | 6% | 1% | — | 0% (4) | 0% (29) |
 | Same agent | 8+ | 1 | 0% | 0% | — | — | 0% (1) |
 
