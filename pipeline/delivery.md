@@ -1,4 +1,4 @@
-# Delivery of orla-il-banks (counted 2026-11-07 06:00 from Task Floor's run logs and linked pull requests; counts only)
+# Delivery of orla-il-banks (counted 2026-11-08 06:00 from Task Floor's run logs and linked pull requests; counts only)
 
 KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge = merged / (merged + closed unmerged + reverted). Goal for nudges: zero (answers, permissions, «go on», status checks, restarts, stops for the owner). Outcomes: change failure = (reverted + hotfixes) / (merged + reverted); rework = finished work the owner sent back to verify or restart, or another task continued; time to restore = a reverted change's merge to its revert's.
 
@@ -6,16 +6,15 @@ KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge =
 
 | Agent | Tasks | Output tokens | PRs opened | Merged | Wait median h | Wait mean h | Conversion | Closed / reverted / open / no PR | Nudges | Runaway | Rating | Change failure | Rework | Restore h |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Development lead | 1 | 4k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — | — | 0% | — |
-| **All** | 1 | 4k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — | — | 0% | — |
+| — | 0 | | | | | | | | | | | | | |
 
 ## Last 7 days
 
 | Agent | Tasks | Output tokens | PRs opened | Merged | Wait median h | Wait mean h | Conversion | Closed / reverted / open / no PR | Nudges | Runaway | Rating | Change failure | Rework | Restore h |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Development lead | 2 | 11k | 0 | 0 | — | — | — | 0 / 0 / 0 / 2 | 0 | 0 | — | — | 50% | — |
-| Product lead | 2 | 8k | 0 | 0 | — | — | — | 0 / 0 / 0 / 3 | 0 | 0 | — | — | 33% | — |
-| **All** | 4 | 18k | 0 | 0 | — | — | — | 0 / 0 / 0 / 5 | 0 | 0 | — | — | 40% | — |
+| Development lead | 1 | 8k | 0 | 0 | — | — | — | 0 / 0 / 0 / 2 | 0 | 0 | — | — | 50% | — |
+| Product lead | 0 | 0 | 0 | 0 | — | — | — | 0 / 0 / 0 / 3 | 0 | 0 | — | — | 33% | — |
+| **All** | 1 | 8k | 0 | 0 | — | — | — | 0 / 0 / 0 / 5 | 0 | 0 | — | — | 40% | — |
 
 ## Outcomes over 30 days
 
@@ -27,7 +26,7 @@ Runs ended in the last 7 days; a long run has 46 turns or more. A compaction dro
 
 | Model | Effort | Runs | Compactions | Per run | Runs compacted | Long runs | Per long run |
 |---|---|---|---|---|---|---|---|
-| claude-opus-5-5 | high | 6 | 0 | 0 | 0 | 0 | — |
+| claude-opus-5-5 | high | 2 | 0 | 0 | 0 | 0 | — |
 
 ## Runaway runs
 
@@ -55,9 +54,8 @@ Work as a share of task time that was not «off» (owner: waits for the owner, i
 
 - offline: «Anton MacBook Air Old» (member-1cf130e8): Anton MacBook Air Old silent since 02.11 18:30
 - offline: «Roman Dubina's Mac» (member-4c77dcbf): Roman Dubina's Mac silent since 13.10 19:51
-- offline: «Anton MacBook Pro» (member-500ccf82): Anton MacBook Pro silent since 07.11 05:53
-- offline: «Anton MacBook Pro Old» (member-6d504cb7): Anton MacBook Pro Old silent since 07.11 05:43
-- offline: «Anton Mac Mini» (member-70ee94bc): Anton Mac Mini silent since 06.11 18:44
+- offline: «Anton MacBook Pro» (member-500ccf82): Anton MacBook Pro silent since 08.11 02:28
+- offline: «Anton MacBook Pro Old» (member-6d504cb7): Anton MacBook Pro Old silent since 08.11 05:48
 - offline: «Gera Skalski's Mac» (member-c20323c4): Gera Skalski's Mac silent since 22.10 16:09
 - offline: «Gera Skalski's Mac» (member-d7405858): Gera Skalski's Mac silent since 22.10 15:59
 
@@ -67,7 +65,6 @@ The owner's ratings, grade verdicts, the claims judge and the Academy on real wo
 
 | Agent | Model | Rating (n) | As is (n) | Claims checked: confirmed / unseen / contradicted | Exams: score (n) |
 |---|---|---|---|---|---|
-| Product lead | claude-opus-5-5 | — | — | 2: 1 / 1 / 0 | — |
 | Development lead | claude-opus-5-5 | — | — | 1: 0 / 0 / 0 | — |
 
 ## Quality under load
@@ -92,17 +89,17 @@ Outcomes by how many other runs were going as a run started (last 30 days): on i
 
 | Load | Other runs | Runs | Failed | Stopped by you | Rating (n) | As is (n) | Claims contradicted (n) |
 |---|---|---|---|---|---|---|---|
-| Same subscription | 0 | 2468 | 2% | 0% | — | 0% (27) | 3% (500) |
-| Same subscription | 1 | 2621 | 2% | 0% | — | 0% (28) | 6% (403) |
-| Same subscription | 2–3 | 2044 | 2% | 0% | — | 0% (25) | 6% (377) |
-| Same Mac | 0 | 2129 | 3% | 0% | — | 0% (18) | 3% (379) |
-| Same Mac | 1 | 2387 | 2% | 0% | — | 0% (36) | 8% (396) |
-| Same Mac | 2–3 | 2000 | 1% | 0% | — | 0% (20) | 5% (353) |
-| Same Mac | 4–7 | 597 | 3% | 0% | — | 0% (6) | 2% (149) |
+| Same subscription | 0 | 2586 | 3% | 0% | — | 0% (27) | 4% (524) |
+| Same subscription | 1 | 2696 | 2% | 0% | — | 0% (28) | 5% (424) |
+| Same subscription | 2–3 | 2083 | 2% | 0% | — | 0% (25) | 6% (391) |
+| Same Mac | 0 | 2198 | 3% | 0% | — | 0% (18) | 3% (390) |
+| Same Mac | 1 | 2458 | 2% | 0% | — | 0% (36) | 7% (414) |
+| Same Mac | 2–3 | 2059 | 2% | 0% | — | 0% (20) | 5% (366) |
+| Same Mac | 4–7 | 630 | 3% | 0% | — | 0% (6) | 2% (166) |
 | Same Mac | 8+ | 20 | 0% | 5% | — | — | 0% (3) |
-| Same agent | 0 | 3122 | 2% | 0% | — | 0% (41) | 5% (577) |
-| Same agent | 1 | 1423 | 3% | 0% | — | 0% (20) | 5% (257) |
-| Same agent | 2–3 | 971 | 3% | 0% | — | 0% (15) | 5% (199) |
+| Same agent | 0 | 3166 | 2% | 0% | — | 0% (41) | 5% (581) |
+| Same agent | 1 | 1426 | 3% | 0% | — | 0% (20) | 5% (258) |
+| Same agent | 2–3 | 973 | 3% | 0% | — | 0% (15) | 5% (199) |
 | Same agent | 4–7 | 144 | 6% | 1% | — | 0% (4) | 0% (29) |
 | Same agent | 8+ | 1 | 0% | 0% | — | — | 0% (1) |
 
@@ -113,8 +110,7 @@ Runs ended in the last 7 days, each once, as the hub noted them.
 
 | Agent | Model | Effort | Runs | Output tokens |
 |---|---|---|---|---|
-| Development lead | claude-opus-5-5 | high | 4 | 11k |
-| Product lead | claude-opus-5-5 | high | 2 | 8k |
+| Development lead | claude-opus-5-5 | high | 2 | 8k |
 ## Owner stops per backlog item
 
 Decisions you made for one item (cards and design decisions), items done in the last 14 days against the 14 before; a large item counts with its slices.
