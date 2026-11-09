@@ -1,6 +1,6 @@
-# Pipeline of cheetah-trade/orla-il-banks, last 7 days (collected 2026-11-09 05:06)
+# Pipeline of cheetah-trade/orla-il-banks, last 7 days (collected 2026-11-09 11:28)
 
-Window (UTC): 2026-11-02 04:06:59 – 2026-11-09 04:06:59, every run listed.
+Window (UTC): 2026-11-02 10:28:03 – 2026-11-09 10:28:03, every run listed.
 
 ## CI by workflow
 
@@ -33,4 +33,4 @@ Not run yet: red only because a two-tier CI has not run its suites yet (light ti
 ## Pull requests
 
 - Merged, complete UTC days: 0 without bots (0 by bots left out); to merge, bots excluded: not measured.
-- Open (not drafts): 4; oldest: #12 On Windows the browser profile is private by its ACL; release 0.3.2 (16.4 d); #13 Bump @puppeteer/browsers from 2.13.2 to 3.2.6 (10.3 d); #14 Bump actions/setup-node from 7.0.0 to 7.1.0 (7.3 d); #15 Bump israeli-bank-scrapers from 6.12.2 to 6.13.0 (3.3 d).
+- Open (not drafts): 4; oldest: #12 On Windows the browser profile is private by its ACL; release 0.3.2 (16.7 d); #13 Bump @puppeteer/browsers from 2.13.2 to 3.2.6 (10.6 d); #14 Bump actions/setup-node from 7.0.0 to 7.1.0 (7.6 d); #15 Bump israeli-bank-scrapers from 6.12.2 to 6.13.0 (3.6 d).
