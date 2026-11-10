@@ -1,4 +1,4 @@
-# Delivery of orla-il-banks (counted 2026-11-09 06:00 from Task Floor's run logs and linked pull requests; counts only)
+# Delivery of orla-il-banks (counted 2026-11-10 06:00 from Task Floor's run logs and linked pull requests; counts only)
 
 KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge = merged / (merged + closed unmerged + reverted). Goal for nudges: zero (answers, permissions, «go on», status checks, restarts, stops for the owner). Outcomes: change failure = (reverted + hotfixes) / (merged + reverted); rework = finished work the owner sent back to verify or restart, or another task continued; time to restore = a reverted change's merge to its revert's.
 
@@ -12,9 +12,9 @@ KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge =
 
 | Agent | Tasks | Output tokens | PRs opened | Merged | Wait median h | Wait mean h | Conversion | Closed / reverted / open / no PR | Nudges | Runaway | Rating | Change failure | Rework | Restore h |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Development lead | 1 | 8k | 0 | 0 | — | — | — | 0 / 0 / 0 / 2 | 0 | 0 | — | — | 50% | — |
-| Product lead | 0 | 0 | 0 | 0 | — | — | — | 0 / 0 / 0 / 3 | 0 | 0 | — | — | 33% | — |
-| **All** | 1 | 8k | 0 | 0 | — | — | — | 0 / 0 / 0 / 5 | 0 | 0 | — | — | 40% | — |
+| Product lead | 3 | 0 | 0 | 0 | — | — | — | 0 / 0 / 0 / 3 | 0 | 0 | — | — | 33% | — |
+| Development lead | 2 | 8k | 0 | 0 | — | — | — | 0 / 0 / 0 / 2 | 0 | 0 | — | — | 50% | — |
+| **All** | 5 | 8k | 0 | 0 | — | — | — | 0 / 0 / 0 / 5 | 0 | 0 | — | — | 40% | — |
 
 ## Outcomes over 30 days
 
@@ -30,7 +30,7 @@ Runs ended in the last 7 days; a long run has 46 turns or more. A compaction dro
 
 ## Runaway runs
 
-Usual run here: 90th percentile 11k output tokens, 15 turns.
+Usual run here: 90th percentile 6k output tokens, 12 turns.
 
 - None.
 
@@ -44,22 +44,26 @@ Score of 5 and the owner's note; the lowest first. Find why each low one went ba
 
 Work as a share of task time that was not «off» (owner: waits for the owner, including finished turns whose questions were open), per week from Monday, the latest first.
 
-| Department | 2026-11-02 | 2026-10-26 | 2026-10-19 |
-|---|---|---|---|
-| development | 99% (0.0553 h; owner 0%) | 0% (31 h; owner 0%) | 0% (69 h; owner 0%) |
-| product | 0% (231 h; owner 0%) | 0% (73.6 h; owner 21%) | 0% (217 h; owner 2%) |
-| No department | — | — | 0% (55.9 h; owner 35%) |
+| Department | 2026-11-09 | 2026-11-02 | 2026-10-26 | 2026-10-19 |
+|---|---|---|---|---|
+| development | — | 99% (0.0553 h; owner 0%) | 0% (31 h; owner 0%) | 0% (69 h; owner 0%) |
+| product | 0% (83.9 h; owner 0%) | 0% (231 h; owner 0%) | 0% (73.6 h; owner 21%) | 0% (217 h; owner 2%) |
+| No department | — | — | — | 0% (55.9 h; owner 35%) |
 
 ## What hangs now
 
+- waits for machine: «Anton Mac Mini» (member-70ee94bc): 4 task(s), 83.9 task-hours, the oldest 22.7 h
+- queued: «Product pulse · 09.11» (fcc76daecb47): queued 18.0 h: Waiting for its computer: Anton Mac Mini, offline since 09.11 00:55
+- queued: «Product planning · 09.11» (113ad3ac9466): queued 20.5 h: Waiting for its computer: Anton Mac Mini, offline since 09.11 00:55
+- queued: «Artifact review · 09.11» (fa602d5255dd): queued 22.7 h: Waiting for its computer: Anton Mac Mini, offline since 09.11 00:55
+- queued: «Backlog review · 09.11» (0694cdae0d6b): queued 22.7 h: Waiting for its computer: Anton Mac Mini, offline since 09.11 00:55
 - offline: «Anton MacBook Air Old» (member-1cf130e8): Anton MacBook Air Old silent since 02.11 18:30
 - offline: «Roman Dubina's Mac» (member-4c77dcbf): Roman Dubina's Mac silent since 13.10 19:51
-- offline: «Anton MacBook Pro Old» (member-6d504cb7): Anton MacBook Pro Old silent since 09.11 05:46
+- offline: «Anton MacBook Pro Old» (member-6d504cb7): Anton MacBook Pro Old silent since 10.11 04:02
 - offline: «Anton Mac Mini» (member-70ee94bc): Anton Mac Mini silent since 09.11 00:55
 - offline: «Gera Skalski's Mac» (member-c20323c4): Gera Skalski's Mac silent since 22.10 16:09
 - offline: «Gera Skalski's Mac» (member-d7405858): Gera Skalski's Mac silent since 22.10 15:59
-- offline: «Anton MacBook Air» (member-e1dacae1): Anton MacBook Air silent since 09.11 04:59
-- offline: «Irina's Mac» (member-fd1d09bf): Irina's Mac silent since 08.11 19:38
+- offline: «Irina's Mac» (member-fd1d09bf): Irina's Mac silent since 10.11 05:36
 
 ## Quality by agent and model
 
@@ -91,17 +95,17 @@ Outcomes by how many other runs were going as a run started (last 30 days): on i
 
 | Load | Other runs | Runs | Failed | Stopped by you | Rating (n) | As is (n) | Claims contradicted (n) |
 |---|---|---|---|---|---|---|---|
-| Same subscription | 0 | 2669 | 2% | 0% | — | 0% (27) | 4% (520) |
-| Same subscription | 1 | 2728 | 2% | 0% | — | 0% (28) | 5% (424) |
-| Same subscription | 2–3 | 2095 | 2% | 0% | — | 0% (25) | 6% (391) |
-| Same Mac | 0 | 2282 | 3% | 0% | — | 0% (18) | 3% (386) |
-| Same Mac | 1 | 2490 | 2% | 0% | — | 0% (36) | 7% (414) |
-| Same Mac | 2–3 | 2070 | 2% | 0% | — | 0% (20) | 5% (366) |
-| Same Mac | 4–7 | 630 | 3% | 0% | — | 0% (6) | 2% (166) |
+| Same subscription | 0 | 2695 | 2% | 0% | — | 0% (27) | 4% (520) |
+| Same subscription | 1 | 2772 | 2% | 0% | — | 0% (28) | 5% (424) |
+| Same subscription | 2–3 | 2198 | 2% | 0% | — | 0% (25) | 6% (391) |
+| Same Mac | 0 | 2307 | 3% | 0% | — | 0% (18) | 3% (386) |
+| Same Mac | 1 | 2526 | 2% | 0% | — | 0% (36) | 7% (414) |
+| Same Mac | 2–3 | 2166 | 2% | 0% | — | 0% (20) | 5% (366) |
+| Same Mac | 4–7 | 646 | 3% | 0% | — | 0% (6) | 2% (166) |
 | Same Mac | 8+ | 20 | 0% | 5% | — | — | 0% (3) |
-| Same agent | 0 | 3195 | 2% | 0% | — | 0% (41) | 5% (578) |
-| Same agent | 1 | 1426 | 3% | 0% | — | 0% (20) | 5% (258) |
-| Same agent | 2–3 | 973 | 3% | 0% | — | 0% (15) | 5% (199) |
+| Same agent | 0 | 3218 | 2% | 0% | — | 0% (41) | 5% (578) |
+| Same agent | 1 | 1434 | 3% | 0% | — | 0% (20) | 5% (258) |
+| Same agent | 2–3 | 989 | 3% | 0% | — | 0% (15) | 5% (199) |
 | Same agent | 4–7 | 144 | 6% | 1% | — | 0% (4) | 0% (29) |
 | Same agent | 8+ | 1 | 0% | 0% | — | — | 0% (1) |
 
