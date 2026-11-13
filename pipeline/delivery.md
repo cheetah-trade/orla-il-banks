@@ -1,4 +1,4 @@
-# Delivery of orla-il-banks (counted 2026-11-12 06:00 from Task Floor's run logs and linked pull requests; counts only)
+# Delivery of orla-il-banks (counted 2026-11-13 06:00 from Task Floor's run logs and linked pull requests; counts only)
 
 KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge = merged / (merged + closed unmerged + reverted). Goal for nudges: zero (answers, permissions, «go on», status checks, restarts, stops for the owner). Outcomes: change failure = (reverted + hotfixes) / (merged + reverted); rework = finished work the owner sent back to verify or restart, or another task continued; time to restore = a reverted change's merge to its revert's.
 
@@ -46,23 +46,20 @@ Work as a share of task time that was not «off» (owner: waits for the owner, i
 | Department | 2026-11-09 | 2026-11-02 | 2026-10-26 | 2026-10-19 |
 |---|---|---|---|---|
 | development | — | 99% (0.0553 h; owner 0%) | 0% (31 h; owner 0%) | 0% (69 h; owner 0%) |
-| product | 0% (276 h; owner 0%) | 0% (231 h; owner 0%) | 0% (73.6 h; owner 21%) | 0% (217 h; owner 2%) |
+| product | 0% (372 h; owner 0%) | 0% (231 h; owner 0%) | 0% (73.6 h; owner 21%) | 0% (217 h; owner 2%) |
 | No department | — | — | — | 0% (55.9 h; owner 35%) |
 
 ## What hangs now
 
-- waits for machine: «Anton Mac Mini» (member-70ee94bc): 4 task(s), 275.9 task-hours, the oldest 70.7 h
-- queued: «Product pulse · 09.11» (fcc76daecb47): queued 66.0 h: Waiting for its computer: Anton Mac Mini, offline since 09.11 00:55
-- queued: «Product planning · 09.11» (113ad3ac9466): queued 68.5 h: Waiting for its computer: Anton Mac Mini, offline since 09.11 00:55
-- queued: «Artifact review · 09.11» (fa602d5255dd): queued 70.7 h: Waiting for its computer: Anton Mac Mini, offline since 09.11 00:55
-- queued: «Backlog review · 09.11» (0694cdae0d6b): queued 70.7 h: Waiting for its computer: Anton Mac Mini, offline since 09.11 00:55
-- offline: «Anton MacBook Air Old» (member-1cf130e8): Anton MacBook Air Old silent since 02.11 18:30
+- queued: «Product pulse · 09.11» (fcc76daecb47): queued 90.0 h: No eligible profile: member-70ee94bc_claude-07: sign-in required; it stays on th
+- queued: «Product planning · 09.11» (113ad3ac9466): queued 92.5 h: No eligible profile: member-70ee94bc_claude-07: sign-in required; it stays on th
+- queued: «Artifact review · 09.11» (fa602d5255dd): queued 94.7 h: No eligible profile: member-70ee94bc_claude-07: sign-in required; it stays on th
+- queued: «Backlog review · 09.11» (0694cdae0d6b): queued 94.7 h: No eligible profile: member-70ee94bc_claude-07: sign-in required; it stays on th
 - offline: «Roman Dubina's Mac» (member-4c77dcbf): Roman Dubina's Mac silent since 13.10 19:51
-- offline: «Anton MacBook Pro Old» (member-6d504cb7): Anton MacBook Pro Old silent since 12.11 05:49
-- offline: «Anton Mac Mini» (member-70ee94bc): Anton Mac Mini silent since 09.11 00:55
+- offline: «Anton MacBook Pro Old» (member-6d504cb7): Anton MacBook Pro Old silent since 13.11 05:54
 - offline: «Gera Skalski's Mac» (member-c20323c4): Gera Skalski's Mac silent since 22.10 16:09
 - offline: «Gera Skalski's Mac» (member-d7405858): Gera Skalski's Mac silent since 22.10 15:59
-- offline: «Irina's Mac» (member-fd1d09bf): Irina's Mac silent since 12.11 05:45
+- offline: «Irina's Mac» (member-fd1d09bf): Irina's Mac silent since 13.11 05:41
 
 ## Quality by agent and model
 
@@ -78,10 +75,10 @@ Outcomes by how many other runs were going as a run started (last 30 days): on i
 
 | Load | Other runs | Runs | Failed | Stopped by you | Rating (n) | As is (n) | Claims contradicted (n) |
 |---|---|---|---|---|---|---|---|
-| Same subscription | 0 | 20 | 10% | 0% | — | — | 0% (5) |
+| Same subscription | 0 | 18 | 11% | 0% | — | — | 0% (5) |
 | Same subscription | 1 | 32 | 0% | 0% | — | — | 0% (7) |
 | Same subscription | 2–3 | 30 | 3% | 3% | — | — | 0% (1) |
-| Same Mac | 0 | 19 | 11% | 5% | — | — | 0% (3) |
+| Same Mac | 0 | 17 | 12% | 6% | — | — | 0% (3) |
 | Same Mac | 1 | 32 | 0% | 0% | — | — | 0% (8) |
 | Same Mac | 2–3 | 25 | 4% | 0% | — | — | 0% (2) |
 | Same Mac | 4–7 | 6 | 0% | 0% | — | — | — |
@@ -94,18 +91,18 @@ Outcomes by how many other runs were going as a run started (last 30 days): on i
 
 | Load | Other runs | Runs | Failed | Stopped by you | Rating (n) | As is (n) | Claims contradicted (n) |
 |---|---|---|---|---|---|---|---|
-| Same subscription | 0 | 2847 | 2% | 0% | — | 0% (27) | 4% (520) |
-| Same subscription | 1 | 2864 | 2% | 0% | — | 0% (28) | 5% (424) |
-| Same subscription | 2–3 | 2317 | 2% | 0% | — | 0% (25) | 6% (391) |
-| Same Mac | 0 | 2448 | 3% | 0% | — | 0% (18) | 3% (386) |
-| Same Mac | 1 | 2605 | 2% | 0% | — | 0% (36) | 7% (414) |
-| Same Mac | 2–3 | 2293 | 1% | 0% | — | 0% (20) | 5% (366) |
-| Same Mac | 4–7 | 662 | 3% | 0% | — | 0% (6) | 2% (166) |
-| Same Mac | 8+ | 20 | 0% | 5% | — | — | 0% (3) |
-| Same agent | 0 | 3255 | 2% | 0% | — | 0% (41) | 5% (578) |
-| Same agent | 1 | 1447 | 2% | 0% | — | 0% (20) | 5% (258) |
-| Same agent | 2–3 | 1000 | 3% | 0% | — | 0% (15) | 5% (199) |
-| Same agent | 4–7 | 144 | 6% | 1% | — | 0% (4) | 0% (29) |
+| Same subscription | 0 | 2769 | 2% | 0% | — | 0% (26) | 4% (485) |
+| Same subscription | 1 | 2858 | 2% | 0% | — | 0% (28) | 5% (411) |
+| Same subscription | 2–3 | 2271 | 2% | 0% | — | 0% (25) | 6% (359) |
+| Same Mac | 0 | 2403 | 2% | 0% | — | 0% (18) | 2% (368) |
+| Same Mac | 1 | 2628 | 2% | 0% | — | 0% (36) | 7% (409) |
+| Same Mac | 2–3 | 2244 | 1% | 0% | — | 0% (20) | 5% (322) |
+| Same Mac | 4–7 | 605 | 2% | 0% | — | 0% (5) | 3% (153) |
+| Same Mac | 8+ | 18 | 0% | 0% | — | — | 0% (3) |
+| Same agent | 0 | 3162 | 2% | 0% | — | 0% (41) | 5% (550) |
+| Same agent | 1 | 1382 | 2% | 0% | — | 0% (19) | 5% (248) |
+| Same agent | 2–3 | 935 | 2% | 0% | — | 0% (15) | 4% (170) |
+| Same agent | 4–7 | 128 | 2% | 0% | — | 0% (4) | 0% (24) |
 | Same agent | 8+ | 1 | 0% | 0% | — | — | 0% (1) |
 
 
