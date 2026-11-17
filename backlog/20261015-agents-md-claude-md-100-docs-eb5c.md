@@ -14,6 +14,9 @@ epic: Агентная обвязка 2026-10
 rank: 
 found_in: 
 updated: 2026-10-14T22:42:46Z
+cod: value 3 · urgency 2 · risk 2 · size 1
+cod_by: Development lead · task 6cfdf9dcd13c
+cod_note: Задаёт структуру AGENTS.md для шести пунктов эпика, поэтому идёт первым; в репо 2,7 тыс. строк, CONTRIBUTING уже есть
 ---
 # Короткий AGENTS.md/CLAUDE.md как карта: ~100 строк, команды, неочевидные правила, ссылки в docs/
 
