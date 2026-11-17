@@ -1,7 +1,7 @@
 ---
 type: fact
 key: artifact-review-invitation-v1-v2
-status: active
+status: retired
 author: Antons-Mac-mini · task ca7b3bed525e
 date: 2026-10-26
 review_by: 2026-11-02
