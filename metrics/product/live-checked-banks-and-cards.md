@@ -6,3 +6,4 @@ better: up
 target: 7 of 17 by 2026-10-30
 ---
 2026-10-19 0 README.md в main (0f8bd20): колонки Live-checked нет; отчётов живых прогонов на канале и в памяти нет; PR #11 (протокол) не влит · Antons-MacBook-Pro · task 8e3
+2026-11-17 0 docs/live-check.md таблица Results на origin/main c13d6ef: все 17 строк «not yet»; отчётов на канале и в файлах нет (17.11) · Antons-MacBook-Pro-2 · task 4b973e
