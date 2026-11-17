@@ -14,6 +14,9 @@ epic: Агентная обвязка 2026-10
 rank: 
 found_in: 
 updated: 2026-10-15T07:57:24Z
+cod: value 2 · urgency 1 · risk 2 · size 4
+cod_by: Development lead · task 6cfdf9dcd13c
+cod_note: Пилот на одном модуле: пять критериев, а код свежий; ждать дешевле, чем делать до живых проверок
 ---
 # Пилот code-modernization на одном модуле: оценка, карта, правила, harden
 
