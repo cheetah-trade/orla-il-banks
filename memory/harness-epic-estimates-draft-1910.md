@@ -1,7 +1,7 @@
 ---
 type: fact
 key: harness-epic-estimates-draft-1910
-status: active
+status: retired
 author: Antons-MacBook-Pro · task 8e3ccf413e5a
 date: 2026-10-19
 review_by: 2026-11-02
