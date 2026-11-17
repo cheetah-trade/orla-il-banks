@@ -1,7 +1,7 @@
 ---
 type: fact
 key: phase-1-depends-on-pr-11
-status: active
+status: retired
 author: Antons-Mac-mini · task 6cfdf9dcd13c
 date: 2026-11-06
 review_by: 2026-11-13
