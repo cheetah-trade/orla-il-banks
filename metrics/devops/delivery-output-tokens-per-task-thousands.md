@@ -21,4 +21,4 @@ target:
 2026-10-31 3.5 Task Floor run logs and linked pull requests · Task Floor
 2026-11-04 1.1 Task Floor run logs and linked pull requests · Task Floor
 2026-11-06 3.8 Task Floor run logs and linked pull requests · Task Floor
-2026-11-17 3.1 Task Floor run logs and linked pull requests · Task Floor
+2026-11-17 10 Task Floor run logs and linked pull requests · Task Floor
