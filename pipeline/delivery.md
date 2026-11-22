@@ -1,4 +1,4 @@
-# Delivery of orla-il-banks (counted 2026-11-21 06:00 from Task Floor's run logs and linked pull requests; counts only)
+# Delivery of orla-il-banks (counted 2026-11-22 06:00 from Task Floor's run logs and linked pull requests; counts only)
 
 KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge = merged / (merged + closed unmerged + reverted). Goal for nudges: zero (answers, permissions, «go on», status checks, restarts, stops for the owner). Outcomes: change failure = (reverted + hotfixes) / (merged + reverted); rework = finished work the owner sent back to verify or restart, or another task continued; time to restore = a reverted change's merge to its revert's.
 
@@ -20,7 +20,7 @@ KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge =
 
 ## Outcomes over 30 days
 
-Merged 0, reverted 0, hotfixes 0: change failure —, rework 20% (4 of 20 finished), time to restore median —.
+Merged 0, reverted 0, hotfixes 0: change failure —, rework 20% (3 of 15 finished), time to restore median —.
 
 ## Context compactions by model and effort
 
@@ -49,15 +49,16 @@ Work as a share of task time that was not «off» (owner: waits for the owner, i
 | Department | 2026-11-16 | 2026-11-09 | 2026-11-02 | 2026-10-26 |
 |---|---|---|---|---|
 | development | 0% (36.6 h; owner 0%) | 0% (63 h; owner 0%) | 99% (0.0553 h; owner 0%) | 0% (31 h; owner 0%) |
-| product | 0% (143 h; owner 1%) | 0% (636 h; owner 0%) | 0% (231 h; owner 0%) | 0% (73.6 h; owner 21%) |
+| product | 0% (156 h; owner 1%) | 0% (636 h; owner 0%) | 0% (231 h; owner 0%) | 0% (73.6 h; owner 21%) |
 
 ## What hangs now
 
-- queued: «Product pulse · 19.11» (a67027ed8d18): queued 42.0 h: No eligible profile: member-1cf130e8_claude-01: sign-in required; member-500ccf8
+- offline: «Anton MacBook Air Old» (member-1cf130e8): Anton MacBook Air Old silent since 22.11 05:46
 - offline: «Roman Dubina's Mac» (member-4c77dcbf): Roman Dubina's Mac silent since 13.10 19:51
+- offline: «Anton MacBook Pro Old» (member-6d504cb7): Anton MacBook Pro Old silent since 22.11 04:04
 - offline: «Gera Skalski's Mac» (member-c20323c4): Gera Skalski's Mac silent since 22.10 16:09
 - offline: «Gera Skalski's Mac» (member-d7405858): Gera Skalski's Mac silent since 22.10 15:59
-- offline: «Irina's Mac» (member-fd1d09bf): Irina's Mac silent since 21.11 05:54
+- offline: «Irina's Mac» (member-fd1d09bf): Irina's Mac silent since 22.11 04:26
 
 ## Quality by agent and model
 
@@ -77,14 +78,14 @@ Outcomes by how many other runs were going as a run started (last 30 days): on i
 | Load | Other runs | Runs | Failed | Stopped by you | Rating (n) | As is (n) | Claims contradicted (n) |
 |---|---|---|---|---|---|---|---|
 | Same subscription | 0 | 12 | 17% | 0% | — | — | 0% (4) |
-| Same subscription | 1 | 12 | 0% | 0% | — | — | 0% (2) |
-| Same subscription | 2–3 | 19 | 5% | 5% | — | — | 0% (4) |
-| Same Mac | 0 | 9 | 22% | 11% | — | — | 0% (3) |
-| Same Mac | 1 | 14 | 0% | 0% | — | — | 0% (2) |
-| Same Mac | 2–3 | 15 | 7% | 0% | — | — | 0% (5) |
+| Same subscription | 1 | 9 | 0% | 0% | — | — | 0% (2) |
+| Same subscription | 2–3 | 17 | 6% | 0% | — | — | 0% (4) |
+| Same Mac | 0 | 8 | 25% | 0% | — | — | 0% (3) |
+| Same Mac | 1 | 11 | 0% | 0% | — | — | 0% (2) |
+| Same Mac | 2–3 | 14 | 7% | 0% | — | — | 0% (5) |
 | Same Mac | 4–7 | 5 | 0% | 0% | — | — | — |
-| Same agent | 0 | 24 | 12% | 0% | — | — | 0% (8) |
-| Same agent | 1 | 9 | 0% | 11% | — | — | — |
+| Same agent | 0 | 22 | 14% | 0% | — | — | 0% (8) |
+| Same agent | 1 | 7 | 0% | 0% | — | — | — |
 | Same agent | 2–3 | 8 | 0% | 0% | — | — | 0% (2) |
 | Same agent | 4–7 | 1 | 0% | 0% | — | — | — |
 
@@ -92,17 +93,17 @@ Outcomes by how many other runs were going as a run started (last 30 days): on i
 
 | Load | Other runs | Runs | Failed | Stopped by you | Rating (n) | As is (n) | Claims contradicted (n) |
 |---|---|---|---|---|---|---|---|
-| Same subscription | 0 | 1665 | 2% | 0% | — | — | 3% (327) |
-| Same subscription | 1 | 1348 | 2% | 0% | — | — | 5% (222) |
-| Same subscription | 2–3 | 1341 | 3% | 0% | — | — | 3% (306) |
-| Same Mac | 0 | 1252 | 3% | 0% | — | — | 1% (226) |
-| Same Mac | 1 | 1415 | 2% | 0% | — | — | 5% (235) |
-| Same Mac | 2–3 | 1338 | 2% | 0% | — | — | 3% (292) |
+| Same subscription | 0 | 1650 | 2% | 0% | — | — | 3% (327) |
+| Same subscription | 1 | 1228 | 2% | 0% | — | — | 5% (222) |
+| Same subscription | 2–3 | 1238 | 3% | 0% | — | — | 3% (302) |
+| Same Mac | 0 | 1202 | 3% | 0% | — | — | 1% (224) |
+| Same Mac | 1 | 1268 | 2% | 0% | — | — | 5% (233) |
+| Same Mac | 2–3 | 1297 | 2% | 0% | — | — | 3% (292) |
 | Same Mac | 4–7 | 349 | 4% | 0% | — | — | 4% (102) |
-| Same agent | 0 | 1486 | 2% | 0% | — | — | 4% (326) |
-| Same agent | 1 | 616 | 2% | 0% | — | — | 3% (113) |
-| Same agent | 2–3 | 410 | 4% | 0% | — | — | 7% (76) |
-| Same agent | 4–7 | 6 | 17% | 0% | — | — | — |
+| Same agent | 0 | 1373 | 2% | 0% | — | — | 4% (323) |
+| Same agent | 1 | 554 | 3% | 0% | — | — | 3% (113) |
+| Same agent | 2–3 | 385 | 4% | 0% | — | — | 7% (76) |
+| Same agent | 4–7 | 5 | 20% | 0% | — | — | — |
 
 
 ## Runs by agent, model and effort
