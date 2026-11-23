@@ -10,3 +10,4 @@ target:
 2026-11-01 0.67 Task Floor task timelines: the times the owner had to step in, per task active in the week · Task Floor
 2026-11-08 0 Task Floor task timelines: the times the owner had to step in, per task active in the week · Task Floor
 2026-11-15 0 Task Floor task timelines: the times the owner had to step in, per task active in the week · Task Floor
+2026-11-22 0.2 Task Floor task timelines: the times the owner had to step in, per task active in the week · Task Floor
