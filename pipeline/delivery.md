@@ -1,4 +1,4 @@
-# Delivery of orla-il-banks (counted 2026-11-23 06:00 from Task Floor's run logs and linked pull requests; counts only)
+# Delivery of orla-il-banks (counted 2026-11-24 06:00 from Task Floor's run logs and linked pull requests; counts only)
 
 KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge = merged / (merged + closed unmerged + reverted). Goal for nudges: zero (answers, permissions, «go on», status checks, restarts, stops for the owner). Outcomes: change failure = (reverted + hotfixes) / (merged + reverted); rework = finished work the owner sent back to verify or restart, or another task continued; time to restore = a reverted change's merge to its revert's.
 
@@ -6,21 +6,24 @@ KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge =
 
 | Agent | Tasks | Output tokens | PRs opened | Merged | Wait median h | Wait mean h | Conversion | Closed / reverted / open / no PR | Nudges | Runaway | Rating | Change failure | Rework | Restore h |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| — | 0 | | | | | | | | | | | | | |
+| Product lead | 1 | 16k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 1 (answers 1) | 0 | — | — | 0% | — |
+| Artifact steward | 1 | 2k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — | — | 0% | — |
+| Backlog steward | 1 | 3k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — | — | 0% | — |
+| **All** | 3 | 22k | 0 | 0 | — | — | — | 0 / 0 / 0 / 3 | 1 (answers 1) | 0 | — | — | 0% | — |
 
 ## Last 7 days
 
 | Agent | Tasks | Output tokens | PRs opened | Merged | Wait median h | Wait mean h | Conversion | Closed / reverted / open / no PR | Nudges | Runaway | Rating | Change failure | Rework | Restore h |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Product lead | 1 | 21k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — | — | 0% | — |
-| Artifact steward | 1 | 3k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — | — | 0% | — |
+| Product lead | 2 | 37k | 0 | 0 | — | — | — | 0 / 0 / 0 / 2 | 1 (answers 1) | 0 | — | — | 0% | — |
+| Artifact steward | 1 | 2k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — | — | 0% | — |
 | Backlog steward | 1 | 3k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — | — | 0% | — |
 | Development lead | 1 | 13k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 1 (restarts 1) | 0 | — | — | 100% | — |
-| **All** | 4 | 40k | 0 | 0 | — | — | — | 0 / 0 / 0 / 4 | 1 (restarts 1) | 0 | — | — | 25% | — |
+| **All** | 5 | 55k | 0 | 0 | — | — | — | 0 / 0 / 0 / 5 | 2 (answers 1, restarts 1) | 0 | — | — | 20% | — |
 
 ## Outcomes over 30 days
 
-Merged 0, reverted 0, hotfixes 0: change failure —, rework 30% (3 of 10 finished), time to restore median —.
+Merged 0, reverted 0, hotfixes 0: change failure —, rework 23% (3 of 13 finished), time to restore median —.
 
 ## Context compactions by model and effort
 
@@ -28,11 +31,11 @@ Runs ended in the last 7 days; a long run has 46 turns or more. A compaction dro
 
 | Model | Effort | Runs | Compactions | Per run | Runs compacted | Long runs | Per long run |
 |---|---|---|---|---|---|---|---|
-| claude-opus-5-5 | high | 8 | 0 | 0 | 0 | 0 | — |
+| claude-opus-5-5 | high | 10 | 0 | 0 | 0 | 0 | — |
 
 ## Runaway runs
 
-Usual run here: under ten runs yet; all runs are measured against 26k tokens and 46 turns.
+Usual run here: 90th percentile 12k output tokens, 26 turns.
 
 - None.
 
@@ -46,17 +49,20 @@ Score of 5 and the owner's note; the lowest first. Find why each low one went ba
 
 Work as a share of task time that was not «off» (owner: waits for the owner, including finished turns whose questions were open), per week from Monday, the latest first.
 
-| Department | 2026-11-16 | 2026-11-09 | 2026-11-02 |
-|---|---|---|---|
-| development | 0% (36.6 h; owner 0%) | 0% (63 h; owner 0%) | 99% (0.0553 h; owner 0%) |
-| product | 0% (156 h; owner 1%) | 0% (636 h; owner 0%) | 0% (231 h; owner 0%) |
+| Department | 2026-11-23 | 2026-11-16 | 2026-11-09 | 2026-11-02 |
+|---|---|---|---|---|
+| development | — | 0% (36.6 h; owner 0%) | 0% (63 h; owner 0%) | 99% (0.0553 h; owner 0%) |
+| product | 4% (2.1 h; owner 95%) | 0% (156 h; owner 1%) | 0% (636 h; owner 0%) | 0% (231 h; owner 0%) |
 
 ## What hangs now
 
+- offline: «Anton MacBook Air Old» (member-1cf130e8): Anton MacBook Air Old silent since 24.11 04:25
 - offline: «Roman Dubina's Mac» (member-4c77dcbf): Roman Dubina's Mac silent since 13.10 19:51
+- offline: «Anton MacBook Pro» (member-500ccf82): Anton MacBook Pro silent since 24.11 04:01
+- offline: «Anton MacBook Pro Old» (member-6d504cb7): Anton MacBook Pro Old silent since 24.11 04:10
 - offline: «Gera Skalski's Mac» (member-c20323c4): Gera Skalski's Mac silent since 22.10 16:09
 - offline: «Gera Skalski's Mac» (member-d7405858): Gera Skalski's Mac silent since 22.10 15:59
-- offline: «Irina's Mac» (member-fd1d09bf): Irina's Mac silent since 23.11 05:24
+- offline: «Irina's Mac» (member-fd1d09bf): Irina's Mac silent since 24.11 05:55
 
 ## Quality by agent and model
 
@@ -64,7 +70,7 @@ The owner's ratings, grade verdicts, the claims judge and the Academy on real wo
 
 | Agent | Model | Rating (n) | As is (n) | Claims checked: confirmed / unseen / contradicted | Exams: score (n) |
 |---|---|---|---|---|---|
-| Product lead | claude-opus-5-5 | — | — | 1: 0 / 0 / 0 | — |
+| Product lead | claude-opus-5-5 | — | — | 2: 0 / 1 / 0 | — |
 | Artifact steward | claude-opus-5-5 | — | — | 1: 1 / 0 / 0 | — |
 | Backlog steward | claude-opus-5-5 | — | — | 1: 1 / 0 / 0 | — |
 | Development lead | claude-opus-5-5 | — | — | 1: 0 / 2 / 0 | — |
@@ -75,32 +81,32 @@ Outcomes by how many other runs were going as a run started (last 30 days): on i
 
 | Load | Other runs | Runs | Failed | Stopped by you | Rating (n) | As is (n) | Claims contradicted (n) |
 |---|---|---|---|---|---|---|---|
-| Same subscription | 0 | 12 | 17% | 0% | — | — | 0% (4) |
-| Same subscription | 1 | 8 | 0% | 0% | — | — | 0% (2) |
-| Same subscription | 2–3 | 8 | 12% | 0% | — | — | 0% (4) |
+| Same subscription | 0 | 13 | 15% | 0% | — | — | 0% (5) |
+| Same subscription | 1 | 10 | 0% | 0% | — | — | 0% (4) |
+| Same subscription | 2–3 | 9 | 11% | 0% | — | — | 0% (4) |
 | Same Mac | 0 | 7 | 29% | 0% | — | — | 0% (3) |
-| Same Mac | 1 | 9 | 0% | 0% | — | — | 0% (2) |
+| Same Mac | 1 | 13 | 0% | 0% | — | — | 0% (5) |
 | Same Mac | 2–3 | 12 | 8% | 0% | — | — | 0% (5) |
 | Same agent | 0 | 21 | 14% | 0% | — | — | 0% (8) |
 | Same agent | 1 | 2 | 0% | 0% | — | — | — |
-| Same agent | 2–3 | 4 | 0% | 0% | — | — | 0% (2) |
-| Same agent | 4–7 | 1 | 0% | 0% | — | — | — |
+| Same agent | 2–3 | 7 | 0% | 0% | — | — | 0% (4) |
+| Same agent | 4–7 | 2 | 0% | 0% | — | — | 0% (1) |
 
 ### All projects
 
 | Load | Other runs | Runs | Failed | Stopped by you | Rating (n) | As is (n) | Claims contradicted (n) |
 |---|---|---|---|---|---|---|---|
-| Same subscription | 0 | 1664 | 2% | 0% | — | — | 3% (328) |
-| Same subscription | 1 | 1120 | 2% | 0% | — | — | 5% (186) |
-| Same subscription | 2–3 | 987 | 2% | 0% | — | — | 2% (254) |
-| Same Mac | 0 | 1203 | 2% | 0% | — | — | 1% (215) |
-| Same Mac | 1 | 1212 | 2% | 0% | — | — | 5% (226) |
-| Same Mac | 2–3 | 1194 | 2% | 0% | — | — | 4% (277) |
-| Same Mac | 4–7 | 162 | 1% | 0% | — | — | 2% (50) |
-| Same agent | 0 | 1243 | 2% | 0% | — | — | 4% (273) |
-| Same agent | 1 | 416 | 1% | 0% | — | — | 2% (86) |
-| Same agent | 2–3 | 295 | 2% | 0% | — | — | 6% (70) |
-| Same agent | 4–7 | 4 | 0% | 0% | — | — | — |
+| Same subscription | 0 | 1639 | 2% | 0% | — | — | 2% (322) |
+| Same subscription | 1 | 1073 | 1% | 0% | — | — | 4% (178) |
+| Same subscription | 2–3 | 905 | 2% | 0% | — | — | 3% (230) |
+| Same Mac | 0 | 1271 | 2% | 0% | — | — | 1% (230) |
+| Same Mac | 1 | 1093 | 1% | 0% | — | — | 4% (203) |
+| Same Mac | 2–3 | 1128 | 2% | 0% | — | — | 3% (265) |
+| Same Mac | 4–7 | 125 | 1% | 0% | — | — | 3% (32) |
+| Same agent | 0 | 1156 | 2% | 0% | — | — | 4% (237) |
+| Same agent | 1 | 361 | 1% | 0% | — | — | 1% (80) |
+| Same agent | 2–3 | 215 | 1% | 0% | — | — | 7% (54) |
+| Same agent | 4–7 | 12 | 0% | 0% | — | — | 0% (3) |
 
 
 ## Runs by agent, model and effort
@@ -109,9 +115,9 @@ Runs ended in the last 7 days, each once, as the hub noted them.
 
 | Agent | Model | Effort | Runs | Output tokens |
 |---|---|---|---|---|
+| Product lead | claude-opus-5-5 | high | 5 | 37k |
 | Development lead | claude-opus-5-5 | high | 3 | 13k |
-| Product lead | claude-opus-5-5 | high | 3 | 21k |
-| Artifact steward | claude-opus-5-5 | high | 1 | 3k |
+| Artifact steward | claude-opus-5-5 | high | 1 | 2k |
 | Backlog steward | claude-opus-5-5 | high | 1 | 3k |
 ## Owner stops per backlog item
 
