@@ -1,4 +1,4 @@
-# Delivery of orla-il-banks (counted 2026-11-24 06:00 from Task Floor's run logs and linked pull requests; counts only)
+# Delivery of orla-il-banks (counted 2026-11-25 06:00 from Task Floor's run logs and linked pull requests; counts only)
 
 KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge = merged / (merged + closed unmerged + reverted). Goal for nudges: zero (answers, permissions, «go on», status checks, restarts, stops for the owner). Outcomes: change failure = (reverted + hotfixes) / (merged + reverted); rework = finished work the owner sent back to verify or restart, or another task continued; time to restore = a reverted change's merge to its revert's.
 
@@ -6,20 +6,16 @@ KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge =
 
 | Agent | Tasks | Output tokens | PRs opened | Merged | Wait median h | Wait mean h | Conversion | Closed / reverted / open / no PR | Nudges | Runaway | Rating | Change failure | Rework | Restore h |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Product lead | 1 | 16k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 1 (answers 1) | 0 | — | — | 0% | — |
-| Artifact steward | 1 | 2k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — | — | 0% | — |
-| Backlog steward | 1 | 3k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — | — | 0% | — |
-| **All** | 3 | 22k | 0 | 0 | — | — | — | 0 / 0 / 0 / 3 | 1 (answers 1) | 0 | — | — | 0% | — |
+| — | 0 | | | | | | | | | | | | | |
 
 ## Last 7 days
 
 | Agent | Tasks | Output tokens | PRs opened | Merged | Wait median h | Wait mean h | Conversion | Closed / reverted / open / no PR | Nudges | Runaway | Rating | Change failure | Rework | Restore h |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Product lead | 2 | 37k | 0 | 0 | — | — | — | 0 / 0 / 0 / 2 | 1 (answers 1) | 0 | — | — | 0% | — |
+| Product lead | 1 | 16k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 1 (answers 1) | 0 | — | — | 0% | — |
 | Artifact steward | 1 | 2k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — | — | 0% | — |
 | Backlog steward | 1 | 3k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 0 | 0 | — | — | 0% | — |
-| Development lead | 1 | 13k | 0 | 0 | — | — | — | 0 / 0 / 0 / 1 | 1 (restarts 1) | 0 | — | — | 100% | — |
-| **All** | 5 | 55k | 0 | 0 | — | — | — | 0 / 0 / 0 / 5 | 2 (answers 1, restarts 1) | 0 | — | — | 20% | — |
+| **All** | 3 | 22k | 0 | 0 | — | — | — | 0 / 0 / 0 / 3 | 1 (answers 1) | 0 | — | — | 0% | — |
 
 ## Outcomes over 30 days
 
@@ -31,7 +27,7 @@ Runs ended in the last 7 days; a long run has 46 turns or more. A compaction dro
 
 | Model | Effort | Runs | Compactions | Per run | Runs compacted | Long runs | Per long run |
 |---|---|---|---|---|---|---|---|
-| claude-opus-5-5 | high | 10 | 0 | 0 | 0 | 0 | — |
+| claude-opus-5-5 | high | 4 | 0 | 0 | 0 | 0 | — |
 
 ## Runaway runs
 
@@ -56,13 +52,9 @@ Work as a share of task time that was not «off» (owner: waits for the owner, i
 
 ## What hangs now
 
-- offline: «Anton MacBook Air Old» (member-1cf130e8): Anton MacBook Air Old silent since 24.11 04:25
 - offline: «Roman Dubina's Mac» (member-4c77dcbf): Roman Dubina's Mac silent since 13.10 19:51
-- offline: «Anton MacBook Pro» (member-500ccf82): Anton MacBook Pro silent since 24.11 04:01
-- offline: «Anton MacBook Pro Old» (member-6d504cb7): Anton MacBook Pro Old silent since 24.11 04:10
 - offline: «Gera Skalski's Mac» (member-c20323c4): Gera Skalski's Mac silent since 22.10 16:09
 - offline: «Gera Skalski's Mac» (member-d7405858): Gera Skalski's Mac silent since 22.10 15:59
-- offline: «Irina's Mac» (member-fd1d09bf): Irina's Mac silent since 24.11 05:55
 
 ## Quality by agent and model
 
@@ -70,10 +62,9 @@ The owner's ratings, grade verdicts, the claims judge and the Academy on real wo
 
 | Agent | Model | Rating (n) | As is (n) | Claims checked: confirmed / unseen / contradicted | Exams: score (n) |
 |---|---|---|---|---|---|
-| Product lead | claude-opus-5-5 | — | — | 2: 0 / 1 / 0 | — |
+| Product lead | claude-opus-5-5 | — | — | 1: 0 / 1 / 0 | — |
 | Artifact steward | claude-opus-5-5 | — | — | 1: 1 / 0 / 0 | — |
 | Backlog steward | claude-opus-5-5 | — | — | 1: 1 / 0 / 0 | — |
-| Development lead | claude-opus-5-5 | — | — | 1: 0 / 2 / 0 | — |
 
 ## Quality under load
 
@@ -96,16 +87,16 @@ Outcomes by how many other runs were going as a run started (last 30 days): on i
 
 | Load | Other runs | Runs | Failed | Stopped by you | Rating (n) | As is (n) | Claims contradicted (n) |
 |---|---|---|---|---|---|---|---|
-| Same subscription | 0 | 1639 | 2% | 0% | — | — | 2% (322) |
-| Same subscription | 1 | 1073 | 1% | 0% | — | — | 4% (178) |
-| Same subscription | 2–3 | 905 | 2% | 0% | — | — | 3% (230) |
-| Same Mac | 0 | 1271 | 2% | 0% | — | — | 1% (230) |
-| Same Mac | 1 | 1093 | 1% | 0% | — | — | 4% (203) |
-| Same Mac | 2–3 | 1128 | 2% | 0% | — | — | 3% (265) |
-| Same Mac | 4–7 | 125 | 1% | 0% | — | — | 3% (32) |
-| Same agent | 0 | 1156 | 2% | 0% | — | — | 4% (237) |
-| Same agent | 1 | 361 | 1% | 0% | — | — | 1% (80) |
-| Same agent | 2–3 | 215 | 1% | 0% | — | — | 7% (54) |
+| Same subscription | 0 | 1651 | 2% | 0% | — | — | 2% (317) |
+| Same subscription | 1 | 1058 | 2% | 0% | — | — | 4% (169) |
+| Same subscription | 2–3 | 906 | 2% | 0% | — | — | 3% (232) |
+| Same Mac | 0 | 1323 | 2% | 0% | — | — | 1% (238) |
+| Same Mac | 1 | 1066 | 2% | 0% | — | — | 4% (188) |
+| Same Mac | 2–3 | 1102 | 2% | 0% | — | — | 3% (260) |
+| Same Mac | 4–7 | 124 | 1% | 0% | — | — | 3% (32) |
+| Same agent | 0 | 1102 | 2% | 0% | — | — | 4% (221) |
+| Same agent | 1 | 334 | 1% | 0% | — | — | 1% (71) |
+| Same agent | 2–3 | 204 | 0% | 0% | — | — | 7% (54) |
 | Same agent | 4–7 | 12 | 0% | 0% | — | — | 0% (3) |
 
 
@@ -115,8 +106,7 @@ Runs ended in the last 7 days, each once, as the hub noted them.
 
 | Agent | Model | Effort | Runs | Output tokens |
 |---|---|---|---|---|
-| Product lead | claude-opus-5-5 | high | 5 | 37k |
-| Development lead | claude-opus-5-5 | high | 3 | 13k |
+| Product lead | claude-opus-5-5 | high | 2 | 16k |
 | Artifact steward | claude-opus-5-5 | high | 1 | 2k |
 | Backlog steward | claude-opus-5-5 | high | 1 | 3k |
 ## Owner stops per backlog item
