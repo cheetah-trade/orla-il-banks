@@ -1,4 +1,4 @@
-# Delivery of orla-il-banks (counted 2026-11-25 06:00 from Task Floor's run logs and linked pull requests; counts only)
+# Delivery of orla-il-banks (counted 2026-11-26 06:00 from Task Floor's run logs and linked pull requests; counts only)
 
 KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge = merged / (merged + closed unmerged + reverted). Goal for nudges: zero (answers, permissions, «go on», status checks, restarts, stops for the owner). Outcomes: change failure = (reverted + hotfixes) / (merged + reverted); rework = finished work the owner sent back to verify or restart, or another task continued; time to restore = a reverted change's merge to its revert's.
 
@@ -19,7 +19,7 @@ KPI 1: pull request wait to merge (open → merge). KPI 2: conversion to merge =
 
 ## Outcomes over 30 days
 
-Merged 0, reverted 0, hotfixes 0: change failure —, rework 23% (3 of 13 finished), time to restore median —.
+Merged 0, reverted 0, hotfixes 0: change failure —, rework 27% (3 of 11 finished), time to restore median —.
 
 ## Context compactions by model and effort
 
@@ -53,8 +53,10 @@ Work as a share of task time that was not «off» (owner: waits for the owner, i
 ## What hangs now
 
 - offline: «Roman Dubina's Mac» (member-4c77dcbf): Roman Dubina's Mac silent since 13.10 19:51
+- offline: «Anton MacBook Pro» (member-500ccf82): Anton MacBook Pro silent since 26.11 05:26
 - offline: «Gera Skalski's Mac» (member-c20323c4): Gera Skalski's Mac silent since 22.10 16:09
 - offline: «Gera Skalski's Mac» (member-d7405858): Gera Skalski's Mac silent since 22.10 15:59
+- offline: «Irina's Mac» (member-fd1d09bf): Irina's Mac silent since 26.11 05:12
 
 ## Quality by agent and model
 
@@ -72,32 +74,32 @@ Outcomes by how many other runs were going as a run started (last 30 days): on i
 
 | Load | Other runs | Runs | Failed | Stopped by you | Rating (n) | As is (n) | Claims contradicted (n) |
 |---|---|---|---|---|---|---|---|
-| Same subscription | 0 | 13 | 15% | 0% | — | — | 0% (5) |
-| Same subscription | 1 | 10 | 0% | 0% | — | — | 0% (4) |
-| Same subscription | 2–3 | 9 | 11% | 0% | — | — | 0% (4) |
+| Same subscription | 0 | 10 | 20% | 0% | — | — | 0% (5) |
+| Same subscription | 1 | 8 | 0% | 0% | — | — | 0% (3) |
+| Same subscription | 2–3 | 7 | 14% | 0% | — | — | 0% (4) |
 | Same Mac | 0 | 7 | 29% | 0% | — | — | 0% (3) |
-| Same Mac | 1 | 13 | 0% | 0% | — | — | 0% (5) |
-| Same Mac | 2–3 | 12 | 8% | 0% | — | — | 0% (5) |
-| Same agent | 0 | 21 | 14% | 0% | — | — | 0% (8) |
+| Same Mac | 1 | 12 | 0% | 0% | — | — | 0% (5) |
+| Same Mac | 2–3 | 6 | 17% | 0% | — | — | 0% (4) |
+| Same agent | 0 | 18 | 17% | 0% | — | — | 0% (8) |
 | Same agent | 1 | 2 | 0% | 0% | — | — | — |
-| Same agent | 2–3 | 7 | 0% | 0% | — | — | 0% (4) |
-| Same agent | 4–7 | 2 | 0% | 0% | — | — | 0% (1) |
+| Same agent | 2–3 | 4 | 0% | 0% | — | — | 0% (3) |
+| Same agent | 4–7 | 1 | 0% | 0% | — | — | 0% (1) |
 
 ### All projects
 
 | Load | Other runs | Runs | Failed | Stopped by you | Rating (n) | As is (n) | Claims contradicted (n) |
 |---|---|---|---|---|---|---|---|
-| Same subscription | 0 | 1651 | 2% | 0% | — | — | 2% (317) |
-| Same subscription | 1 | 1058 | 2% | 0% | — | — | 4% (169) |
-| Same subscription | 2–3 | 906 | 2% | 0% | — | — | 3% (232) |
-| Same Mac | 0 | 1323 | 2% | 0% | — | — | 1% (238) |
-| Same Mac | 1 | 1066 | 2% | 0% | — | — | 4% (188) |
-| Same Mac | 2–3 | 1102 | 2% | 0% | — | — | 3% (260) |
+| Same subscription | 0 | 1619 | 2% | 0% | — | — | 2% (313) |
+| Same subscription | 1 | 1030 | 2% | 0% | — | — | 4% (160) |
+| Same subscription | 2–3 | 897 | 2% | 0% | — | — | 3% (232) |
+| Same Mac | 0 | 1344 | 2% | 0% | — | — | 2% (250) |
+| Same Mac | 1 | 1036 | 2% | 0% | — | — | 4% (182) |
+| Same Mac | 2–3 | 1042 | 2% | 0% | — | — | 3% (241) |
 | Same Mac | 4–7 | 124 | 1% | 0% | — | — | 3% (32) |
-| Same agent | 0 | 1102 | 2% | 0% | — | — | 4% (221) |
-| Same agent | 1 | 334 | 1% | 0% | — | — | 1% (71) |
-| Same agent | 2–3 | 204 | 0% | 0% | — | — | 7% (54) |
-| Same agent | 4–7 | 12 | 0% | 0% | — | — | 0% (3) |
+| Same agent | 0 | 1029 | 2% | 0% | — | — | 5% (200) |
+| Same agent | 1 | 319 | 1% | 0% | — | — | 1% (67) |
+| Same agent | 2–3 | 187 | 1% | 0% | — | — | 6% (50) |
+| Same agent | 4–7 | 8 | 0% | 0% | — | — | 0% (3) |
 
 
 ## Runs by agent, model and effort
